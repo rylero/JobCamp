@@ -4,8 +4,15 @@ import { hash, verify } from "@node-rs/argon2";
 import { luciaAuthDb, prisma } from './prisma.js';
 import type { CompanyRep, School, Student } from '@prisma/client';
 import type { RequestEvent } from '@sveltejs/kit';
+import { encodeHex } from 'oslo/encoding';
+import { alphabet, generateRandomString, sha256 } from 'oslo/crypto';
+import { TimeSpan as osloTimeSpan, createDate } from 'oslo';
 
 export const userIdEntropySize = 10;
+export const passwordResetTokenEntropySize = 25;
+
+export const emailVerificationCodeLength = 6;
+export const emailVerificationCodeCharacters = alphabet("0-9", "A-Z");
 
 export const passwordHashingOptions = {
 	memoryCost: 19456,
@@ -13,6 +20,47 @@ export const passwordHashingOptions = {
 	outputLen: 32,
 	parallelism: 1
 };
+
+export const sessionLifetime = new TimeSpan(2, "d");
+
+export enum AuthError {
+	IncorrectCredentials,
+	AccountExists,
+};
+
+export async function createPasswordResetToken(userId: string): Promise<string> {
+	await prisma.passwordResetTokens.deleteMany({ where: { user_id: userId } });
+	
+	const tokenId = generateIdFromEntropySize(passwordResetTokenEntropySize);
+	const tokenHash = encodeHex(await sha256(new TextEncoder().encode(tokenId)));
+
+	await prisma.passwordResetTokens.create({
+		data: {
+			token_hash: tokenHash,
+			user_id: userId,
+			expires_at: createDate(new TimeSpan(2, "h"))
+		}
+	});
+
+	return tokenId;
+}
+
+export async function generateEmailVerificationCode(userId: string, email: string): Promise<string> {
+	await prisma.passwordResetTokens.deleteMany({ where: { user_id: userId } });
+
+	const code = generateRandomString(emailVerificationCodeLength, emailVerificationCodeCharacters);
+	
+	await prisma.emailVerificationCodes.create({
+		data: {
+			user_id: userId,
+			email,
+			code,
+			expires_at: createDate(new osloTimeSpan(15, "m")) // 15 minutes
+		}
+	});
+
+	return code;
+}
 
 export async function setNewLuciaSession(userId: string, event: RequestEvent) {
 	const session = await lucia.createSession(userId, {});
@@ -33,11 +81,6 @@ export async function updateLastLoginToNow(userId: string) {
 		}
 	})
 }
-
-export enum AuthError {
-	IncorrectCredentials,
-	AccountExists,
-};
 
 export async function login(email: string, password: string, event: RequestEvent): Promise<AuthError | undefined> {
 	const existingUser = await prisma.user.findFirst({ where: { email } });
@@ -77,7 +120,7 @@ export async function signup(email: string, password: string, event: RequestEven
 }
 
 export const lucia = new Lucia(luciaAuthDb, {
-    sessionExpiresIn: new TimeSpan(2, "d"),
+    sessionExpiresIn: sessionLifetime,
     sessionCookie: {
         attributes: {
 			// set to `true` when using HTTPS

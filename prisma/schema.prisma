@@ -1,0 +1,140 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.sqlite"
+}
+
+model Event {
+  id                       String      @id @default(cuid())
+
+  schoolId                 String
+  school                   School      @relation(references: [id], fields: [schoolId], onDelete: Cascade)
+
+  date                     DateTime
+
+  displayLotteryResults    Boolean
+
+  positions                Position[]
+}
+
+model School {
+  id                       String      @id @default(cuid())
+  
+  name                     String
+  emailDomain              String
+
+  userId                   String      @unique
+  user                     User        @relation(references: [id], fields: [userId], onDelete: Cascade)
+
+  events                   Event[]
+}
+
+model Position {
+  id                       String      @id @default(cuid())
+
+  start                    DateTime
+  end                      DateTime
+
+  eventId                  String
+  event                    Event       @relation(references: [id], fields: [eventId])
+
+  comapanyRepId            String
+  companyRep               CompanyRep  @relation(references: [id], fields: [comapanyRepId])
+
+  students                 PositionsOnStudents[]
+  studentsAttending        Student[]
+}
+
+model Student {
+  id                       String      @id @default(cuid())
+
+  name                     String
+  permissionSlipCompleted  Boolean     @default(false)
+
+  userId                   String      @unique
+  user                     User        @relation(references: [id], fields: [userId], onDelete: Cascade)
+
+  positionsSignedUpFor     PositionsOnStudents[]
+  lotteryResult            Position    @relation(references: [id], fields: [userId])
+}
+
+model PositionsOnStudents {
+  position                 Position    @relation(fields: [positionId], references: [id])
+  positionId               String
+  student                  Student     @relation(fields: [studentId], references: [id])
+  studentId                String
+
+  @@id([positionId, studentId])
+}
+
+model Company {
+  id                       String      @id @default(cuid())
+
+  companyName              String
+  companyDescription       String
+  companyUrl               String?
+
+  companyReps              CompanyRep[]
+}
+
+model CompanyRep {
+  id                       String      @id @default(cuid())
+
+  name                     String
+  phone                    String
+
+  companyId                String
+  companyData              Company     @relation(references: [id], fields: [companyId])
+  
+  userId                   String      @unique
+  user                     User        @relation(references: [id], fields: [userId])
+
+  positions                Position[]
+}
+
+model User {
+  id                       String      @id
+  email                    String      @unique
+  password_hash            String
+  emailVerified            Boolean     @default(false)
+  
+  student                  Student?
+  companyRep               CompanyRep?
+  school                   School?
+
+  lastLogin                DateTime
+  
+  sessions                 Session[]
+}
+
+model Session {
+  id                       String      @id
+  expiresAt                DateTime
+
+  userId                   String
+  user                     User        @relation(references: [id], fields: [userId], onDelete: Cascade)
+}
+
+model EmailVerificationCodes {
+  id                       String      @id @default(cuid())
+  user_id                  String      @unique
+  email                    String
+  code                     String
+  expires_at               DateTime
+}
+
+model PasswordResetTokens {
+  id                       String      @id @default(cuid())
+  user_id                  String      @unique
+  token_hash               String      @unique
+  expires_at               DateTime
+}
+
+model PermissionSlipCode {
+  id                       String      @id @default(cuid())
+  user_id                  String      @unique
+  code                     String
+}

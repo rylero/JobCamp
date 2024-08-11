@@ -2,31 +2,20 @@ import { Lucia, TimeSpan, generateIdFromEntropySize } from 'lucia';
 import { dev } from '$app/environment';
 import { hash, verify } from "@node-rs/argon2";
 import { luciaAuthDb, prisma } from './prisma.js';
-import type { CompanyRep, School, Student } from '@prisma/client';
 import type { RequestEvent } from '@sveltejs/kit';
 import { encodeHex } from 'oslo/encoding';
-import { alphabet, generateRandomString, sha256 } from 'oslo/crypto';
+import { generateRandomString, sha256 } from 'oslo/crypto';
 import { TimeSpan as osloTimeSpan, createDate } from 'oslo';
-
-export const userIdEntropySize = 10;
-export const passwordResetTokenEntropySize = 25;
-
-export const emailVerificationCodeLength = 6;
-export const emailVerificationCodeCharacters = alphabet("0-9", "A-Z");
-
-export const passwordHashingOptions = {
-	memoryCost: 19456,
-	timeCost: 2,
-	outputLen: 32,
-	parallelism: 1
-};
-
-export const sessionLifetime = new TimeSpan(2, "d");
-
-export enum AuthError {
-	IncorrectCredentials,
-	AccountExists,
-};
+import { 
+	passwordResetTokenEntropySize, 
+	emailVerificationCodeLength, 
+	emailVerificationCodeCharacters, 
+	AuthError, 
+	passwordHashingOptions, 
+	userIdEntropySize, 
+	sessionLifetime, 
+	type DatabaseUserAttributes 
+} from './authConstants.js';
 
 export async function createPasswordResetToken(userId: string): Promise<string> {
 	await prisma.passwordResetTokens.deleteMany({ where: { user_id: userId } });
@@ -49,7 +38,7 @@ export async function generateEmailVerificationCode(userId: string, email: strin
 	await prisma.passwordResetTokens.deleteMany({ where: { user_id: userId } });
 
 	const code = generateRandomString(emailVerificationCodeLength, emailVerificationCodeCharacters);
-	
+
 	await prisma.emailVerificationCodes.create({
 		data: {
 			user_id: userId,
@@ -145,13 +134,4 @@ declare module "lucia" {
 		Lucia: typeof lucia;
 		DatabaseUserAttributes: DatabaseUserAttributes;
 	}
-}
-
-interface DatabaseUserAttributes {
-	email: string;
-	emailVerified: boolean;
-    student: Student | null;
-    companyRep: CompanyRep | null;
-    school: School | null;
-    lastLogin: Date;
 }

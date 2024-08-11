@@ -4,7 +4,7 @@ generator client {
 
 datasource db {
   provider = "sqlite"
-  url      = "file:./dev.sqlite"
+  url      = env("DATABASE_URL")
 }
 
 model Event {
@@ -98,7 +98,7 @@ model CompanyRep {
 model User {
   id                       String      @id
   email                    String      @unique
-  password_hash            String
+  passwordHash             String
   emailVerified            Boolean     @default(false)
   
   student                  Student?

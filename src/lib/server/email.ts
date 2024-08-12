@@ -11,7 +11,7 @@ export type EmailParams = { [index: string]: string }
 
 export async function renderEmailTemplate(emailHtml: string, params: EmailParams) {
     Object.getOwnPropertyNames(params).forEach(name => {
-        emailHtml.replaceAll("${"+name+"}", params[name]);
+        emailHtml.replaceAll(new RegExp("/\\${ *"+name+" *}/g"), params[name]);
     });
     return emailHtml;
 }

@@ -28,5 +28,6 @@ export interface DatabaseUserAttributes {
     student: Student | null;
     companyRep: CompanyRep | null;
     school: School | null;
+	accountSetupFinished: boolean;
     lastLogin: Date;
 }

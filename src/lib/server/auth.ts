@@ -124,6 +124,7 @@ export const lucia = new Lucia(luciaAuthDb, {
             student: attributes.student,
             companyRep: attributes.companyRep,
             school: attributes.school,
+			accountSetupFinished: attributes.accountSetupFinished,
             lastLogin: attributes.lastLogin,
 		};
 	}

@@ -104,8 +104,7 @@ model User {
   student                  Student?
   companyRep               CompanyRep?
   school                   School?
-
-  accountSetupFinished     Boolean     @default(false)
+  
   lastLogin                DateTime
   
   sessions                 Session[]

@@ -1,6 +1,5 @@
 import { Lucia, TimeSpan, generateIdFromEntropySize } from 'lucia';
 import { dev } from '$app/environment';
-import { hash, verify } from "@node-rs/argon2";
 import { luciaAuthDb, prisma } from './prisma.js';
 import type { RequestEvent } from '@sveltejs/kit';
 import { encodeHex } from 'oslo/encoding';
@@ -11,11 +10,12 @@ import {
 	emailVerificationCodeLength, 
 	emailVerificationCodeCharacters, 
 	AuthError, 
-	passwordHashingOptions, 
 	userIdEntropySize, 
 	sessionLifetime, 
-	type DatabaseUserAttributes 
+	type DatabaseUserAttributes, 
+	passwordSaltCharacters
 } from './authConstants.js';
+import { scrypt } from './hash.js';
 
 export async function createPasswordResetToken(userId: string): Promise<string> {
 	await prisma.passwordResetTokens.deleteMany({ where: { user_id: userId } });
@@ -77,8 +77,8 @@ export async function login(email: string, password: string, event: RequestEvent
 		return AuthError.IncorrectCredentials;
 	}
 
-	const validPassword = await verify(existingUser.passwordHash, password, passwordHashingOptions);
-	if (!validPassword) {
+	const validPassword = await scrypt.verify(password, existingUser.passwordSalt, existingUser.passwordHash);
+	if (!validPassword) { 
 		return AuthError.IncorrectCredentials;
 	}
 
@@ -94,12 +94,14 @@ export async function signup(email: string, password: string, event: RequestEven
 	}
 
 	const userId = generateIdFromEntropySize(userIdEntropySize);
-	const passwordHash = await hash(password, passwordHashingOptions);
+	const passwordSalt = generateRandomString(16, passwordSaltCharacters); // 128bit salt
+	const passwordHash = await scrypt.hash(password, passwordSalt);
 
 	await prisma.user.create({
 		data: {
 			id: userId,
 			email,
+			passwordSalt,
 			passwordHash,
 			lastLogin: new Date(),
 		}

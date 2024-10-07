@@ -35,9 +35,11 @@
 		"@lucia-auth/adapter-prisma": "^4.0.1",
 		"@node-rs/argon2": "^1.8.3",
 		"@prisma/client": "^5.18.0",
+		"firebase-scrypt": "^2.2.0",
 		"mailtrap": "^3.4.0",
 		"oslo": "^1.2.1",
 		"sveltekit-superforms": "^2.16.1",
+		"validator": "^13.12.0",
 		"zod": "^3.23.8"
 	}
 }

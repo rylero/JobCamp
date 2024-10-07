@@ -30,6 +30,8 @@ model School {
   user                     User        @relation(references: [id], fields: [userId], onDelete: Cascade)
 
   events                   Event[]
+
+  students                 Student[]
 }
 
 model Position {
@@ -52,7 +54,14 @@ model Student {
   id                       String      @id @default(cuid())
 
   name                     String
+  phone                    String
+  grade                    Int
+
+  parentEmail              String
   permissionSlipCompleted  Boolean     @default(false)
+
+  schoolId                 String      @unique
+  school                   School      @relation(references: [id], fields: [userId])
 
   userId                   String      @unique
   user                     User        @relation(references: [id], fields: [userId], onDelete: Cascade)
@@ -99,6 +108,7 @@ model User {
   id                       String      @id
   email                    String      @unique
   passwordHash             String
+  passwordSalt             String
   emailVerified            Boolean     @default(false)
   
   student                  Student?

@@ -71,7 +71,7 @@ export async function updateLastLoginToNow(userId: string) {
 	})
 }
 
-export async function login(email: string, password: string, event: RequestEvent): Promise<AuthError | undefined> {
+export async function login(email: string, password: string, event: RequestEvent): Promise<AuthError | string> {
 	const existingUser = await prisma.user.findFirst({ where: { email } });
 	if (!existingUser) {
 		return AuthError.IncorrectCredentials;
@@ -85,9 +85,11 @@ export async function login(email: string, password: string, event: RequestEvent
 	updateLastLoginToNow(existingUser.id);
 
 	setNewLuciaSession(existingUser.id, event);
+
+	return existingUser.id;
 }
 
-export async function signup(email: string, password: string, event: RequestEvent): Promise<AuthError | undefined> {
+export async function signup(email: string, password: string, event: RequestEvent): Promise<AuthError | string> {
 	const existingUser = await prisma.user.findFirst({ where: { email } });
 	if (existingUser) {
 		return AuthError.AccountExists;
@@ -108,6 +110,8 @@ export async function signup(email: string, password: string, event: RequestEven
 	});
 
 	setNewLuciaSession(userId, event);
+
+	return userId;
 }
 
 export const lucia = new Lucia(luciaAuthDb, {

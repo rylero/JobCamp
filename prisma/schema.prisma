@@ -60,14 +60,16 @@ model Student {
   parentEmail              String
   permissionSlipCompleted  Boolean     @default(false)
 
-  schoolId                 String      @unique
-  school                   School      @relation(references: [id], fields: [userId])
+  school                   School?     @relation(fields: [schoolId], references: [id])
+  schoolId                 String?
 
-  userId                   String      @unique
-  user                     User        @relation(references: [id], fields: [userId], onDelete: Cascade)
+  userId                   String?     @unique
+  user                     User?       @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   positionsSignedUpFor     PositionsOnStudents[]
-  lotteryResult            Position    @relation(references: [id], fields: [userId])
+
+  lotteryPositionId        String?
+  lotteryResult            Position?   @relation(fields: [lotteryPositionId], references: [id])
 }
 
 model PositionsOnStudents {

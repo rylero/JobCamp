@@ -9,7 +9,7 @@ export const SENDER = { name: "JobCamp", email: "info@jobcamp.org" };
 
 export type EmailParams = { [index: string]: string }
 
-export async function renderEmailTemplate(emailHtml: string, params: EmailParams) {
+export function renderEmailTemplate(emailHtml: string, params: EmailParams) {
     Object.getOwnPropertyNames(params).forEach(name => {
         emailHtml.replaceAll(new RegExp("/\\${ *"+name+" *}/g"), params[name]);
     });
@@ -20,7 +20,7 @@ export async function sendEmailVerificationEmail(email: string, code: string) {
     await emailClient.send({
         from: SENDER,
         to:  [{ email: email }],
-        subject: "Reset JobCamp Password",
+        subject: "Verify JobCamp Email",
         html: renderEmailTemplate(verificationEmail, {code: code})
     });
 }

@@ -4,9 +4,10 @@ import type { PageServerLoad } from "./$types";
 import { schema } from "./schema";
 import { superValidate } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
-import { signup } from '$lib/server/auth';
+import { generateEmailVerificationCode, signup } from '$lib/server/auth';
 import { prisma } from '$lib/server/prisma';
 import { AuthError } from '$lib/server/authConstants';
+import { sendEmailVerificationEmail } from '$lib/server/email';
 
 export const load: PageServerLoad = async (event) => {
     userAccountSetupFlow(event.locals, PageType.AccountCreation);
@@ -47,6 +48,11 @@ export const actions: Actions = {
           }
         }
       });
+
+      // runs in background while user is redirected
+      generateEmailVerificationCode(userId, form.data.email).then(
+        (code) => sendEmailVerificationEmail(form.data.email, code)
+      );
 
       redirect(302, "/verify-email");
     }

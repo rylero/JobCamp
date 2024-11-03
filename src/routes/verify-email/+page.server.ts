@@ -47,8 +47,12 @@ export const actions: Actions = {
                 emailVerified: true,
             }
         });
+        
+        await prisma.emailVerificationCodes.delete({
+            where: { user_id: userId }
+        });
 
-        userAccountSetupFlow(event.locals, PageType.EmailVerify);
+        redirect(302, "/dashboard")
     },
     resend: async (event) => {
         if (!event.locals.user) return;

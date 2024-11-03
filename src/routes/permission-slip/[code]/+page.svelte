@@ -11,7 +11,7 @@
 </script>
 
 <div class="flex flex-col px-10 min-h-96 py-10 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 justify-center items-center gap-8 border-4 bg-slate-100">
-    <h1 class="text-4xl">Login</h1>
+    <h1 class="text-4xl">Permission Slip</h1>
     <form method="POST" class="flex flex-col justify-center items-center gap-3" use:enhance>
         <div class="flex w-96 justify-between">
             <label for="sample">Sample</label>

@@ -13,7 +13,9 @@ import {
 	userIdEntropySize, 
 	sessionLifetime, 
 	type DatabaseUserAttributes, 
-	passwordSaltCharacters
+	passwordSaltCharacters,
+	permissionSlipCodeLength,
+	permissionSlipCodeCharacters
 } from './authConstants.js';
 import { scrypt } from './hash.js';
 
@@ -35,7 +37,7 @@ export async function createPasswordResetToken(userId: string): Promise<string> 
 }
 
 export async function generateEmailVerificationCode(userId: string, email: string): Promise<string> {
-	await prisma.passwordResetTokens.deleteMany({ where: { user_id: userId } });
+	await prisma.emailVerificationCodes.deleteMany({ where: { user_id: userId } });
 
 	const code = generateRandomString(emailVerificationCodeLength, emailVerificationCodeCharacters);
 
@@ -45,6 +47,21 @@ export async function generateEmailVerificationCode(userId: string, email: strin
 			email,
 			code,
 			expires_at: createDate(new osloTimeSpan(15, "m")) // 15 minutes
+		}
+	});
+
+	return code;
+}
+
+export async function generatePermissionSlipCode(userId: string, parentEmail: string): Promise<string> {
+	await prisma.permissionSlipCode.deleteMany({ where: { user_id: userId } });
+
+	const code = generateRandomString(permissionSlipCodeLength, permissionSlipCodeCharacters);
+
+	await prisma.permissionSlipCode.create({
+		data: {
+			user_id: userId,
+			code,
 		}
 	});
 

@@ -9,6 +9,9 @@ export const passwordResetTokenEntropySize = 25;
 export const emailVerificationCodeLength = 6;
 export const emailVerificationCodeCharacters = alphabet("0-9", "A-Z");
 
+export const permissionSlipCodeLength = 10;
+export const permissionSlipCodeCharacters = alphabet("0-9", "A-Z");
+
 export const sessionLifetime = new TimeSpan(2, "d");
 
 export enum AuthError {

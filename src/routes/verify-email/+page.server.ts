@@ -5,6 +5,8 @@ import { zod } from 'sveltekit-superforms/adapters';
 import { fail, setError, superValidate } from "sveltekit-superforms";
 import { redirect } from '@sveltejs/kit';
 import { prisma } from '$lib/server/prisma';
+import { generateEmailVerificationCode } from '$lib/server/auth';
+import { sendEmailVerificationEmail } from '$lib/server/email';
 
 const schema = z.object({
     code: z.string()
@@ -19,7 +21,7 @@ export const load: PageServerLoad = async (event) => {
 
 
 export const actions: Actions = {
-    default: async (event) => {
+    verify: async (event) => {
         const { request } = event;
         const form = await superValidate(request, zod(schema));
   
@@ -46,6 +48,14 @@ export const actions: Actions = {
             }
         });
 
-        redirect(302, "/");
+        userAccountSetupFlow(event.locals, PageType.EmailVerify);
+    },
+    resend: async (event) => {
+        if (!event.locals.user) return;
+
+        const email = event.locals.user.email;
+        await generateEmailVerificationCode(event.locals.user.id, email).then(
+            (code) => sendEmailVerificationEmail(email, code)
+        );
     }
 };

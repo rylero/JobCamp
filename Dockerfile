@@ -28,4 +28,4 @@ EXPOSE 8080
 
 # Set the command to run the app
 #CMD ["node", "build/index.js"]
-CMD /cloud_sql_proxy --private-ip -instances=deep-voyage-436902-b3:us-central1:svelte-test=tcp:3306 & npm run start
+CMD /cloud_sql_proxy deep-voyage-436902-b3:us-central1:svelte-test=tcp:3306 & npm run start

@@ -2,7 +2,7 @@
 FROM node:22
 
 # Install the Cloud SQL Auth Proxy
-ADD https://dl.google.com/cloudsql/cloud_sql_proxy.linux.amd64 /cloud_sql_proxy
+ADD https://storage.googleapis.com/cloud-sql-connectors/cloud-sql-proxy/v2.14.0/cloud-sql-proxy.linux.amd64 /cloud_sql_proxy
 RUN chmod +x /cloud_sql_proxy
 
 # Set the working directory in the container
@@ -27,5 +27,4 @@ RUN npm run build
 EXPOSE 8080
 
 # Set the command to run the app
-#CMD ["node", "build/index.js"]
-CMD /cloud_sql_proxy deep-voyage-436902-b3:us-central1:svelte-test=tcp:3306 & npm run start
+CMD /cloud_sql_proxy deep-voyage-436902-b3:us-central1:svelte-test --port 3306 --private-ip & npm run start

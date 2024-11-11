@@ -77,8 +77,7 @@ jobs:
           service: '${{ env.SERVICE }}'
           region: '${{ env.REGION }}'
           image: '${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.ARTIFACT_REPO }}/jobcamp-image:${{ github.sha }}'
-          env_vars: 'DATABASE_URL=${{ secrets.GCP_DATABASE_URL }}'
-          flags: '--add-cloudsql-instances=deep-voyage-436902-b3:us-central1:svelte-test --allow-unauthenticated --network=default --subnet=default'
-          
+          env_vars: 'DATABASE_URL=${{ secrets.GCP_DATABASE_URL }},MAILTRAP_TOKEN=${{ secrets.MAILTRAP_TOKEN }}'
+          flags: '--add-cloudsql-instances=deep-voyage-436902-b3:us-central1:svelte-test --platform-managed --allow-unauthenticated --vpc-egress=private-ranges-only --vpc-connector ${{env.CONNECTOR}}'
 
 

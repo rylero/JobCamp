@@ -56,14 +56,14 @@ jobs:
         name: 'Authenticate to Google Cloud'
         uses: 'google-github-actions/auth@v2'
         with:
-          credentials_json: '${{ secrets.GCP_CREDENTIALS_JSON }}'
+          credentials_json: '${{ secrets.GCP_CREDENTIAL_JSON }}'
 
       - name: 'Docker Auth'
         uses: 'docker/login-action@v3'
         with:
           registry: '${{ env.REGION }}-docker.pkg.dev'
           username: _json_key
-          password: ${{ secrets.GCP_CREDENTIALS_JSON }}
+          password: ${{ secrets.GCP_CREDENTIAL_JSON }}
 
       - name: 'Build and Push Container'
         run: |-

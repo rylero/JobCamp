@@ -39,6 +39,7 @@ env:
   REGION: 'us-central1'
   SERVICE: 'github-actions-jobcamp' 
   ARTIFACT_REPO: 'jobcamp'
+  CONNECTOR: 'my-sql-connector'
 
 jobs:
   deploy:

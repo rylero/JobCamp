@@ -32,7 +32,7 @@
             <label><input type="checkbox" bind:checked={showPassword} /> Show Password</label>
         </div>
 
-        <button type="submit" class="mt-2 w-24 h-8 rounded bg-blue-500 text-white hover:bg-blue-600">Sign Up</button>
+        <button type="submit" class="mt-2 w-24 h-8 rounded bg-blue-500 text-white hover:bg-blue-600">Login</button>
     </form>
     <a href="/signup" class="underline text-blue-500">Do you want to signup?</a>
 </div>

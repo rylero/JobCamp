@@ -26,12 +26,13 @@ model School {
   name                     String
   emailDomain              String
 
-  userId                   String      @unique
-  user                     User        @relation(references: [id], fields: [userId], onDelete: Cascade)
+  adminId                  String      @unique
+  admin                    User        @relation(references: [id], fields: [adminId], onDelete: Cascade)
 
   events                   Event[]
 
   students                 Student[]
+  companies                Company[]
 }
 
 model Position {
@@ -43,8 +44,8 @@ model Position {
   eventId                  String
   event                    Event       @relation(references: [id], fields: [eventId])
 
-  comapanyRepId            String
-  companyRep               CompanyRep  @relation(references: [id], fields: [comapanyRepId])
+  hostId                   String
+  host                     Host        @relation(references: [id], fields: [hostId])
 
   students                 PositionsOnStudents[]
   studentsAttending        Student[]
@@ -88,10 +89,13 @@ model Company {
   companyDescription       String
   companyUrl               String?
 
-  companyReps              CompanyRep[]
+  school                   School?     @relation(fields: [schoolId], references: [id])
+  schoolId                 String?
+
+  hosts                    Host[]
 }
 
-model CompanyRep {
+model Host {
   id                       String      @id @default(cuid())
 
   name                     String
@@ -114,7 +118,7 @@ model User {
   emailVerified            Boolean     @default(false)
   
   student                  Student?
-  companyRep               CompanyRep?
+  Host                     Host?
   school                   School?
   
   lastLogin                DateTime

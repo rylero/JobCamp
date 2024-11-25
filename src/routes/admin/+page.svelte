@@ -18,7 +18,7 @@
         }
     };
 
-    let query : Query = {
+    let query : Query = $state({
         "students": {
             selected: false,
         },
@@ -28,7 +28,7 @@
         "positions": {
             selected: false,
         }
-    };
+    });
 
     function selectQueryType(queryType: string) {
         // set all to false

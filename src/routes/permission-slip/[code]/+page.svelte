@@ -2,7 +2,11 @@
     import { superForm } from "sveltekit-superforms";
     import type { PageData } from "./$types";
 
-    export let data: PageData;
+    interface Props {
+        data: PageData;
+    }
+
+    let { data }: Props = $props();
 
     const { form, errors, enhance } = superForm(data.form, {
         resetForm: false,

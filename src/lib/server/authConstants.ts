@@ -1,4 +1,4 @@
-import type { CompanyRep, School, Student } from '@prisma/client';
+import type { Host, School, Student } from '@prisma/client';
 import { TimeSpan } from 'lucia';
 import { alphabet } from 'oslo/crypto';
 
@@ -23,7 +23,7 @@ export interface DatabaseUserAttributes {
 	email: string;
 	emailVerified: boolean;
     student: Student | null;
-    companyRep: CompanyRep | null;
+    host: Host | null;
     school: School | null;
 	accountSetupFinished: boolean;
     lastLogin: Date;

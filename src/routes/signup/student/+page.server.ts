@@ -1,7 +1,7 @@
 import { PageType, userAccountSetupFlow } from '$lib/server/authFlow';
 import { fail, redirect, type Actions } from '@sveltejs/kit';
 import type { PageServerLoad } from "./$types";
-import { schema } from "./schema";
+import { createStudentSchema } from "./schema";
 import { superValidate } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
 import { generateEmailVerificationCode, generatePermissionSlipCode, signup } from '$lib/server/auth';
@@ -13,14 +13,19 @@ import { sendEmailVerificationEmail, sendPermissionSlipEmail } from '$lib/server
 export const load: PageServerLoad = async (event) => {
     userAccountSetupFlow(event.locals, PageType.AccountCreation);
 
-    const form = await superValidate(zod(schema));
-    return { form };
+    const schoolId = event.cookies.get("school");
+    const schools = await prisma.school.findMany();
+    const schoolMapping = Object.fromEntries(schools.map((val) => [val.id, val.name]));
+
+    const form = await superValidate(zod(createStudentSchema(schoolId)));
+    return { form, schoolMapping };
 };
 
 export const actions: Actions = {
     default: async (event) => {
         const { request } = event;
-        const form = await superValidate(request, zod(schema));
+        const schoolId = event.cookies.get("school");
+        const form = await superValidate(request, zod(createStudentSchema(schoolId)));
 
         if (!form.valid) {
             return fail(400, { form });

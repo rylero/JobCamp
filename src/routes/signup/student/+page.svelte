@@ -1,12 +1,7 @@
 <script lang="ts">
     import { superForm } from "sveltekit-superforms";
-    import type { PageData } from "./$types";
 
-    interface Props {
-        data: PageData;
-    }
-
-    let { data }: Props = $props();
+    let { data } = $props();
 
     const { form, errors, enhance } = superForm(data.form, {
         resetForm: false,
@@ -20,6 +15,16 @@
 <div class="flex flex-col px-10 min-h-96 py-10 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 justify-center items-center gap-8 border-4 bg-slate-100">
     <h1 class="text-4xl">Sign Up</h1>
     <form method="POST" class="flex flex-col justify-center items-center gap-3" use:enhance>
+        <div class="flex w-96 justify-between">
+            <label for="grade">School</label>
+            <select class="px-2 py-0.5 rounded w-52" name="grade" bind:value={$form.schoolId}>
+                {#each data.schoolMapping as school}
+                    <option value={school} selected={$form.schoolId == school}>{schoolMapping[school]}</option>
+                {/each}
+            </select>
+        </div>
+        {#if $errors.schoolId}<span class="text-sm text-red-500">{$errors.schoolId}</span>{/if}
+
         <div class="flex w-96 justify-between">
             <label for="grade">Grade</label>
             <select class="px-2 py-0.5 rounded w-52" name="grade" bind:value={$form.grade}>

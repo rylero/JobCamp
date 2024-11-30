@@ -1,6 +1,6 @@
 import { z } from "zod"
 
-import { isMobilePhone } from "$lib/utils";
+import { isMobilePhone } from "$lib/server/auth";
 
 export const schema = z.object({
     schoolId: z.string(),
@@ -9,6 +9,6 @@ export const schema = z.object({
     parentEmail: z.string().email("Please enter a valid email."),
     phone: z.string().refine((arg) => isMobilePhone.test(arg), "Please enter a valid phone number."),
     allowPhoneMessaging: z.literal(true, { errorMap: () => ({ message: "You must accept phone messages." })}),
-    email: z.string().email("Please enter a valid email."),
+    email: z.string().email("Plea   se enter a valid email."),
     password: z.string().min(8, "Password must be at least 8 characters long."),
 });

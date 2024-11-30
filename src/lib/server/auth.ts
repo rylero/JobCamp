@@ -145,7 +145,7 @@ export const lucia = new Lucia(luciaAuthDb, {
 			email: attributes.email,
 			emailVerified: attributes.emailVerified,
             student: attributes.student,
-            companyRep: attributes.companyRep,
+            host: attributes.host,
             school: attributes.school,
 			accountSetupFinished: attributes.accountSetupFinished,
             lastLogin: attributes.lastLogin,
@@ -158,4 +158,10 @@ declare module "lucia" {
 		Lucia: typeof lucia;
 		DatabaseUserAttributes: DatabaseUserAttributes;
 	}
+}
+
+export const isMobilePhone = new RegExp(/^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/);
+
+export const schoolEmailCheck = (schoolEmailDomain: string) => {
+    return new RegExp('^[A-Za-z0-9._%+-]+'+schoolEmailDomain+'$');
 }

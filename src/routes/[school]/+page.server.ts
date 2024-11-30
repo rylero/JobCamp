@@ -11,7 +11,7 @@ export const load : PageServerLoad = async ({ cookies, params }) => {
     }
 
     cookies.set("school", schoolData.id, {
-		path: ".",
+		    path: ".",
     });
 
     return { schoolData };

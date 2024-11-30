@@ -99,9 +99,9 @@ export async function login(email: string, password: string, event: RequestEvent
 		return AuthError.IncorrectCredentials;
 	}
 
-	updateLastLoginToNow(existingUser.id);
+	await updateLastLoginToNow(existingUser.id);
 
-	setNewLuciaSession(existingUser.id, event);
+	await setNewLuciaSession(existingUser.id, event);
 
 	return existingUser.id;
 }
@@ -126,7 +126,7 @@ export async function signup(email: string, password: string, event: RequestEven
 		}
 	});
 
-	setNewLuciaSession(userId, event);
+	await setNewLuciaSession(userId, event);
 
 	return userId;
 }

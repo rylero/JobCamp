@@ -6,7 +6,7 @@ export const createStudentSchema = (schoolId: string | undefined) => {
     if (schoolId) {
         return z.object({
             schoolId: z.string().default(schoolId),
-            grade: z.number().int().min(9).max(12),
+            grade: z.number().int().min(9).max(12).default(9),
             name: z.string().min(1),
             parentEmail: z.string().email("Please enter a valid email."),
             phone: z.string().refine((arg) => isMobilePhone.test(arg), "Please enter a valid phone number."),

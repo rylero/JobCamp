@@ -22,8 +22,6 @@ RUN pnpm install
 # Copy the rest of the app files
 COPY . .
 
-ENV MAILTRAP_TOKEN 73463203979e676a06c8f0e699c04aca
-ENV DATABASE_URL mysql://172.16.0.2:3306
 # Generate Prisma Client (ensure this runs after npm install)
 RUN npx prisma generate
 

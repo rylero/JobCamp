@@ -1,5 +1,10 @@
-# Use the Node.js image to run the SvelteKit app
-FROM node:22
+FROM node:22-bookworm-slim AS build
+ENV PNPM_HOME="/pnpm"
+ENV PATH="$PNPM_HOME:$PATH"
+RUN corepack enable
+
+RUN apt-get update -y
+RUN apt-get install -y openssl
 
 # Install the Cloud SQL Auth Proxy
 ADD https://storage.googleapis.com/cloud-sql-connectors/cloud-sql-proxy/v2.14.0/cloud-sql-proxy.linux.amd64 /cloud_sql_proxy
@@ -9,10 +14,14 @@ RUN chmod +x /cloud_sql_proxy
 WORKDIR /usr/src/app
 
 # Copy package.json and package-lock.json
-COPY package*.json ./
+COPY package.json .
+COPY pnpm-lock.yaml .
+COPY tsconfig.json .
+COPY svelte.config.js .
+COPY vite.config.ts .
 
 # Install dependencies
-RUN npm install
+RUN pnpm install
 
 # Copy the rest of the app files
 COPY . .

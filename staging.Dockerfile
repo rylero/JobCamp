@@ -3,6 +3,11 @@ ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
 RUN corepack enable
 
+ARG MAILTRAP_TOKEN
+ARG DATABASE_URL
+ENV DATABASE_URL=${DATABASE_URL}
+ENV MAILTRAP_TOKEN=${MAILTRAP_TOKEN}
+
 RUN apt-get update -y
 RUN apt-get install -y openssl
 
@@ -33,4 +38,4 @@ ENV PORT 34040
 EXPOSE 34040
 
 # Set the command to run the app
-CMD npx prisma db push; pnpm run start
+CMD pnpm run start

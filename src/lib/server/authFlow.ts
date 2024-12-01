@@ -15,7 +15,6 @@ export function userAccountSetupFlow(locals: App.Locals, pageType: PageType) {
         return;
     }
 
-
     if (!locals.user) {
         if (pageType == PageType.AccountCreation || pageType == PageType.Login) {
             return;

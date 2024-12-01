@@ -1,12 +1,9 @@
 <script lang="ts">
+    import { Input } from "$lib/components/ui/input/index.js";
+    import { Checkbox } from "$lib/components/ui/checkbox/index.js";
     import { superForm } from "sveltekit-superforms";
-    import type { PageData } from "./$types";
 
-    interface Props {
-        data: PageData;
-    }
-
-    let { data }: Props = $props();
+    let { data } = $props();
 
     const { form, errors, enhance } = superForm(data.form, {
         resetForm: false,
@@ -16,13 +13,22 @@
     let showPassword = $state(false);
     let passwordEntryType = $derived(showPassword ? 'text' : 'password')
 </script>
+<div class="w-full min-h-screen flex flex-col gap-8 justify-center items-center">
+    <form method="POST" class="flex flex-col justify-between items-center gap-4 py-10 px-10 border-2 rounded-lg shadow-2xl" use:enhance>
+        <h1 class="text-4xl">Sign Up</h1>
+        <div class="flex w-96 justify-between">
+            <label for="grade">School</label>
+            <select class="px-2 py-2 rounded w-52 border" name="grade" bind:value={$form.schoolId}>
+                {#each Object.keys(data.schoolMapping) as schoolId}
+                    <option value={schoolId} selected={$form.schoolId == schoolId}>{data.schoolMapping[schoolId]}</option>
+                {/each}
+            </select>
+        </div>
+        {#if $errors.schoolId}<span class="text-sm text-red-500">{$errors.schoolId}</span>{/if}
 
-<div class="flex flex-col px-10 min-h-96 py-10 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 justify-center items-center gap-8 border-4 bg-slate-100">
-    <h1 class="text-4xl">Sign Up</h1>
-    <form method="POST" class="flex flex-col justify-center items-center gap-3" use:enhance>
         <div class="flex w-96 justify-between">
             <label for="grade">Grade</label>
-            <select class="px-2 py-0.5 rounded w-52" name="grade" bind:value={$form.grade}>
+            <select class="px-2 py-2 rounded w-52 border" name="grade" bind:value={$form.grade}>
                 {#each [9,10,11,12] as grade}
                     <option value={grade} selected={$form.grade == grade}>{grade}th Grade</option>
                 {/each}
@@ -32,42 +38,42 @@
 
         <div class="flex w-96 justify-between">
             <label for="name">Full Name</label>
-            <input class="px-2 py-0.5 rounded w-52" type="text" name="name" bind:value={$form.name} />
+            <Input class="px-2 py-0.5 rounded w-52" type="text" name="name" bind:value={$form.name} />
         </div>
         {#if $errors.name}<span class="text-sm text-red-500">{$errors.name}</span>{/if}
 
         <div class="flex w-96 justify-between">
             <label for="parentEmail">Parent Email</label>
-            <input class="px-2 py-0.5 rounded w-52" type="text" name="parentEmail" bind:value={$form.parentEmail} />
+            <Input class="px-2 py-0.5 rounded w-52" type="text" name="parentEmail" bind:value={$form.parentEmail} />
         </div>
         {#if $errors.parentEmail}<span class="text-sm text-red-500">{$errors.parentEmail}</span>{/if}
 
         <div class="flex w-96 justify-between">
             <label for="phone">Phone</label>
-            <input class="px-2 py-0.5 rounded w-52" type="text" name="phone" bind:value={$form.phone} />
+            <Input class="px-2 py-0.5 rounded w-52" type="text" name="phone" bind:value={$form.phone} />
         </div>
         {#if $errors.phone}<span class="text-sm text-red-500">{$errors.phone}</span>{/if}
 
-        <div class="flex w-96 justify-center gap-2">
-            <input class="px-2 py-0.5 rounded" type="checkbox" name="allowPhoneMessaging" bind:checked={$form.allowPhoneMessaging} />
+        <div class="flex w-96 justify-center items-center gap-2">
+            <Checkbox class="rounded" name="allowPhoneMessaging" bind:checked={$form.allowPhoneMessaging} />
             <label for="allowPhoneMessaging">Allow Phone Messaging</label>
         </div>
         {#if $errors.allowPhoneMessaging}<span class="text-sm text-red-500">{$errors.allowPhoneMessaging}</span>{/if}
         
         <div class="flex w-96 justify-between">
             <label for="email">Email</label>
-            <input class="px-2 py-0.5 rounded w-52" type="text" name="email" bind:value={$form.email} />
+            <Input class="px-2 py-0.5 rounded w-52" type="text" name="email" bind:value={$form.email} />
         </div>
         {#if $errors.email}<span class="text-sm text-red-500">{$errors.email}</span>{/if}
 
         <div class="flex w-96 justify-between">
             <label for="password">Password</label>
-            <input class="px-2 py-0.5 rounded w-52" {...{ type: passwordEntryType }} name="password" bind:value={$form.password} />
+            <Input class="px-2 py-0.5 rounded w-52" {...{ type: passwordEntryType }} name="password" bind:value={$form.password} />
         </div>
         {#if $errors.password}<span class="text-sm text-red-500">{$errors.password}</span>{/if}
         
-        <div class="flex w-96 justify-center">
-            <label><input type="checkbox" bind:checked={showPassword} /> Show Password</label>
+        <div class="flex w-96 justify-center items-center">
+            <Checkbox class="rounded mr-2" bind:checked={showPassword} /><label>Show Password</label>
         </div>
 
         <button type="submit" class="mt-2 w-24 h-8 rounded bg-blue-500 text-white hover:bg-blue-600">Sign Up</button>

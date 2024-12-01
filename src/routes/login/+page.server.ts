@@ -23,7 +23,7 @@ export const actions: Actions = {
             return fail(400, { form });
         }
 
-        login(form.data.email, form.data.password, event);
+        await login(form.data.email, form.data.password, event);
         
         redirect(302, "/verify-email");
     }

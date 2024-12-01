@@ -27,8 +27,11 @@ export function userAccountSetupFlow(locals: App.Locals, pageType: PageType) {
         }
     }
 
-    if (!locals.user.emailVerified && pageType != PageType.EmailVerify) {
-        redirect(302, "/verify-email");
+    if (!locals.user.emailVerified) {
+        if (pageType != PageType.EmailVerify) {
+            redirect(302, "/verify-email");
+        }
+        return;
     }
 
     var permissionSlipNeeded = locals.user.student && locals.user.student.permissionSlipCompleted == false;

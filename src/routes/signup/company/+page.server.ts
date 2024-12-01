@@ -1,7 +1,7 @@
 import { PageType, userAccountSetupFlow } from '$lib/server/authFlow';
 import { fail, redirect, type Actions } from '@sveltejs/kit';
 import type { PageServerLoad } from "./$types";
-import schema from "./schema.js";
+import { createCompanySchema } from "./schema.js";
 import { setError, superValidate } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
 import { generateEmailVerificationCode, generatePermissionSlipCode, schoolEmailCheck, signup } from '$lib/server/auth';
@@ -13,14 +13,19 @@ import { sendEmailVerificationEmail, sendPermissionSlipEmail } from '$lib/server
 export const load: PageServerLoad = async (event) => {
     userAccountSetupFlow(event.locals, PageType.AccountCreation);
 
-    const form = await superValidate(zod(schema));
-    return { form };
+    const schoolId = event.cookies.get("school");
+    const schools = await prisma.school.findMany();
+    const schoolMapping = Object.fromEntries(schools.map((val) => [val.id, val.name]));
+
+    const form = await superValidate(zod(createCompanySchema(schoolId)));
+    return { form, schoolMapping };
 };
 
 export const actions: Actions = {
     default: async (event) => {
         const { request } = event;
-        const form = await superValidate(request, zod(schema));
+        const schoolIdCookie = event.cookies.get("school");
+        const form = await superValidate(request, zod(createCompanySchema(schoolIdCookie)));
 
         if (!form.valid) {
             return fail(400, { form });
@@ -29,6 +34,12 @@ export const actions: Actions = {
         const userId = await signup(form.data.email, form.data.password, event);
         if (userId == AuthError.IncorrectCredentials || userId == AuthError.AccountExists) {
             return fail(400, { form });
+        }
+
+        const schoolId = form.data.schoolId;
+        const schoolData = await prisma.school.findFirst({where: {id: schoolId}});
+        if (!schoolData) {
+            return setError(form, "schoolId", "School does not exist.");
         }
 
         await prisma.user.update({

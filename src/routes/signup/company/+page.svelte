@@ -40,8 +40,8 @@
         {#if $errors.companyDescription}<span class="text-sm text-red-500">{$errors.companyDescription}</span>{/if}
 
         <div class="flex w-96 justify-between items-center">
-            <label for="companyUrl">Company Url</label>
-            <Input class="px-2 py-0.5 rounded w-52" type="text" name="companyUrl" bind:value={$form.companyUrl} />
+            <label for="companyUrl">Company URL</label>
+            <Input class="px-2 py-0.5 rounded w-52" type="text" name="companyUrl" placeholder="(Optional)" bind:value={$form.companyUrl} />
         </div>
         {#if $errors.companyUrl}<span class="text-sm text-red-500">{$errors.companyUrl}</span>{/if}
 

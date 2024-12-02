@@ -1,8 +1,11 @@
 <script lang="ts">
-    import Button from "$lib/components/ui/button/button.svelte";
+    import Navbar from "$lib/components/navbar/Navbar.svelte";
 
+    let { data } = $props();
+
+    let hostAndPositionData = $derived(JSON.stringify(data.hostAndPositionInfo))
 </script>
 
-<form method="POST">
-    <Button type="submit">Signout</Button>
-</form>
+<Navbar />
+
+{ hostAndPositionData }

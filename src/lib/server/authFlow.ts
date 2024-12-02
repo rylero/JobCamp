@@ -41,5 +41,9 @@ export function userAccountSetupFlow(locals: App.Locals, pageType: PageType) {
         redirect(302, "/dashboard");
     }
 
+    if (locals.user.emailVerified && pageType == PageType.EmailVerify) {
+        redirect(302, "/dashboard");
+    }
+
     return;
 }

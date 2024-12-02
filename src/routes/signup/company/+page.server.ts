@@ -63,6 +63,9 @@ export const actions: Actions = {
                         companyName: form.data.companyName,
                         companyDescription: form.data.companyDescription,
                         companyUrl: form.data.companyUrl,
+                        school: { connect: {
+                            id: schoolId
+                        }}
                     }
                 }}
             }

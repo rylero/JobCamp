@@ -10,8 +10,8 @@
     <h1 class="ml-4 text-2xl text-white">JobCamp</h1>
 
     <DropdownMenu.Root>
-        <DropdownMenu.Trigger asChild let:builder>
-            <Button builders={[builder]} variant="outline"><User />Profile</Button>
+        <DropdownMenu.Trigger>
+            <Button variant="outline"><User />Profile</Button>
         </DropdownMenu.Trigger>
         <DropdownMenu.Content>
             <DropdownMenu.Item>

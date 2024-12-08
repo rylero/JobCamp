@@ -8,149 +8,135 @@ datasource db {
 }
 
 model Event {
-  id                       String      @id @default(cuid())
+  id                    String     @id @default(cuid())
+  schoolId              String
+  date                  DateTime
+  displayLotteryResults Boolean
+  school                School     @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  positions             Position[]
 
-  schoolId                 String
-  school                   School      @relation(references: [id], fields: [schoolId], onDelete: Cascade)
-
-  date                     DateTime
-
-  displayLotteryResults    Boolean
-
-  positions                Position[]
+  @@index([schoolId], map: "Event_schoolId_fkey")
 }
 
 model School {
-  id                       String      @id @default(cuid())
-  
-  name                     String
-  emailDomain              String
-  webAddr                  String
-
-  adminId                  String      @unique
-  admin                    User        @relation(references: [id], fields: [adminId], onDelete: Cascade)
-
-  events                   Event[]
-
-  students                 Student[]
-  companies                Company[]
+  id          String    @id @default(cuid())
+  name        String
+  emailDomain String
+  webAddr     String
+  adminId     String    @unique
+  companies   Company[]
+  events      Event[]
+  admin       User      @relation(fields: [adminId], references: [id], onDelete: Cascade)
+  students    Student[]
 }
 
 model Position {
-  id                       String      @id @default(cuid())
+  id                String                @id @default(cuid())
+  start             DateTime
+  end               DateTime
+  eventId           String
+  hostId            String
+  event             Event                 @relation(fields: [eventId], references: [id])
+  host              Host                  @relation(fields: [hostId], references: [id])
+  students          PositionsOnStudents[]
+  studentsAttending Student[]
 
-  start                    DateTime
-  end                      DateTime
-
-  eventId                  String
-  event                    Event       @relation(references: [id], fields: [eventId])
-
-  hostId                   String
-  host                     Host        @relation(references: [id], fields: [hostId])
-
-  students                 PositionsOnStudents[]
-  studentsAttending        Student[]
+  @@index([eventId], map: "Position_eventId_fkey")
+  @@index([hostId], map: "Position_hostId_fkey")
 }
 
 model Student {
-  id                       String      @id @default(cuid())
+  id                      String                @id @default(cuid())
+  name                    String
+  phone                   String
+  grade                   Int
+  parentEmail             String
+  permissionSlipCompleted Boolean               @default(false)
+  schoolId                String?
+  userId                  String?               @unique
+  lotteryPositionId       String?
+  positionsSignedUpFor    PositionsOnStudents[]
+  lotteryResult           Position?             @relation(fields: [lotteryPositionId], references: [id])
+  school                  School?               @relation(fields: [schoolId], references: [id])
+  user                    User?                 @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  name                     String
-  phone                    String
-  grade                    Int
-
-  parentEmail              String
-  permissionSlipCompleted  Boolean     @default(false)
-
-  school                   School?     @relation(fields: [schoolId], references: [id])
-  schoolId                 String?
-
-  userId                   String?     @unique
-  user                     User?       @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  positionsSignedUpFor     PositionsOnStudents[]
-
-  lotteryPositionId        String?
-  lotteryResult            Position?   @relation(fields: [lotteryPositionId], references: [id])
+  @@index([lotteryPositionId], map: "Student_lotteryPositionId_fkey")
+  @@index([schoolId], map: "Student_schoolId_fkey")
 }
 
 model PositionsOnStudents {
-  position                 Position    @relation(fields: [positionId], references: [id])
-  positionId               String
-  student                  Student     @relation(fields: [studentId], references: [id])
-  studentId                String
+  positionId String
+  studentId  String
+  position   Position @relation(fields: [positionId], references: [id])
+  student    Student  @relation(fields: [studentId], references: [id])
 
   @@id([positionId, studentId])
+  @@index([studentId], map: "PositionsOnStudents_studentId_fkey")
 }
 
 model Company {
-  id                       String      @id @default(cuid())
+  id                 String  @id @default(cuid())
+  companyName        String  @unique
+  companyDescription String  @db.VarChar(1024)
+  companyUrl         String?
+  schoolId           String?
+  school             School? @relation(fields: [schoolId], references: [id])
+  hosts              Host[]
 
-  companyName              String      @unique
-  companyDescription       String      @db.VarChar(1024)
-  companyUrl               String?
-
-  school                   School?     @relation(fields: [schoolId], references: [id])
-  schoolId                 String?
-
-  hosts                    Host[]
+  @@index([schoolId], map: "Company_schoolId_fkey")
 }
 
 model Host {
-  id                       String      @id @default(cuid())
+  id        String     @id @default(cuid())
+  name      String
+  companyId String?
+  userId    String     @unique
+  company   Company?   @relation(fields: [companyId], references: [id])
+  user      User       @relation(fields: [userId], references: [id])
+  positions Position[]
 
-  name                     String
-
-  companyId                String?
-  company                  Company?    @relation(references: [id], fields: [companyId])
-  
-  userId                   String      @unique
-  user                     User        @relation(references: [id], fields: [userId])
-
-  positions                Position[]
+  @@index([companyId], map: "Host_companyId_fkey")
 }
 
 model User {
-  id                       String      @id
-  email                    String      @unique
-  passwordHash             String
-  passwordSalt             String
-  emailVerified            Boolean     @default(false)
-  
-  student                  Student?
-  host                     Host?
-  school                   School?
-  
-  lastLogin                DateTime
-  
-  sessions                 Session[]
+  id            String    @id @default(cuid())
+  email         String    @unique
+  passwordHash  String
+  passwordSalt  String
+  emailVerified Boolean   @default(false)
+  lastLogin     DateTime
+  host          Host?
+  school        School?
+  sessions      Session[]
+  student       Student?
 }
 
 model Session {
-  id                       String      @id
-  expiresAt                DateTime
+  id        String   @id
+  expiresAt DateTime
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  userId                   String
-  user                     User        @relation(references: [id], fields: [userId], onDelete: Cascade)
+  @@index([userId], map: "Session_userId_fkey")
 }
 
 model EmailVerificationCodes {
-  id                       String      @id @default(cuid())
-  user_id                  String      @unique
-  email                    String
-  code                     String
-  expires_at               DateTime
+  id         String   @id @default(cuid())
+  user_id    String   @unique
+  email      String
+  code       String
+  expires_at DateTime
 }
 
 model PasswordResetTokens {
-  id                       String      @id @default(cuid())
-  user_id                  String      @unique
-  token_hash               String      @unique
-  expires_at               DateTime
+  id         String   @id @default(cuid())
+  user_id    String   @unique
+  token_hash String   @unique
+  expires_at DateTime
 }
 
 model PermissionSlipCode {
-  id                       String      @id @default(cuid())
-  user_id                  String      @unique
-  code                     String
+  id      String @id @default(cuid())
+  user_id String @unique
+  code    String
 }

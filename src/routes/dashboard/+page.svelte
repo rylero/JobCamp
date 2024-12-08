@@ -1,4 +1,5 @@
 <script lang="ts">
+    import CreateNewPositionScreen from "$lib/components/dashboard/CreateNewPositionScreen.svelte";
     import Navbar from "$lib/components/navbar/Navbar.svelte";
 
     let { data } = $props();
@@ -8,4 +9,6 @@
 
 <Navbar />
 
-{ hostAndPositionData }
+<div class="h-20"></div>
+
+<CreateNewPositionScreen />

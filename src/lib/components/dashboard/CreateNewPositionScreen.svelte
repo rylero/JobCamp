@@ -4,7 +4,7 @@
     import { Input } from "../ui/input";
     import { Label } from "../ui/label";
     import { Textarea } from "../ui/textarea";
-
+    import { careers } from "$lib/appconfig";
 </script>
 
 <div class="w-full min-h-[calc(100vh-5rem)] flex justify-center items-center">
@@ -17,14 +17,23 @@
         </div>
 
         <div class="flex w-full max-w-sm flex-col gap-1.5">
+            <Label for="career">Career</Label>
+            <select id="career">
+                {#each careers as career}
+                    <option value="career">{career}</option>
+                {/each}
+            </select>
+        </div>
+
+        <div class="flex w-full max-w-sm flex-col gap-1.5">
             <Label for="sumamry">Summary</Label>
             <Textarea id="summary" />
         </div>
-
+        
         <div class="flex w-full max-w-sm justify-between gap-3">
             <div class="w-full h-full">
                 <Label for="instructions">Instructions For Students</Label>
-                <Textarea id="instructions" class="h-full" />
+                <Textarea id="instructions" placeholder="Dress code, specific meeting location, parking information, etc." class="h-full" />
             </div>
             <div>
                 <div class="flex w-full max-w-sm flex-col gap-1.5">

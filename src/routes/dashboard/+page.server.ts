@@ -13,14 +13,18 @@ export const load: PageServerLoad = async (event) => {
         redirect(302, "/login");
     }
 
-    const hostAndPositionInfo = await prisma.host.findFirst({
-        where: { userId: event.locals.user?.id },
+    const userAndHostInfo = await prisma.user.findFirst({
+        where: { id: event.locals.user?.id },
         include: {
-            positions: true
+            host: true,
         }
     });
 
-    return { userData: event.locals.user, hostAndPositionInfo };
+    if (!userAndHostInfo || !userAndHostInfo.host) {
+        redirect(302, "/login")
+    }
+
+    return { userData: event.locals.user, userAndHostInfo };
 };
 
 export const actions: Actions = {

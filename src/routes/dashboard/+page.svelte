@@ -4,11 +4,13 @@
 
     let { data } = $props();
 
-    let hostAndPositionData = $derived(JSON.stringify(data.hostAndPositionInfo))
+    let userAndHostInfo = $derived(data.userAndHostInfo)
 </script>
 
 <Navbar />
 
-<div class="h-20"></div>
+<div class="h-24"></div>
 
-<CreateNewPositionScreen />
+<CreateNewPositionScreen userData={{ name: userAndHostInfo.host.name, email: userAndHostInfo.email }} />
+
+<div class="h-2"></div>

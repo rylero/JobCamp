@@ -6,7 +6,7 @@
     import Settings from "lucide-svelte/icons/settings";
 </script>
 
-<nav class="w-screen h-20 fixed top-0 left-0 bg-gray-800 flex flex-row justify-between items-center px-5">
+<nav class="w-screen h-20 fixed top-0 left-0 bg-gray-800 flex flex-row justify-between items-center px-5 z-50">
     <h1 class="ml-4 text-2xl text-white">JobCamp</h1>
 
     <DropdownMenu.Root>
@@ -29,7 +29,7 @@
         </DropdownMenu.Content>
     </DropdownMenu.Root>
 </nav>
-<form id="logOutForm" method="POST"></form>
+<form id="logOutForm"  method="POST" action="?/logOut"></form>
 
 <style>
     .nav-dropdown-button:hover {

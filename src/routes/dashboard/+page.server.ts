@@ -13,22 +13,25 @@ export const load: PageServerLoad = async (event) => {
         redirect(302, "/login");
     }
 
-    const userAndHostInfo = await prisma.user.findFirst({
-        where: { id: event.locals.user?.id },
-        include: {
-            host: true,
-        }
+    const userInfo = await prisma.user.findFirst({
+        where: { id: event.locals.user.id }
     });
-
-    if (!userAndHostInfo || !userAndHostInfo.host) {
+    if (!userInfo) {
+        redirect(302, "/login")
+    }
+    
+    const hostInfo = await prisma.host.findFirst({
+        where: { userId: userInfo.id }
+    });
+    if (!hostInfo) {
         redirect(302, "/login")
     }
 
-    return { userData: event.locals.user, userAndHostInfo };
+    return { userData: event.locals.user, user: userInfo, host: hostInfo };
 };
 
 export const actions: Actions = {
-    default: async ({ locals, cookies }) => {
+    logOut: async ({ locals, cookies }) => {
         if (locals.session) {
             const session = await lucia.validateSession(locals.session.id);
             if (!session) return fail(401);
@@ -36,5 +39,8 @@ export const actions: Actions = {
             cookies.delete(lucia.sessionCookieName, { path: "." });
         }
         redirect(302, "/login")
+    },
+    createPosition: async ({ locals, cookies }) => {
+        return;
     }
 };

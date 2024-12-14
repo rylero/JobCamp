@@ -5,13 +5,15 @@
     import { Label } from "../ui/label";
     import { Textarea } from "../ui/textarea";
     import { careers } from "$lib/appconfig";
+    import { X } from "lucide-svelte";
 
-    let { userData } = $props();
+    let { userData, closeScreen } = $props();
 </script>
 
 <div class="w-full min-h-[calc(100vh-5rem)] flex justify-center items-center">
-    <form method="POST" action="?/createPosition" class="md:border-2 px-10 py-8 rounded-lg w-[700px] mx-5 flex flex-col gap-4 items-center justify-center" use:enhance>
+    <form method="POST" action="?/createPosition" class="z-0 relative md:border-2 px-10 py-8 rounded-lg w-[700px] mx-5 flex flex-col gap-4 items-center justify-center" use:enhance>
         <h1 class="text-xl">Create New Position</h1>
+        <X onclick={closeScreen} class="absolute top-3 right-3 hover:cursor-pointer"/>
 
         <div class="flex w-full max-w-sm flex-col gap-1.5">
             <Label for="title">Title</Label>
@@ -70,3 +72,5 @@
         </div>
     </form>
 </div>
+
+<div class="h-2"></div>

@@ -35,7 +35,6 @@ export const load: PageServerLoad = async (event) => {
     userAccountSetupFlow(event.locals, PageType.RequiresAuth);
 
     const { userInfo, hostInfo } = await grabUserData(event.locals);
-    console.log(userInfo)
     const form = await superValidate(zod(createNewPositionSchema(hostInfo.name, userInfo.email)));
 
     return { userData: event.locals.user, form };

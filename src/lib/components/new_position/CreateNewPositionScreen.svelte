@@ -1,13 +1,18 @@
 <script lang="ts">
-    import { enhance } from "$app/forms";
     import { Button } from "../ui/button";
     import { Input } from "../ui/input";
     import { Label } from "../ui/label";
     import { Textarea } from "../ui/textarea";
     import { careers } from "$lib/appconfig";
     import { X } from "lucide-svelte";
+    import { superForm } from "sveltekit-superforms";
 
-    let { userData, closeScreen } = $props();
+    let { formHandler, closeScreen } = $props();
+
+    const { form, errors, enhance } = superForm(formHandler, {
+        resetForm: false,
+		clearOnSubmit: 'none'
+    });
 </script>
 
 <div class="w-full min-h-[calc(100vh-5rem)] flex justify-center items-center">
@@ -17,7 +22,8 @@
 
         <div class="flex w-full max-w-sm flex-col gap-1.5">
             <Label for="title">Title</Label>
-            <Input id="title" />
+            <Input name="title" id="title" bind:value={$form.title} />
+            {#if $errors.title}<span class="text-sm text-red-500">{$errors.title}</span>{/if}
         </div>
 
         <div class="flex w-full max-w-sm flex-col gap-1.5">
@@ -31,17 +37,17 @@
 
         <div class="flex w-full max-w-sm flex-col gap-1.5">
             <Label for="sumamry">Summary</Label>
-            <Textarea id="summary" />
+            <Textarea id="summary" placeholder="What will students learn about and do?" />
         </div>
         
         <div class="flex justify-between items-center w-full max-w-sm gap-1.5">
             <Label for="name" class="w-28">Full Name</Label>
-            <Input class="w-full" id="name" value={userData.name} />
+            <Input class="w-full" id="name" bind:value={$form.fullName}  />
         </div>
 
         <div class="flex justify-between items-center w-full max-w-sm gap-1.5">
             <Label for="email" class="w-28">Email</Label>
-            <Input class="w-full" id="email" value={userData.email} />
+            <Input class="w-full" id="email" bind:value={$form.email}  />
         </div>
 
         <div class="flex w-full max-w-sm flex-col gap-1.5">
@@ -50,17 +56,27 @@
         </div>
         
         <div class="flex w-full max-w-sm justify-between gap-3">
-            <div class="flex w-full max-w-sm flex-col gap-1.5">
-                <Label for="instructions">Instructions For Students</Label>
-                <Textarea id="instructions" placeholder="Dress code, specific meeting location, parking information, etc." class="h-full" />
+            <div class="flex flex-col gap-1.5">
+                <div class="flex w-full max-w-sm flex-col gap-1.5">
+                    <Label for="instructions">Instructions For Students</Label>
+                    <Textarea id="instructions" placeholder="Any other instructions students need to know. Include specific meeting location." class="h-full" />
+                </div>
+                <div class="flex w-full max-w-sm flex-col gap-1.5">
+                    <Label for="instructions">Attire Instructions</Label>
+                    <Textarea id="instructions" placeholder="E.g., Closed-toed shoes, no heels, no shorts, no sneakers, no jeans, etc. The more specific you can be, the better chance students will meet your requirements" class="h-full" />
+                </div>
             </div>
             <div class="flex flex-col gap-1.5">
                 <div class="flex w-full max-w-md flex-col gap-1.5">
-                    <Label for="arrival">Arrival</Label>
+                    <Label for="arrival">Arrival Time</Label>
                     <Input class="w-max" id="arrival" type="time" />
                 </div>
                 <div class="flex w-full max-w-md flex-col gap-1.5">
-                    <Label for="release">Release</Label>
+                    <Label for="arrival">Start Time</Label>
+                    <Input class="w-max" id="arrival" type="time" />
+                </div>
+                <div class="flex w-full max-w-md flex-col gap-1.5">
+                    <Label for="release">Release Time</Label>
                     <Input class="w-max" id="release" type="time" />
                 </div>
             </div>
@@ -68,7 +84,7 @@
         
 
         <div class="w-full flex justify-center">
-            <Button class="w-28 py-4 text-lg">Create</Button>
+            <Button type="submit" class="w-28 py-4 text-lg">Create</Button>
         </div>
     </form>
 </div>

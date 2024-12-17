@@ -1,5 +1,5 @@
 <script lang="ts">
-    import CreateNewPositionScreen from "$lib/components/dashboard/CreateNewPositionScreen.svelte";
+    import CreateNewPositionScreen from "$lib/components/new_position/CreateNewPositionScreen.svelte";
     import Navbar from "$lib/components/navbar/Navbar.svelte";
     import { CirclePlus } from 'lucide-svelte';
     import { Button } from "$lib/components/ui/button";
@@ -20,6 +20,6 @@
 
 {:else}
 
-<CreateNewPositionScreen userData={{ name: data.host.name, email: data.user.email }} closeScreen={() => createPositionOpen = false} />
+<CreateNewPositionScreen formHandler={data.form} closeScreen={() => createPositionOpen = false} />
 
 {/if}

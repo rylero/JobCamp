@@ -5,16 +5,17 @@ import { lucia } from "$lib/server/auth";
 import { PageType, userAccountSetupFlow } from '$lib/server/authFlow';
 import type { PageServerLoad } from "./$types";
 import { prisma } from "$lib/server/prisma";
+import { superValidate } from "sveltekit-superforms";
+import { createNewPositionSchema } from "$lib/components/new_position/schema";
+import { zod } from "sveltekit-superforms/adapters";
 
-export const load: PageServerLoad = async (event) => {
-    userAccountSetupFlow(event.locals, PageType.RequiresAuth);
-
-    if (!event.locals.user) {
+const grabUserData = async (locals : App.Locals) => {
+    if (!locals.user) {
         redirect(302, "/login");
     }
 
     const userInfo = await prisma.user.findFirst({
-        where: { id: event.locals.user.id }
+        where: { id: locals.user.id }
     });
     if (!userInfo) {
         redirect(302, "/login")
@@ -27,7 +28,17 @@ export const load: PageServerLoad = async (event) => {
         redirect(302, "/login")
     }
 
-    return { userData: event.locals.user, user: userInfo, host: hostInfo };
+    return { userInfo, hostInfo }
+}
+
+export const load: PageServerLoad = async (event) => {
+    userAccountSetupFlow(event.locals, PageType.RequiresAuth);
+
+    const { userInfo, hostInfo } = await grabUserData(event.locals);
+    console.log(userInfo)
+    const form = await superValidate(zod(createNewPositionSchema(hostInfo.name, userInfo.email)));
+
+    return { userData: event.locals.user, form };
 };
 
 export const actions: Actions = {
@@ -40,7 +51,15 @@ export const actions: Actions = {
         }
         redirect(302, "/login")
     },
-    createPosition: async ({ locals, cookies }) => {
-        return;
+    createPosition: async ({ request, locals, cookies }) => {
+        console.log(await request.formData());
+        const { userInfo, hostInfo } = await grabUserData(locals);
+        const form = await superValidate(request, zod(createNewPositionSchema(hostInfo.name, userInfo.email)));
+
+        if (!form.valid) {
+            return fail(400, { form });
+        }
+
+        console.log(form.data)
     }
 };

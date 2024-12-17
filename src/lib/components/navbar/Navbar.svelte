@@ -14,12 +14,12 @@
             <Button variant="outline"><User />Profile</Button>
         </DropdownMenu.Trigger>
         <DropdownMenu.Content>
-            <DropdownMenu.Item>
+            <!-- <DropdownMenu.Item>
                 <button class="nav-dropdown-button">
                     <Settings class="mr-2 h-4 w-4" />
                     <span>Settings</span>
                 </button>
-            </DropdownMenu.Item>
+            </DropdownMenu.Item> -->
             <DropdownMenu.Item>
                 <button type="submit" form="logOutForm" class="nav-dropdown-button">
                     <LogOut class="mr-2 h-4 w-4" />

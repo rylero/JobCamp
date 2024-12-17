@@ -56,7 +56,7 @@
 
         <div class="flex w-96 justify-center items-center gap-2">
             <Checkbox class="rounded" name="allowPhoneMessaging" bind:checked={$form.allowPhoneMessaging} />
-            <label for="allowPhoneMessaging">Allow Phone Messaging</label>
+            <label for="allowPhoneMessaging">Allow SMS Messaging</label>
         </div>
         {#if $errors.allowPhoneMessaging}<span class="text-sm text-red-500">{$errors.allowPhoneMessaging}</span>{/if}
         

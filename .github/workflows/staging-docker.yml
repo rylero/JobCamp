@@ -16,11 +16,15 @@ jobs:
     steps:
       - name: 'Checkout'
         uses: 'actions/checkout@v4'
+
+      - name: 'Authenticate Docker'
+        run: |-
+          echo "${{ secrets.CR_PAT }}" | docker login ghcr.io -u rylero --password-stdin
           
       - name: 'Build and Push Container'
         run: |-
           DOCKER_TAG="ghcr.io/rylero/jobcampstaging:latest"
-          docker buildx build -f staging.Dockerfile --tag "${DOCKER_TAG}" --build-arg DATABASE_URL="${{ secrets.STAGING_DATABASE_URL }}"" --build-arg MAILTRAP_TOKEN="${{ secrets.MAILTRAP_TOKEN }}" .
+          docker buildx build -f staging.Dockerfile --tag "${DOCKER_TAG}" --build-arg DATABASE_URL="${{ secrets.STAGING_DATABASE_URL }}" --build-arg MAILTRAP_TOKEN="${{ secrets.MAILTRAP_TOKEN }}" .
           docker push "${DOCKER_TAG}"
 
 

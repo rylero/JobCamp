@@ -22,7 +22,7 @@
 <div class="w-screen h-screen bg-cover bg-center flex flex-col justify-center items-center" style="background-image: url({JobCampBanner});">
     <h1 class="text-8xl md:text-9xl font-bold text-3D text-white">{schoolData.webAddr.toUpperCase()}</h1>
     <h1 class="text-8xl md:text-9xl font-semibold text-3D text-white">JobCamp</h1>
-    <Button class="text-2xl mt-8 py-6 shadow-2xl" href="/signup">Sign Up Now</Button>
+    <Button class="text-2xl mt-8 py-6" href="/signup">Sign Up Now</Button>
 </div>
 
 <style>

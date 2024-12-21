@@ -11,8 +11,8 @@ export const createNewPositionSchema = (name: string, email: string) => {
         address: z.string(),
         instructions: z.string(),
         attire: z.string(),
-        arrival: z.string().time(),
-        start: z.string().time(),
-        relesase: z.string().time(),
+        arrival: z.string(),
+        start: z.string(),
+        relesase: z.string()  ,
     });
 }

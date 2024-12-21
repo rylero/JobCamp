@@ -37,7 +37,7 @@ export const load: PageServerLoad = async (event) => {
     const { userInfo, hostInfo } = await grabUserData(event.locals);
     const form = await superValidate(zod(createNewPositionSchema(hostInfo.name, userInfo.email)));
 
-    return { userData: event.locals.user, form };
+    return { userData: event.locals.user, form, positionCreateOpen: false };
 };
 
 export const actions: Actions = {
@@ -51,14 +51,17 @@ export const actions: Actions = {
         redirect(302, "/login")
     },
     createPosition: async ({ request, locals, cookies }) => {
-        console.log(await request.formData());
+        console.log("test")
         const { userInfo, hostInfo } = await grabUserData(locals);
         const form = await superValidate(request, zod(createNewPositionSchema(hostInfo.name, userInfo.email)));
 
         if (!form.valid) {
-            return fail(400, { form });
+            console.log("fail")
+            return fail(400, { form, positionCreateOpen: true });
         }
+        
+        console.log(form.data.fullName)
 
-        console.log(form.data)
+        return { form, positionCreateOpen: false }
     }
 };

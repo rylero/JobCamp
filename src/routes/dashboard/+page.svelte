@@ -7,9 +7,11 @@
     let { data } = $props();
 
     let createPositionOpen = $state(false);
+
+    let logOutForm = null;
 </script>
 
-<Navbar />
+<Navbar form={logOutForm} />
 
 <div class="h-24"></div>
 

@@ -42,7 +42,7 @@ export const actions: Actions = {
             return setError(form, "schoolId", "School does not exist.");
         }
 
-        await prisma.user.update({
+        const user = await prisma.user.update({
             where: { id: userId },
             data: {
                 host: { create: {
@@ -51,9 +51,8 @@ export const actions: Actions = {
             },
             include: {
                 host: true
-            },
+            }
         });
-
         await prisma.host.update({
             where: { userId: userId },
             data: {

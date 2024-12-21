@@ -115,7 +115,7 @@ export async function signup(email: string, password: string, event: RequestEven
 	const passwordSalt = generateRandomString(16, passwordSaltCharacters); // 128bit salt
 	const passwordHash = await scrypt.hash(password, passwordSalt);
 
-	await prisma.user.create({
+	const user = await prisma.user.create({
 		data: {
 			email,
 			passwordSalt,
@@ -124,9 +124,9 @@ export async function signup(email: string, password: string, event: RequestEven
 		}
 	});
 
-	await setNewLuciaSession(userId, event);
+	await setNewLuciaSession(user.id, event);
 
-	return userId;
+	return user.id;
 }
 
 export const lucia = new Lucia(luciaAuthDb, {

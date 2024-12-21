@@ -4,6 +4,9 @@
     import User from "lucide-svelte/icons/user";
     import LogOut from "lucide-svelte/icons/log-out";
     import Settings from "lucide-svelte/icons/settings";
+    import { enhance } from "$app/forms";
+
+    let { form } = $props();
 </script>
 
 <nav class="w-screen h-20 fixed top-0 left-0 bg-gray-800 flex flex-row justify-between items-center px-5 z-50">
@@ -21,15 +24,16 @@
                 </button>
             </DropdownMenu.Item> -->
             <DropdownMenu.Item>
-                <button type="submit" form="logOutForm" class="nav-dropdown-button">
-                    <LogOut class="mr-2 h-4 w-4" />
-                    <span>Log out</span>
-                </button>
+                <form method="POST" use:enhance action="?/logOut">
+                    <DropdownMenu.Item onclick={() => form.submit()}>
+                        <LogOut class="mr-2 h-4 w-4" />
+                        <input type="submit" value="Log out" />
+                    </DropdownMenu.Item>
+                </form>
             </DropdownMenu.Item>
         </DropdownMenu.Content>
     </DropdownMenu.Root>
 </nav>
-<form id="logOutForm"  method="POST" action="?/logOut"></form>
 
 <style>
     .nav-dropdown-button:hover {

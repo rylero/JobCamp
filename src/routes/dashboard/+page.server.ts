@@ -44,14 +44,13 @@ export const load: PageServerLoad = async (event) => {
 
 export const actions: Actions = {
     logOut: async ({ locals, cookies }) => {
-        console.log("Log out")
-        // if (locals.session) {
-        //     const session = await lucia.validateSession(locals.session.id);
-        //     if (!session) return fail(401);
-        //     await lucia.invalidateSession(locals.session.id);
-        //     cookies.delete(lucia.sessionCookieName, { path: "." });
-        // }
-        // redirect(302, "/login")
+        if (locals.session) {
+            const session = await lucia.validateSession(locals.session.id);
+            if (!session) return fail(401);
+            await lucia.invalidateSession(locals.session.id);
+            cookies.delete(lucia.sessionCookieName, { path: "." });
+        }
+        redirect(302, "/login")
     },
     createPosition: async ({ request, locals, cookies }) => {
         const { userInfo, hostInfo } = await grabUserData(locals);

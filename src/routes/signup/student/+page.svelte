@@ -5,7 +5,7 @@
 
     let { data } = $props();
 
-    const { form, errors, enhance } = superForm(data.form, {
+    const { form, errors, enhance, message } = superForm(data.form, {
         resetForm: false,
 		clearOnSubmit: 'none'
     });
@@ -16,7 +16,8 @@
 <div class="w-full min-h-screen flex flex-col gap-8 justify-center items-center">
     <form method="POST" class="flex flex-col justify-between items-center gap-4 py-10 px-10 border-2 rounded-lg shadow-2xl" use:enhance>
         <h1 class="text-4xl">Sign Up</h1>
-        <div class="flex w-96 justify-between">
+        {#if $message}<span class="text-sm text-red-500">{$message}</span>{/if}
+        <div class="flex w-96 justify-between items-center">
             <label for="grade">School</label>
             <select class="px-2 py-2 rounded w-52 border" name="grade" bind:value={$form.schoolId}>
                 {#each Object.keys(data.schoolMapping) as schoolId}

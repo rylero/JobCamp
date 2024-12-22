@@ -1,12 +1,13 @@
 import { PageType, userAccountSetupFlow } from '$lib/server/authFlow';
-import type { PageServerLoad } from "./$types";
-import { createCompanySchema } from "./schema.js";
+import type { PageServerLoad, Actions } from "./$types";
+import { createCompanySchema } from "./schema";
 import { message, setError, superValidate } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
 import { generateEmailVerificationCode, generatePermissionSlipCode, schoolEmailCheck, signup } from '$lib/server/auth';
 import { prisma } from '$lib/server/prisma';
 import { AuthError } from '$lib/server/authConstants';
 import { sendEmailVerificationEmail, sendPermissionSlipEmail } from '$lib/server/email';
+import { fail, redirect } from '@sveltejs/kit';
 
 export const load: PageServerLoad = async (event) => {
     userAccountSetupFlow(event.locals, PageType.AccountCreation);

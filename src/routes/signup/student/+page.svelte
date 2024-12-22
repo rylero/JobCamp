@@ -73,7 +73,7 @@
         {#if $errors.password}<span class="text-sm text-red-500">{$errors.password}</span>{/if}
         
         <div class="flex w-96 justify-center items-center">
-            <Checkbox class="rounded mr-2" bind:checked={showPassword} /><label>Show Password</label>
+            <Checkbox class="rounded mr-2" bind:checked={showPassword} /><span>Show Password</span>
         </div>
 
         <button type="submit" class="mt-2 w-24 h-8 rounded bg-blue-500 text-white hover:bg-blue-600">Sign Up</button>

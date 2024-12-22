@@ -94,14 +94,10 @@ export async function login(email: string, password: string, event: RequestEvent
 		return AuthError.IncorrectCredentials;
 	}
 
-	console.log("user check")
-
 	const validPassword = await scrypt.verify(password, existingUser.passwordSalt, existingUser.passwordHash);
 	if (!validPassword) { 
 		return AuthError.IncorrectCredentials;
 	}
-
-	console.log("password check")
 
 	await updateLastLoginToNow(existingUser.id);
 
@@ -110,7 +106,7 @@ export async function login(email: string, password: string, event: RequestEvent
 	return existingUser.id;
 }
 
-export async function signup(email: string, password: string, event: RequestEvent): Promise<AuthError | string> {
+export async function signup(email: string, password: string, event: RequestEvent): Promise<AuthError.AccountExists | string> {
 	const existingUser = await prisma.user.findFirst({ where: { email } });
 	if (existingUser) {
 		return AuthError.AccountExists;

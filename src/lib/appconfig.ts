@@ -1,4 +1,3 @@
-
 export const careers = [
     "Multiple Careers",
     "Creative Arts/Design",

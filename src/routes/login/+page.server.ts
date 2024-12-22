@@ -1,11 +1,12 @@
 import { PageType, userAccountSetupFlow } from '$lib/server/authFlow';
-import { fail, superValidate } from 'sveltekit-superforms';
+import { fail, message, superValidate } from 'sveltekit-superforms';
 import type { Actions, PageServerLoad } from './$types';
 import { schema } from './schema';
 import { zod } from 'sveltekit-superforms/adapters';
 import { prisma } from '$lib/server/prisma';
 import { login } from '$lib/server/auth';
 import { redirect } from '@sveltejs/kit';
+import { AuthError } from '$lib/server/authConstants';
 
 export const load: PageServerLoad = async (event) => {
     if (event.locals.user) {
@@ -25,7 +26,10 @@ export const actions: Actions = {
             return fail(400, { form });
         }
 
-        await login(form.data.email, form.data.password, event);
+        const res = await login(form.data.email, form.data.password, event);
+        if (res == AuthError.IncorrectCredentials) {
+            return message(form, "Incorrect Email or Password.");
+        }
         
         redirect(302, "/verify-email");
     }

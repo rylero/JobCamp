@@ -3,8 +3,8 @@ generator client {
 }
 
 datasource db {
-  provider = "mysql"
-  url      = env("DATABASE_URL")
+  provider  = "mysql"
+  url       = env("DATABASE_URL")
 }
 
 model Event {
@@ -37,19 +37,28 @@ model School {
 }
 
 model Position {
-  id                       String      @id @default(cuid())
+  id                String                @id @default(cuid())
+  title             String
+  career            String
+  slots             Int
+  summary           String
+  contact_name      String
+  contact_email     String
+  address           String
+  instructions      String
+  attire            String
+  arrival           DateTime
+  start             DateTime
+  end               DateTime
+  eventId           String
+  hostId            String
+  event             Event                 @relation(fields: [eventId], references: [id])
+  host              Host                  @relation(fields: [hostId], references: [id])
+  students          PositionsOnStudents[]
+  studentsAttending Student[]
 
-  start                    DateTime
-  end                      DateTime
-
-  eventId                  String
-  event                    Event       @relation(references: [id], fields: [eventId])
-
-  hostId                   String
-  host                     Host        @relation(references: [id], fields: [hostId])
-
-  students                 PositionsOnStudents[]
-  studentsAttending        Student[]
+  @@index([eventId], map: "Position_eventId_fkey")
+  @@index([hostId], map: "Position_hostId_fkey")
 }
 
 model Student {

@@ -8,7 +8,7 @@
 
     let { data }: Props = $props();
 
-    const { form, errors, enhance } = superForm(data.form, {
+    const { form, errors, enhance, message } = superForm(data.form, {
         resetForm: false,
 		clearOnSubmit: 'none'
     });
@@ -17,10 +17,12 @@
     let passwordEntryType = $derived(showPassword ? 'text' : 'password')
 </script>
 
-<div class="flex flex-col px-10 min-h-96 py-10 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 justify-center items-center gap-8 border-4 bg-slate-100">
-    <h1 class="text-4xl">Login</h1>
-    <form method="POST" class="flex flex-col justify-center items-center gap-3" use:enhance>
-        <div class="flex w-96 justify-between">
+<div class="w-full min-h-screen flex flex-col gap-8 justify-center items-center">
+    <form method="POST" class="flex flex-col justify-between items-center gap-6 py-10 px-10 border-2 rounded-lg shadow-2xl" use:enhance>
+        <h1 class="text-4xl mb-8">Login</h1>
+        {#if $message}<span class="text-sm text-red-500 -mt-10">{$message}</span>{/if}
+
+        <div class="flex w-96 justify-between items-center">
             <label for="email">Email</label>
             <input class="px-2 py-0.5 rounded w-52" type="text" name="email" bind:value={$form.email} />
         </div>

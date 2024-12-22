@@ -1,6 +1,9 @@
 import { PageType, userAccountSetupFlow } from '$lib/server/authFlow';
+import { redirect } from '@sveltejs/kit';
 import type { PageServerLoad } from "./$types";
 
 export const load: PageServerLoad = async (event) => {
-    userAccountSetupFlow(event.locals, PageType.AccountCreation);
+    if (event.locals.user) {
+        redirect(302, "/dashboard");
+    }
 };

@@ -71,4 +71,4 @@
         <button type="submit" class="mt-2 w-24 h-8 rounded bg-blue-500 text-white hover:bg-blue-600">Sign Up</button>
     </form>
     <a href="/login" class="underline text-blue-500">Do you want to login?</a>
-</div> 
+</div>

@@ -106,7 +106,7 @@ export async function login(email: string, password: string, event: RequestEvent
 	return existingUser.id;
 }
 
-export async function signup(email: string, password: string, event: RequestEvent): Promise<AuthError | string> {
+export async function signup(email: string, password: string, event: RequestEvent): Promise<AuthError.AccountExists | string> {
 	const existingUser = await prisma.user.findFirst({ where: { email } });
 	if (existingUser) {
 		return AuthError.AccountExists;

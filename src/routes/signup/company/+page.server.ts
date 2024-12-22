@@ -2,7 +2,7 @@ import { PageType, userAccountSetupFlow } from '$lib/server/authFlow';
 import { fail, redirect, type Actions } from '@sveltejs/kit';
 import type { PageServerLoad } from "./$types";
 import { createCompanySchema } from "./schema.js";
-import { setError, superValidate } from "sveltekit-superforms";
+import { message, setError, superValidate } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
 import { generateEmailVerificationCode, generatePermissionSlipCode, schoolEmailCheck, signup } from '$lib/server/auth';
 import { prisma } from '$lib/server/prisma';
@@ -32,8 +32,8 @@ export const actions: Actions = {
         }
 
         const userId = await signup(form.data.email, form.data.password, event);
-        if (userId == AuthError.IncorrectCredentials || userId == AuthError.AccountExists) {
-            return fail(400, { form });
+        if (userId == AuthError.AccountExists) {
+            return message(form, "Account Already Exists. Login instead.");
         }
 
         const schoolId = form.data.schoolId;

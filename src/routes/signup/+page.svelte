@@ -12,7 +12,7 @@
 </script>
 
 <div class="w-full min-h-screen flex flex-col gap-8 justify-center items-center">
-    <div class="flex flex-col justify-between items-center gap-16 py-10 px-20 border-2 rounded-lg shadow-2xl">
+    <div class="flex flex-col justify-between items-center gap-16 py-10 px-10 border-2 rounded-lg shadow-2xl">
         <h1 class="text-5xl">Sign Up</h1>
         <div class="flex flex-col justify-center items-center gap-2">
             <!-- <Button class="w-32 text-lg" onclick={studentSignup}>Student</Button> -->

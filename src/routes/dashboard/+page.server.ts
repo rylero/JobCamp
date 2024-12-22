@@ -43,7 +43,7 @@ export const load: PageServerLoad = async (event) => {
 };
 
 export const actions: Actions = {
-    logOut: async ({ locals, cookies }) => {
+    default: async ({ locals, cookies }) => {
         if (locals.session) {
             const session = await lucia.validateSession(locals.session.id);
             if (!session) return fail(401);

@@ -42,8 +42,6 @@ export const load: PageServerLoad = async (event) => {
     return { userData: event.locals.user, form, positionCreateOpen: false };
 };
 
-=======
->>>>>>> origin/main
 export const actions: Actions = {
     default: async ({ locals, cookies }) => {
         if (locals.session) {

@@ -8,7 +8,9 @@ import { login } from '$lib/server/auth';
 import { redirect } from '@sveltejs/kit';
 
 export const load: PageServerLoad = async (event) => {
-    userAccountSetupFlow(event.locals, PageType.Login);
+    if (event.locals.user) {
+        redirect(302, "/dashboard");
+    }
 
     const form = await superValidate(zod(schema));
     return { form };

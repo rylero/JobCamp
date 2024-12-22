@@ -2,7 +2,7 @@ import type { PageServerLoad } from './$types';
 import { prisma } from '$lib/server/prisma';
 import { redirect } from '@sveltejs/kit';
 
-export const load : PageServerLoad = async ({ cookies, params }) => {
+export const load : PageServerLoad = async ({ cookies, params, locals }) => {
     const schoolData = await prisma.school.findFirst({ where: { webAddr: params.school }});
 
     // school addr dosent exist
@@ -14,5 +14,7 @@ export const load : PageServerLoad = async ({ cookies, params }) => {
 		    path: ".",
     });
 
-    return { schoolData };
+    const loggedIn = locals.user != null;
+
+    return { schoolData, loggedIn };
 };

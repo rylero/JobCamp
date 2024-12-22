@@ -94,10 +94,14 @@ export async function login(email: string, password: string, event: RequestEvent
 		return AuthError.IncorrectCredentials;
 	}
 
+	console.log("user check")
+
 	const validPassword = await scrypt.verify(password, existingUser.passwordSalt, existingUser.passwordHash);
 	if (!validPassword) { 
 		return AuthError.IncorrectCredentials;
 	}
+
+	console.log("password check")
 
 	await updateLastLoginToNow(existingUser.id);
 
@@ -116,7 +120,7 @@ export async function signup(email: string, password: string, event: RequestEven
 	const passwordSalt = generateRandomString(16, passwordSaltCharacters); // 128bit salt
 	const passwordHash = await scrypt.hash(password, passwordSalt);
 
-	await prisma.user.create({
+	const user = await prisma.user.create({
 		data: {
 			id: userId,
 			email,
@@ -126,9 +130,9 @@ export async function signup(email: string, password: string, event: RequestEven
 		}
 	});
 
-	await setNewLuciaSession(userId, event);
+	await setNewLuciaSession(user.id, event);
 
-	return userId;
+	return user.id;
 }
 
 export const lucia = new Lucia(luciaAuthDb, {

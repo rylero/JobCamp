@@ -4,7 +4,7 @@
     import JobCampBanner from "$lib/assets/jobcampbanner.jpg";
 
     const { data } = $props();
-    const { schoolData } = data;
+    const { schoolData, loggedIn } = data;
 
     if (schoolData == undefined) {
         redirect(302, "/");
@@ -14,15 +14,19 @@
 <nav class="w-screen h-20 fixed top-0 left-0 bg-gray-800 flex flex-row justify-between items-center text-white">
     <h1 class="ml-4 text-2xl">{schoolData.name}</h1>
     <div class="flex flex-row gap-4 mr-4">
-        <Button href="/signup" variant="secondary" class="bg-white text-xl">Sign Up</Button>
-        <Button href="/login" variant="secondary" class="bg-white text-xl">Login</Button>
+        {#if !loggedIn}
+            <Button href="/signup" variant="secondary" class="bg-white text-xl">Sign Up</Button>
+            <Button href="/login" variant="secondary" class="bg-white text-xl">Login</Button>
+        {:else}
+            <Button href="/dashboard" variant="secondary" class="bg-white text-xl">Dashboard</Button>
+        {/if}
     </div>
 </nav>
 
 <div class="w-screen h-screen bg-cover bg-center flex flex-col justify-center items-center" style="background-image: url({JobCampBanner});">
     <h1 class="text-8xl md:text-9xl font-bold text-3D text-white">{schoolData.webAddr.toUpperCase()}</h1>
     <h1 class="text-8xl md:text-9xl font-semibold text-3D text-white">JobCamp</h1>
-    <Button class="text-2xl mt-8 py-6" href="/signup">Sign Up Now</Button>
+    <Button class="text-2xl mt-8 py-6 shadow-2xl" href="/signup">{ loggedIn ? "Go To Dashboard" : "Sign Up Now" }</Button>
 </div>
 
 <style>

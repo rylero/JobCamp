@@ -10,8 +10,8 @@ export const createStudentSchema = (schoolId: string | undefined) => {
             name: z.string().min(1),
             parentEmail: z.string().email("Please enter a valid email."),
             phone: z.string().refine((arg) => isMobilePhone.test(arg), "Please enter a valid phone number."),
-            allowPhoneMessaging: z.literal(true, { errorMap: () => ({ message: "You must accept phone messages." })}),
-            email: z.string().email("Plea   se enter a valid email."),
+            allowPhoneMessaging: z.literal(true, { errorMap: () => ({ message: "You must allow SMS messaging." })}),
+            email: z.string().email("Please enter a valid email."),
             password: z.string().min(8, "Password must be at least 8 characters long."),
         });
     }
@@ -21,8 +21,8 @@ export const createStudentSchema = (schoolId: string | undefined) => {
         name: z.string().min(1),
         parentEmail: z.string().email("Please enter a valid email."),
         phone: z.string().refine((arg) => isMobilePhone.test(arg), "Please enter a valid phone number."),
-        allowPhoneMessaging: z.literal(true, { errorMap: () => ({ message: "You must accept phone messages." })}),
-        email: z.string().email("Plea   se enter a valid email."),
+        allowPhoneMessaging: z.literal(true, { errorMap: () => ({ message: "You must allow SMS messaging." })}),
+        email: z.string().email("Please enter a valid email."),
         password: z.string().min(8, "Password must be at least 8 characters long."),
     });
 }

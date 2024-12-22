@@ -11,7 +11,7 @@
 
     let { data }: Props = $props();
 
-    const { form, errors, enhance } = superForm(data.form, {
+    const { form, errors, enhance, message } = superForm(data.form, {
         resetForm: false,
 		clearOnSubmit: 'none'
     });
@@ -23,6 +23,7 @@
 <div class="w-full min-h-screen flex flex-col gap-8 justify-center items-center">
     <form method="POST" class="flex flex-col justify-between items-center gap-6 py-10 px-10 border-2 rounded-lg shadow-2xl" use:enhance>
         <h1 class="text-4xl mb-8">Login</h1>
+        {#if $message}<span class="text-sm text-red-500 -mt-10">{$message}</span>{/if}
 
         <div class="flex w-96 justify-between items-center">
             <label for="email">Email</label>

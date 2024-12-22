@@ -61,6 +61,50 @@ export const actions: Actions = {
             return fail(400, { form, positionCreateOpen: true });
         }
 
+        if (!locals.user) {
+            redirect(302, "login");
+        }
+
+        const host = await prisma.host.findFirst({
+            where: { userId: locals.user.id }, 
+            include: { company: { include: { school: true } } }
+        })
+
+        const schoolId = host?.company?.schoolId;
+        if (!schoolId) {
+            redirect(302, "/login");
+        }
+
+        const eventId = (await prisma.school.findFirst({where: {id: schoolId}, include: {events: true}}))?.events[0].id;   
+        if (!eventId) {
+            redirect(302, "/login")
+        }
+
+        await prisma.host.update({
+            where: { userId: locals.user.id },
+            data: {
+                positions: {
+                    create: [
+                        {
+                            title: form.data.title,
+                            career: form.data.career,
+                            slots: form.data.slots,
+                            summary: form.data.summary,
+                            contact_name: form.data.fullName,
+                            contact_email: form.data.email,
+                            address: form.data.address,
+                            instructions: form.data.instructions,
+                            attire: form.data.attire,
+                            arrival: form.data.arrival,
+                            start: form.data.start,
+                            end: form.data.relesase,
+                            event: { connect: { id: eventId } }
+                        }
+                    ]
+                }
+            }
+        })
+
         return { form, positionCreateOpen: false }
     }
 };

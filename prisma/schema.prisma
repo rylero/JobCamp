@@ -3,8 +3,8 @@ generator client {
 }
 
 datasource db {
-  provider = "mysql"
-  url      = env("DATABASE_URL")
+  provider  = "mysql"
+  url       = env("DATABASE_URL")
 }
 
 model Event {
@@ -32,6 +32,16 @@ model School {
 
 model Position {
   id                String                @id @default(cuid())
+  title             String
+  career            String
+  slots             Int
+  summary           String
+  contact_name      String
+  contact_email     String
+  address           String
+  instructions      String
+  attire            String
+  arrival           DateTime
   start             DateTime
   end               DateTime
   eventId           String

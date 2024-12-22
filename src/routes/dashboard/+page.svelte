@@ -6,7 +6,11 @@
 
     let { data } = $props();
 
-    let createPositionOpen = $state(data.positionCreateOpen);
+    let createPositionOpen = $state(false); 
+
+    if (data.positionCreateOpen) {
+        createPositionOpen = true;
+    }
 </script>
 
 <Navbar />

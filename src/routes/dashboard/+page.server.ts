@@ -39,7 +39,7 @@ export const load: PageServerLoad = async (event) => {
     const { userInfo, hostInfo } = await grabUserData(event.locals);
     const form = await superValidate(zod(createNewPositionSchema(hostInfo.name, userInfo.email)));
 
-    return { userData: event.locals.user, form };
+    return { userData: event.locals.user, form, positionCreateOpen: false };
 };
 
 export const actions: Actions = {
@@ -57,7 +57,10 @@ export const actions: Actions = {
         const form = await superValidate(request, zod(createNewPositionSchema(hostInfo.name, userInfo.email)));
 
         if (!form.valid) {
-            return fail(400, { form });
+            console.log("fail")
+            return fail(400, { form, positionCreateOpen: true });
         }
+
+        return { form, positionCreateOpen: false }
     }
 };

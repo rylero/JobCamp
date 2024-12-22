@@ -94,10 +94,14 @@ export async function login(email: string, password: string, event: RequestEvent
 		return AuthError.IncorrectCredentials;
 	}
 
+	console.log("user check")
+
 	const validPassword = await scrypt.verify(password, existingUser.passwordSalt, existingUser.passwordHash);
 	if (!validPassword) { 
 		return AuthError.IncorrectCredentials;
 	}
+
+	console.log("password check")
 
 	await updateLastLoginToNow(existingUser.id);
 

@@ -67,8 +67,8 @@ export const actions: Actions = {
             redirect(302, "/login");
         }
 
-        const eventId = (await prisma.school.findFirst({where: {id: schoolId}, include: {events: true}}))?.events[0].id;   
-        if (!eventId) {
+        const event = (await prisma.school.findFirst({where: {id: schoolId}, include: {events: true}}))?.events[0];   
+        if (!event) {
             console.log("no event")
             redirect(302, "/login")
         }
@@ -91,10 +91,10 @@ export const actions: Actions = {
                             address: form.data.address,
                             instructions: form.data.instructions,
                             attire: form.data.attire,
-                            arrival: form.data.arrival,
-                            start: form.data.start,
-                            end: form.data.release,
-                            event: { connect: { id: eventId } }
+                            arrival: new Date(event.date.toLocaleDateString() + " " + form.data.arrival),
+                            start: new Date(event.date.toLocaleDateString() + " " + form.data.start),
+                            end: new Date(event.date.toLocaleDateString() + " " + form.data.release),
+                            event: { connect: { id: event.id } }
                         }
                     ]
                 }

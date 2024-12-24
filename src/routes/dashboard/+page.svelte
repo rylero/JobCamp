@@ -15,7 +15,7 @@
 
 {#each data.positions as position}
 <div>
-    <h1>{position}</h1>
+    <h1>{position.title}</h1>
 </div>
 {/each}
 

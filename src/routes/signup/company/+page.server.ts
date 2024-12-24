@@ -67,7 +67,7 @@ export const actions: Actions = {
                 }},
                 hosts: { connect: { id: user.host.id } }
             }
-        });
+        })
 
         // runs in background while user is redirected
         generateEmailVerificationCode(userId, form.data.email).then(

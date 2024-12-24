@@ -95,7 +95,7 @@ model PositionsOnStudents {
 model Company {
   id                       String      @id @default(cuid())
 
-  companyName              String
+  companyName              String      @unique
   companyDescription       String      @db.VarChar(1024)
   companyUrl               String?
 
@@ -109,26 +109,25 @@ model Host {
   id                       String      @id @default(cuid())
 
   name                     String
-  phone                    String
 
-  companyId                String
-  companyData              Company     @relation(references: [id], fields: [companyId])
+  companyId                String?     @unique
+  company                  Company?    @relation(references: [id], fields: [companyId])
   
   userId                   String      @unique
-  user                     User        @relation(references: [id], fields: [userId])
+  user                     User        @relation(references: [id], fields: [userId], onDelete: Cascade)
 
   positions                Position[]
 }
 
 model User {
-  id                       String      @id
+  id                       String      @id @default(cuid())
   email                    String      @unique
   passwordHash             String
   passwordSalt             String
   emailVerified            Boolean     @default(false)
   
   student                  Student?
-  Host                     Host?
+  host                     Host?
   school                   School?
   
   lastLogin                DateTime

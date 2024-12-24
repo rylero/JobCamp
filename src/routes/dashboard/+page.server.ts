@@ -1,13 +1,8 @@
 import { fail, redirect } from "@sveltejs/kit";
 import type { Actions } from "./$types";
 import { lucia } from "$lib/server/auth";
-
-import { PageType, userAccountSetupFlow } from '$lib/server/authFlow';
 import type { PageServerLoad } from "./$types";
 import { prisma } from "$lib/server/prisma";
-import { superValidate } from "sveltekit-superforms";
-import { createNewPositionSchema } from "$lib/components/new_position/schema";
-import { zod } from "sveltekit-superforms/adapters";
 
 const grabUserData = async (locals : App.Locals) => {
     if (!locals.user) {
@@ -37,13 +32,13 @@ export const load: PageServerLoad = async (event) => {
     }
 
     const { userInfo, hostInfo } = await grabUserData(event.locals);
-    const form = await superValidate(zod(createNewPositionSchema(hostInfo.name, userInfo.email)));
+    const positions = await prisma.position.findMany({where: {hostId: hostInfo.id}});
 
-    return { userData: event.locals.user, form, positionCreateOpen: false };
+    return { positions, userData: event.locals.user };
 };
 
 export const actions: Actions = {
-    default: async ({ locals, cookies }) => {
+    logOut: async ({ locals, cookies }) => {
         if (locals.session) {
             const session = await lucia.validateSession(locals.session.id);
             if (!session) return fail(401);
@@ -51,60 +46,5 @@ export const actions: Actions = {
             cookies.delete(lucia.sessionCookieName, { path: "." });
         }
         redirect(302, "/login")
-    },
-    createPosition: async ({ request, locals, cookies }) => {
-        const { userInfo, hostInfo } = await grabUserData(locals);
-        const form = await superValidate(request, zod(createNewPositionSchema(hostInfo.name, userInfo.email)));
-
-        if (!form.valid) {
-            console.log("fail")
-            return fail(400, { form, positionCreateOpen: true });
-        }
-
-        if (!locals.user) {
-            redirect(302, "login");
-        }
-
-        const host = await prisma.host.findFirst({
-            where: { userId: locals.user.id }, 
-            include: { company: { include: { school: true } } }
-        })
-
-        const schoolId = host?.company?.schoolId;
-        if (!schoolId) {
-            redirect(302, "/login");
-        }
-
-        const eventId = (await prisma.school.findFirst({where: {id: schoolId}, include: {events: true}}))?.events[0].id;   
-        if (!eventId) {
-            redirect(302, "/login")
-        }
-
-        await prisma.host.update({
-            where: { userId: locals.user.id },
-            data: {
-                positions: {
-                    create: [
-                        {
-                            title: form.data.title,
-                            career: form.data.career,
-                            slots: form.data.slots,
-                            summary: form.data.summary,
-                            contact_name: form.data.fullName,
-                            contact_email: form.data.email,
-                            address: form.data.address,
-                            instructions: form.data.instructions,
-                            attire: form.data.attire,
-                            arrival: form.data.arrival,
-                            start: form.data.start,
-                            end: form.data.relesase,
-                            event: { connect: { id: eventId } }
-                        }
-                    ]
-                }
-            }
-        })
-
-        return { form, positionCreateOpen: false }
     }
 };

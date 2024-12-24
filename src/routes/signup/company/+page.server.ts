@@ -52,20 +52,20 @@ export const actions: Actions = {
                 host: true
             }
         });
-        await prisma.host.update({
-            where: { userId: userId },
+
+        if (!user.host) {
+            redirect(302, "/");
+        }
+        
+        await prisma.company.create({
             data: {
-                company: { connectOrCreate: {
-                    where: { companyName: form.data.companyName },
-                    create: {
-                        companyName: form.data.companyName,
-                        companyDescription: form.data.companyDescription,
-                        companyUrl: form.data.companyUrl,
-                        school: { connect: {
-                            id: schoolId
-                        }}
-                    }
-                }}
+                companyName: form.data.companyName,
+                companyDescription: form.data.companyDescription,
+                companyUrl: form.data.companyUrl,
+                school: { connect: {
+                    id: schoolData.id
+                }},
+                hosts: { connect: { id: user.host.id } }
             }
         });
 

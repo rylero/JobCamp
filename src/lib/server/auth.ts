@@ -112,13 +112,11 @@ export async function signup(email: string, password: string, event: RequestEven
 		return AuthError.AccountExists;
 	}
 
-	const userId = generateIdFromEntropySize(userIdEntropySize);
 	const passwordSalt = generateRandomString(16, passwordSaltCharacters); // 128bit salt
 	const passwordHash = await scrypt.hash(password, passwordSalt);
 
 	const user = await prisma.user.create({
 		data: {
-			id: userId,
 			email,
 			passwordSalt,
 			passwordHash,

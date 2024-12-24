@@ -52,8 +52,13 @@ export const actions: Actions = {
                 host: true
             }
         });
-        await prisma.host.update({
-            where: { userId: userId },
+
+        if (!user.host) {
+            redirect(302, "/");
+        }
+
+        prisma.host.update({
+            where: { id: user.host.id },
             data: {
                 company: { connectOrCreate: {
                     where: { companyName: form.data.companyName },
@@ -67,7 +72,7 @@ export const actions: Actions = {
                     }
                 }}
             }
-        });
+        })
 
         // runs in background while user is redirected
         generateEmailVerificationCode(userId, form.data.email).then(

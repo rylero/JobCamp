@@ -19,8 +19,7 @@ jobs:
           
       - name: 'Build and Push Container'
         run: |-
-          export CR_PAT="${CR+PAT}"
-          echo $CR_PAT | docker login ghcr.io -u rylero --password-stdin
+          echo "${CR+PAT}" | docker login ghcr.io -u rylero --password-stdin
           DOCKER_TAG="ghcr.io/rylero/jobcampstaging:latest"
           docker buildx build -f staging.Dockerfile --tag "${DOCKER_TAG}" --build-arg DATABASE_URL="${{ secrets.STAGING_DATABASE_URL }}" --build-arg MAILTRAP_TOKEN="${{ secrets.MAILTRAP_TOKEN }}" .
           docker push "${DOCKER_TAG}"

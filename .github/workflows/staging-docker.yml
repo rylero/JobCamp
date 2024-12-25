@@ -22,7 +22,7 @@ jobs:
         with:
           registry: ghcr.io
           username: 'rylero'
-          password: "${{ secrets.CR+PAT }}"
+          password: "${{ secrets.CR_PAT }}"
           
       - name: 'Build and Push Container'
         run: |-

@@ -35,9 +35,6 @@ importers:
       '@tiptap/starter-kit':
         specifier: ^2.10.2
         version: 2.10.2
-      bits-ui:
-        specifier: ^0.22.0
-        version: 0.22.0(svelte@5.2.8)
       firebase-scrypt:
         specifier: ^2.2.0
         version: 2.2.0
@@ -81,6 +78,9 @@ importers:
       autoprefixer:
         specifier: ^10.4.20
         version: 10.4.20(postcss@8.4.49)
+      bits-ui:
+        specifier: ^0.22.0
+        version: 0.22.0(svelte@5.2.8)
       clsx:
         specifier: ^2.1.1
         version: 2.1.1

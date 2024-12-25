@@ -6,6 +6,7 @@ import { prisma } from "$lib/server/prisma";
 import { superValidate } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
 import { createNewPositionSchema } from "./schema";
+import { sendPositionUpdateEmail } from "$lib/server/email";
 
 const grabUserData = async (locals : App.Locals) => {
     if (!locals.user) {
@@ -73,9 +74,6 @@ export const actions: Actions = {
             redirect(302, "/login")
         }
 
-        console.log("Form data");
-        console.log(form.data)
-
         const position = await prisma.host.update({
             where: { userId: locals.user.id },
             data: {
@@ -101,8 +99,21 @@ export const actions: Actions = {
             },
             include: { positions: true }
         })
-        console.log("created")
-        console.log(position.positions);
+
+        sendPositionUpdateEmail(userInfo.email, {
+            title: form.data.title,
+            career: form.data.career,
+            slots: form.data.slots,
+            summary: form.data.summary,
+            contact_name: form.data.fullName,
+            contact_email: form.data.email,
+            address: form.data.address,
+            instructions: form.data.instructions,
+            attire: form.data.attire,
+            arrival: form.data.arrival,
+            start: form.data.start,
+            end: form.data.release,
+        });
 
         redirect(302, "/dashboard");
     }

@@ -30,15 +30,15 @@ export const actions: Actions = {
             return fail(400, { form });
         }
 
-        const userId = await signup(form.data.email, form.data.password, event);
-        if (userId == AuthError.AccountExists) {
-            return message(form, "Account Already Exists. Login instead.");
-        }
-
         const schoolId = form.data.schoolId;
         const schoolData = await prisma.school.findFirst({where: {id: schoolId}});
         if (!schoolData) {
             return setError(form, "schoolId", "School does not exist.");
+        }
+
+        const userId = await signup(form.data.email, form.data.password, event);
+        if (userId == AuthError.AccountExists) {
+            return message(form, "Account Already Exists. Login instead.");
         }
 
         const user = await prisma.user.update({

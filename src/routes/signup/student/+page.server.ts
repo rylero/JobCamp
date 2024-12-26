@@ -32,6 +32,7 @@ export const actions: Actions = {
         }
 
         const schoolId = form.data.schoolId;
+        console.log(schoolId);
         const schoolData = await prisma.school.findFirst({where: {id: schoolId}});
         if (!schoolData) {
             return setError(form, "schoolId", "School does not exist.");

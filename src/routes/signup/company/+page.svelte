@@ -20,7 +20,7 @@
 
         <div class="flex w-96 justify-between items-center">
             <label for="grade">School</label>
-            <select class="px-2 py-2 rounded w-52 border" name="grade" bind:value={$form.schoolId}>
+            <select class="px-2 py-2 rounded w-52 border" name="school" bind:value={$form.schoolId}>
                 {#each Object.keys(data.schoolMapping) as schoolId}
                     <option value={schoolId} selected={$form.schoolId == schoolId}>{data.schoolMapping[schoolId]}</option>
                 {/each}

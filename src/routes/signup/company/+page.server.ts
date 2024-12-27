@@ -12,28 +12,22 @@ import { fail, redirect } from '@sveltejs/kit';
 export const load: PageServerLoad = async (event) => {
     userAccountSetupFlow(event.locals, PageType.AccountCreation);
 
-    const schoolId = event.cookies.get("school");
-    const schools = await prisma.school.findMany();
-    const schoolMapping = Object.fromEntries(schools.map((val) => [val.id, val.name]));
-
-    const form = await superValidate(zod(createCompanySchema(schoolId)));
-    return { form, schoolMapping };
+    const form = await superValidate(zod(createCompanySchema()));
+    return { form };
 };
 
 export const actions: Actions = {
     default: async (event) => {
         const { request } = event;
-        const schoolIdCookie = event.cookies.get("school");
-        const form = await superValidate(request, zod(createCompanySchema(schoolIdCookie)));
+        const form = await superValidate(request, zod(createCompanySchema()));
 
         if (!form.valid) {
             return fail(400, { form });
         }
 
-        const schoolId = form.data.schoolId;
-        const schoolData = await prisma.school.findFirst({where: {id: schoolId}});
-        if (!schoolData) {
-            return setError(form, "schoolId", "School does not exist.");
+        const schoolId = (await prisma.school.findFirst())?.id; // TODO: SCHOOL FIELD for multiple schools
+        if (!schoolId) {
+            return message(form, "Database Error");
         }
 
         const userId = await signup(form.data.email, form.data.password, event);
@@ -63,7 +57,7 @@ export const actions: Actions = {
                 companyDescription: form.data.companyDescription,
                 companyUrl: form.data.companyUrl,
                 school: { connect: {
-                    id: schoolData.id
+                    id: schoolId
                 }},
                 hosts: { connect: { id: user.host.id } }
             }

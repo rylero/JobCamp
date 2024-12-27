@@ -19,16 +19,6 @@
         {#if $message}<span class="text-sm text-red-500">{$message}</span>{/if}
 
         <div class="flex w-96 justify-between items-center">
-            <label for="grade">School</label>
-            <select class="px-2 py-2 rounded w-52 border" name="school" bind:value={$form.schoolId}>
-                {#each Object.keys(data.schoolMapping) as schoolId}
-                    <option value={schoolId} selected={$form.schoolId == schoolId}>{data.schoolMapping[schoolId]}</option>
-                {/each}
-            </select>
-        </div>
-        {#if $errors.schoolId}<span class="text-sm text-red-500">{$errors.schoolId}</span>{/if}
-
-        <div class="flex w-96 justify-between items-center">
             <label for="companyName">Company Name</label>
             <Input class="px-2 py-0.5 rounded w-52" type="text" name="companyName" bind:value={$form.companyName} />
         </div>

@@ -17,7 +17,10 @@ const config = {
 			env: {
 			  port: process.env.PORT || 8080 // Bind to the port Cloud Run provides or default to 8080
 			}
-		  })
+		  }),
+		  csrf: {
+            checkOrigin: false
+          }
 	}
 };
 

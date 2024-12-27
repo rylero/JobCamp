@@ -31,12 +31,8 @@ export const actions: Actions = {
             return fail(400, { form });
         }
 
-        const userId = await signup(form.data.email, form.data.password, event);
-        if (userId == AuthError.AccountExists) {
-            return message(form, "Account Already Exists. Login instead.");
-        }
-
         const schoolId = form.data.schoolId;
+        console.log(schoolId);
         const schoolData = await prisma.school.findFirst({where: {id: schoolId}});
         if (!schoolData) {
             return setError(form, "schoolId", "School does not exist.");
@@ -48,6 +44,11 @@ export const actions: Actions = {
 
         if (form.data.parentEmail == form.data.email) {
             return setError(form, "parentEmail", "Please enter a different email.")
+        }
+
+        const userId = await signup(form.data.email, form.data.password, event);
+        if (userId == AuthError.AccountExists) {
+            return message(form, "Account Already Exists. Login instead.");
         }
 
         await prisma.user.update({

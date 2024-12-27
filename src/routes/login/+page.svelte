@@ -1,6 +1,8 @@
 <script lang="ts">
     import { superForm } from "sveltekit-superforms";
     import type { PageData } from "./$types";
+    import { Input } from "$lib/components/ui/input";
+    import Checkbox from "$lib/components/ui/checkbox/checkbox.svelte";
 
     interface Props {
         data: PageData;
@@ -24,18 +26,18 @@
 
         <div class="flex w-96 justify-between items-center">
             <label for="email">Email</label>
-            <input class="px-2 py-0.5 rounded w-52" type="text" name="email" bind:value={$form.email} />
+            <Input class="px-2 py-0.5 rounded w-52" type="text" name="email" bind:value={$form.email} />
         </div>
         {#if $errors.email}<span class="text-sm text-red-500">{$errors.email}</span>{/if}
 
         <div class="flex w-96 justify-between">
             <label for="password">Password</label>
-            <input class="px-2 py-0.5 rounded w-52" {...{ type: passwordEntryType }} name="password" bind:value={$form.password} />
+            <Input class="px-2 py-0.5 rounded w-52" {...{ type: passwordEntryType }} name="password" bind:value={$form.password} />
         </div>
         {#if $errors.password}<span class="text-sm text-red-500">{$errors.password}</span>{/if}
         
         <div class="flex w-96 justify-center">
-            <label><input type="checkbox" bind:checked={showPassword} /> Show Password</label>
+            <label><Checkbox bind:checked={showPassword} /> Show Password</label>
         </div>
 
         <button type="submit" class="mt-2 w-24 h-8 rounded bg-blue-500 text-white hover:bg-blue-600">Login</button>

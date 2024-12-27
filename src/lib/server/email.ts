@@ -3,6 +3,7 @@ import { MailtrapClient } from "mailtrap";
 import verificationEmail from "$lib/emails/emailVerification.html?raw";
 import resetPasswordEmail from "$lib/emails/resetPassword.html?raw";
 import permissionSlipEmail from "$lib/emails/permissionSlip.html?raw";
+import positionUpdateEmail from "$lib/emails/positionUpdate.html?raw";
 
 export const emailClient = new MailtrapClient({ token: env.MAILTRAP_TOKEN });
 
@@ -12,6 +13,7 @@ export type EmailParams = { [index: string]: string }
 
 export function renderEmailTemplate(emailHtml: string, params: EmailParams) {
     Object.getOwnPropertyNames(params).forEach(name => {
+        console.log(name);
         emailHtml = emailHtml.replaceAll("${"+name+"}", params[name]);
     });
     return emailHtml;
@@ -41,5 +43,14 @@ export async function sendPermissionSlipEmail(parentEmail: string, code: string)
         to:  [{ email: parentEmail }],
         subject: "Permission Slip for Student",
         html: renderEmailTemplate(permissionSlipEmail, {link: "localhost:5173/permission-slip/"+code}) // Change url
+    });
+}
+
+export async function sendPositionUpdateEmail(hostEmail: string, position: any) {
+    await emailClient.send({
+        from: SENDER,
+        to:  [{ email: hostEmail }],
+        subject: "JobCamp Position created for March 10, 2025",
+        html: renderEmailTemplate(positionUpdateEmail, position)
     });
 }

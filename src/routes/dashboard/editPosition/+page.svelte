@@ -18,8 +18,10 @@
 
 <div class="w-full min-h-[calc(100vh-5rem)] flex justify-center items-center">
     <form bind:this={formElement} method="POST" action="?/createPosition" class="z-0 relative md:border-2 px-10 py-8 rounded-lg w-[700px] mx-5 flex flex-col gap-4 items-center justify-center" use:enhance>
-        <h1 class="text-xl">Create New Position</h1>
+        <h1 class="text-xl">Edit Position</h1>
         <X href="/dashboard" class="absolute top-3 right-3 hover:cursor-pointer"/>
+
+        <input name="posId" value={data.posId} />
 
         <div class="flex w-full max-w-sm flex-col gap-1.5">
             <Label for="title">Title</Label>

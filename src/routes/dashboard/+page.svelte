@@ -1,7 +1,6 @@
 <script lang="ts">
-    import CreateNewPositionScreen from "./createPosition/+page.svelte";
     import Navbar from "$lib/components/navbar/Navbar.svelte";
-    import { CirclePlus } from 'lucide-svelte';
+    import { CirclePlus, Edit } from 'lucide-svelte';
     import { Button } from "$lib/components/ui/button";
     import * as Accordion from "$lib/components/ui/accordion/index.js";
 
@@ -17,7 +16,9 @@
 <Accordion.Root class="w-full sm:max-w-[70%] px-10">
 {#each data.positions as position}
   <Accordion.Item value={position.id}>
-    <Accordion.Trigger class="text-xl">{position.title}</Accordion.Trigger>
+    <Accordion.Trigger class="text-xl">
+        <span>{position.title}</span>
+    </Accordion.Trigger>
     <Accordion.Content>
         <p class=" mt-1">Career: { position.career }</p>
 
@@ -42,6 +43,8 @@
         <p class="">Arrival: { position.arrival.toLocaleTimeString() }</p>
         <p class="">Start: { position.start.toLocaleTimeString() }</p>
         <p class="">End: { position.end.toLocaleTimeString() }</p>
+
+        <a href={"/dashboard/editPosition?posId="+position.id}><Edit class="mt-3 z-50" /></a>
     </Accordion.Content>
   </Accordion.Item>
 {/each}

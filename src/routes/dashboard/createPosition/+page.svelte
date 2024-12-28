@@ -103,7 +103,7 @@
             <Button onclick={() => formElement.submit()} class="w-28 py-4 text-lg">Create</Button>
         </div>
         <div class="w-full flex justify-center">
-            <a href="/dashboard" class={buttonVariants({ variant: "secondary" })}>Cancel</a>
+            <a href="/dashboard" class={buttonVariants({ variant: "secondary" }) + " w-28 py-4 text-lg"}>Cancel</a>
         </div>
     </form>
 </div>

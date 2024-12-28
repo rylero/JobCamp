@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { Button } from "../../../lib/components/ui/button";
+    import { Button, buttonVariants } from "../../../lib/components/ui/button";
     import { Input } from "../../../lib/components/ui/input";
     import { Label } from "../../../lib/components/ui/label";
     import { Textarea } from "../../../lib/components/ui/textarea";
@@ -19,8 +19,7 @@
 <div class="w-full min-h-[calc(100vh-5rem)] flex justify-center items-center">
     <form bind:this={formElement} method="POST" action="?/createPosition" class="z-0 relative md:border-2 px-10 py-8 rounded-lg w-[700px] mx-5 flex flex-col gap-4 items-center justify-center" use:enhance>
         <h1 class="text-xl">Edit Position</h1>
-        <X href="/dashboard" class="absolute top-3 right-3 hover:cursor-pointer"/>
-
+        
         <input hidden name="posId" value={data.posId} />
 
         <div class="flex w-full max-w-sm flex-col gap-1.5">
@@ -104,6 +103,10 @@
 
         <div class="w-full flex justify-center">
             <Button onclick={() => formElement.submit()} class="w-28 py-4 text-lg">Create</Button>
+        </div>
+
+        <div class="w-full flex justify-center">
+            <a href="/dashboard" class={buttonVariants({ variant: "secondary" }) + " w-28 py-4 text-lg"}>Cancel</a>
         </div>
     </form>
 </div>

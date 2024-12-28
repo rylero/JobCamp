@@ -31,7 +31,7 @@
 
         <p class="">Summary:<br> { position.summary }</p>
         <p class=""><br>Instructions For Students:<br> { position.instructions }</p>
-        <p class=""><br>Atture:<br> { position.attire }</p>
+        <p class=""><br>Attire:<br> { position.attire }</p>
 
         <hr class="my-2">
 

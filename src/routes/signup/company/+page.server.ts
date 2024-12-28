@@ -8,7 +8,6 @@ import { prisma } from '$lib/server/prisma';
 import { AuthError } from '$lib/server/authConstants';
 import { sendEmailVerificationEmail, sendPermissionSlipEmail } from '$lib/server/email';
 import { fail, redirect } from '@sveltejs/kit';
-import { goto } from '$app/navigation';
 
 export const load: PageServerLoad = async (event) => {
     userAccountSetupFlow(event.locals, PageType.AccountCreation);
@@ -69,7 +68,7 @@ export const actions: Actions = {
             (code) => sendEmailVerificationEmail(form.data.email, code)
         );
 
-        goto("/verify-email");
+        redirect(302, "/verify-email");
     }
 };
   

@@ -21,7 +21,7 @@
         <h1 class="text-xl">Edit Position</h1>
         <X href="/dashboard" class="absolute top-3 right-3 hover:cursor-pointer"/>
 
-        <input name="posId" value={data.posId} />
+        <input hidden name="posId" value={data.posId} />
 
         <div class="flex w-full max-w-sm flex-col gap-1.5">
             <Label for="title">Title</Label>

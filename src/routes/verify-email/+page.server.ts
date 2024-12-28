@@ -13,7 +13,13 @@ const schema = z.object({
 });
 
 export const load: PageServerLoad = async (event) => {
-    userAccountSetupFlow(event.locals, PageType.EmailVerify);
+    if (!event.locals.user) {
+        redirect(302, "/");
+    }
+
+    if (event.locals.user.emailVerified) {
+        redirect(302, "/dashboard")
+    }
 
     const form = await superValidate(zod(schema));
     return { form };

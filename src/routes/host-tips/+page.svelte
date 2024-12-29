@@ -13,14 +13,14 @@
 <NonDashNav schoolData={schoolData} loggedIn={loggedIn} />
 
 <main class="w-full mt-20 p-4 flex flex-col gap-2">
-    <h1 class="text-4xl text-center my-3">JobCamp Host Tips</h1>
+    <h1 class="text-4xl text-center my-3">Host Tips</h1>
     
     <div>First of all, <span class="font-bold">THANK YOU</span> for considering being a host to high school students! This is a unique opportunity for students to learn more about possible careers and majors and it’s hard to do without helpful professionals like yourself.</div>
     <hr class="w-full h-0 border-b">
 
     <div><font size="+2">Tips for signing up:</font></div>
     <div><p>One person from your organization needs to create a JobCamp account using an email address and password. The account creator will then create one or more "positions." Each position is for a certain number of students, a certain number of hours, and to shadow one or more career types. Each position has a host contact - name, email, and phone number. The contact's name and email is only shared with students selected to visit you on job shadow day.</p></div> 
-    <div><p>For example, if you are a school and have one teacher that will host one student, then the host contact name, email, and phone for that single position should be the teacher. If you have a large company and students will rotate between marketing, finance, engineering, and manufacturing, then you can create one "Multiple Career" position and list what the student will see</p></div>
+    <div><p>For example, if you are a school and have one teacher that will host one student, then the host contact name, email, and phone for that single position should be the teacher. If you have a large company and students will rotate between marketing, finance, engineering, and manufacturing, then you can create one "Multiple Career" position and list what the student will see.</p></div>
     <hr class="w-full h-0 border-b">
 
     <div><font size="+2">Tips for job shadow day:</font></div>

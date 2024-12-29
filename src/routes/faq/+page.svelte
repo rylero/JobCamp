@@ -18,6 +18,7 @@
 <NonDashNav schoolData={schoolData} loggedIn={loggedIn} />
 
 <div class="flex flex-col justify-center mt-28 mb-10 w-full">
+  <h1 class="flex justify-center text-4xl mb-3">FAQ's</h1>
   <Accordion.Root class="w-full px-10">
       {#each questions as question, index}
         <Accordion.Item value={question}>

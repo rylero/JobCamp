@@ -4,7 +4,7 @@
     import { Label } from "../../../lib/components/ui/label";
     import { Textarea } from "../../../lib/components/ui/textarea";
     import { careers } from "$lib/appconfig";
-    import { X } from "lucide-svelte";
+    import { ArrowLeft, ArrowRight, X } from "lucide-svelte";
     import { superForm } from "sveltekit-superforms";
 
     let { data } = $props();
@@ -99,11 +99,9 @@
         </div>
         
 
-        <div class="w-full flex justify-center">
-            <Button onclick={() => formElement.submit()} class="w-28 py-4 text-lg">Create</Button>
-        </div>
-        <div class="w-full flex justify-center">
-            <a href="/dashboard" class={buttonVariants({ variant: "secondary" }) + " w-28 py-4 text-lg"}>Cancel</a>
+        <div class="w-full flex justify-center gap-4">
+            <a href="/dashboard" class={buttonVariants({ variant: "outline" }) + " w-28 py-4 border-blue-500 border-2"}>Cancel</a>
+            <Button onclick={() => formElement.submit()} class="w-28 py-4">Create</Button>
         </div>
     </form>
 </div>

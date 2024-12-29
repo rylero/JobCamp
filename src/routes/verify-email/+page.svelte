@@ -1,31 +1,15 @@
 <script lang="ts">
-    import { superForm } from "sveltekit-superforms";
-    import type { PageData } from "./$types";
+    import Button from "$lib/components/ui/button/button.svelte";
 
-    interface Props {
-        data: PageData;
-    }
+    var { data } = $props();
 
-    let { data }: Props = $props();
-
-    const { form, errors, enhance } = superForm(data.form);
-
-    let showPassword = false;
-    let passwordEntryType = $derived(showPassword ? 'text' : 'password')
+    var form: HTMLFormElement;
 </script>
 
 <div class="flex flex-col px-10 min-h-96 py-10 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 justify-center items-center gap-8 border-4 bg-slate-100">
-    <form method="POST" class="flex flex-col justify-center items-center gap-3" action="?/verify" use:enhance>
-        <div class="flex w-96 justify-between">
-            <label for="code">Code</label>
-            <input class="px-2 py-0.5 rounded w-52" type="text" name="code" bind:value={$form.code} />
-        </div>
-        {#if $errors.code}<span class="text-sm text-red-500">{$errors.code}</span>{/if}
-
-        <button type="submit" class="mt-2 w-24 h-8 rounded bg-blue-500 text-white hover:bg-blue-600">Verify</button>
-    </form>
-
-    <form method="POST" action="?/resend">
-        <button type="submit" class="mt-2 w-24 h-8 rounded bg-blue-500 text-white hover:bg-blue-600">Resend</button>
+    <h1>Check Your Inbox for a Email Verification Link</h1>
+    <p class="text-red">{data.msg}</p>
+    <form method="POST" action="?/resend" bind:this={form}>
+        <Button onclick={() => form.submit()} class="mt-2 w-24 h-8 rounded bg-blue-500 text-white hover:bg-blue-600">Resend</Button>
     </form>
 </div> 

@@ -8,9 +8,6 @@ import { prisma } from '$lib/server/prisma';
 import { generateEmailVerificationCode } from '$lib/server/auth';
 import { sendEmailVerificationEmail } from '$lib/server/email';
 
-const schema = z.object({
-    code: z.string()
-});
 
 export const load: PageServerLoad = async (event) => {
     if (!event.locals.user) {
@@ -21,21 +18,16 @@ export const load: PageServerLoad = async (event) => {
         redirect(302, "/dashboard")
     }
 
-    const form = await superValidate(zod(schema));
-    return { form };
+    return { msg: "" };
 };
 
 
 export const actions: Actions = {
     verify: async (event) => {
-        const { request } = event;
-        const form = await superValidate(request, zod(schema));
-  
-        if (!form.valid) {
-            return fail(400, { form });
+        const code = event.url.searchParams.get("code");
+        if (!code) {
+            return { msg: "Incorrect Link. Please contact support at admin@jobcamp.org."};
         }
-
-        const code = form.data.code;
 
         const userId = event.locals.user?.id;
         if (!userId) { redirect(302, "/signup"); }
@@ -44,8 +36,13 @@ export const actions: Actions = {
             where: { user_id: userId }
         });
 
-        if (!correctCode) { redirect(302, "/signup"); }
-        if (correctCode.code != code) { return setError(form, "code", "Inncorrect Verification Code.") };
+        if (!correctCode || correctCode.code != code) { 
+            return { msg: "Incorrect Link. Please Resend and Try again."}
+        }
+
+        if (correctCode.expires_at < new Date()) {
+            return { msg: "Expired Link. Please Resend and Try again."}
+        }
 
         await prisma.user.update({
             where: { id: userId },

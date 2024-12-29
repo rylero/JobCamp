@@ -51,8 +51,12 @@ export const actions: Actions = {
             redirect(302, "/");
         }
         
-        await prisma.company.create({
-            data: {
+        await prisma.company.upsert({
+            where: { companyName: form.data.companyName },
+            update: {
+                hosts: { connect: { id: user.host.id } }
+            },
+            create: {
                 companyName: form.data.companyName,
                 companyDescription: form.data.companyDescription,
                 companyUrl: form.data.companyUrl,

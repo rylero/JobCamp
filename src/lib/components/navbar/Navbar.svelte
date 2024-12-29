@@ -34,16 +34,3 @@
         </DropdownMenu.Content>
     </DropdownMenu.Root>
 </nav>
-
-<style>
-    .nav-dropdown-button:hover {
-        cursor: pointer;
-    }
-
-    .nav-dropdown-button {
-        all: unset;
-        display: flex;
-        justify-content: start;
-        align-items: center;
-    }
-</style>

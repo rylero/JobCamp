@@ -88,6 +88,7 @@ model PositionsOnStudents {
   positionId               String
   student                  Student     @relation(fields: [studentId], references: [id])
   studentId                String
+  rank                     Int
 
   @@id([positionId, studentId])
 }

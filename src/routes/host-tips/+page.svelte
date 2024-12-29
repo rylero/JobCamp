@@ -46,7 +46,7 @@
                 <li>Tell students about yourself, where you went to school, some work and college experiences (internships, first jobs, etc.) and why you chose this field as your career.</li>
                 <li>Explain what you like about your job as well as some of the disadvantages to your career field.</li>
                 <li>Host an optional lunch – this is a great way to end the day and recap.</li>
-            16   </ul>
+            </ul>
         </li>
     </ol>
 </main>

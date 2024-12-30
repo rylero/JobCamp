@@ -24,7 +24,7 @@ export const load: PageServerLoad = async (event) => {
 
 export const actions: Actions = {
     verify: async (event) => {
-        const code = event.url.searchParams.get("code");
+        const code = (await event.request.formData()).get("code");
         if (!code) {
             return { msg: "Incorrect Link. Please contact support at admin@jobcamp.org."};
         }

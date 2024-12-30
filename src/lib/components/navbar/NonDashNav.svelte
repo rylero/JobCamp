@@ -7,6 +7,7 @@
 <nav class="w-screen h-20 fixed top-0 left-0 bg-gray-800 flex flex-row justify-between items-center text-white">
     <a href="/{schoolData.webAddr}" class="ml-4 text-2xl">JobCamp | {schoolData.name}</a>
     <div class="flex flex-row gap-4 mr-4">
+        <Button href="/about" variant="link" class="text-white text-xl">About</Button>
         <Button href="/host-tips" variant="link" class="text-white text-xl">Host Tips</Button>
         <Button href="/faq" variant="link" class="text-white text-xl">FAQ</Button>
         {#if !loggedIn}

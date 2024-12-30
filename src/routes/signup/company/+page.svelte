@@ -2,6 +2,7 @@
     import { Input } from "$lib/components/ui/input/index.js";
     import { Checkbox } from "$lib/components/ui/checkbox/index.js";
     import { superForm } from "sveltekit-superforms";
+    import Navbar from "$lib/components/navbar/Navbar.svelte";
 
     let { data } = $props();
 
@@ -13,6 +14,9 @@
     let showPassword = $state(false);
     let passwordEntryType = $derived(showPassword ? 'text' : 'password')
 </script>
+
+<Navbar isHost={false} loggedIn={false} />
+
 <div class="w-full min-h-screen flex flex-col gap-8 justify-center items-center">
     <form method="POST" class="flex flex-col justify-between items-center gap-4 py-10 px-10 border-2 rounded-lg shadow-2xl" use:enhance>
         <h1 class="text-4xl">Sign Up</h1>

@@ -12,6 +12,9 @@ export const load: PageServerLoad = async (event) => {
     if (!event.locals.user) {
         redirect(302, "/login");
     }
+    if (!event.locals.user.emailVerified) {
+        redirect(302, "/verify-email");
+    }
 
     const positionId = event.url.searchParams.get("posId")?.toString();
     if (!positionId) {

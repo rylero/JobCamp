@@ -34,6 +34,9 @@ export const load: PageServerLoad = async (event) => {
     if (!event.locals.user) {
         redirect(302, "/login");
     }
+    if (!event.locals.user.emailVerified) {
+        redirect(302, "/verify-email");
+    }
 
     const { userInfo, hostInfo } = await grabUserData(event.locals);
     const form = await superValidate(zod(createNewPositionSchema(hostInfo.name, userInfo.email)));

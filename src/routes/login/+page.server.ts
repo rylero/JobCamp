@@ -31,6 +31,15 @@ export const actions: Actions = {
             return message(form, "Incorrect Email or Password.");
         }
         
-        redirect(302, "/verify-email");
+        const user = await prisma.user.findFirst({where: { id: res }});
+        if (!user) {
+            return message(form, "Error creating account. Please try again or contact support at admin@jobcamp.org.");
+        }
+
+        if (!user.emailVerified) {
+            redirect(302, "/verify-email");
+        }
+
+        redirect(302, "/dashboard");
     }
 }

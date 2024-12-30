@@ -1,6 +1,7 @@
 <script lang="ts">
     import { goto } from "$app/navigation";
     import Button from "$lib/components/ui/button/button.svelte";
+    import Navbar from "$lib/components/navbar/Navbar.svelte";
 
     const studentSignup = () => {
         goto("/signup/student");
@@ -10,6 +11,8 @@
         goto("/signup/company");
     }
 </script>
+
+<Navbar isHost={false} loggedIn={false} />
 
 <div class="w-full min-h-screen flex flex-col gap-8 justify-center items-center">
     <div class="flex flex-col justify-between items-center gap-16 py-10 px-10 border-2 rounded-lg shadow-2xl">

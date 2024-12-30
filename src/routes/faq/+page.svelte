@@ -1,21 +1,17 @@
 <script lang="ts">
     import FAQ from "./faq.json";
     import * as Accordion from "$lib/components/ui/accordion/index.js";
-    import NonDashNav from "$lib/components/navbar/NonDashNav.svelte";
+    import Navbar from "$lib/components/navbar/Navbar.svelte";
     import { goto } from "$app/navigation";
 
     const questions = FAQ.Q;
     const answers = FAQ.A;
 
     const { data } = $props();
-    const { schoolData, loggedIn } = data;
-
-    if (schoolData == undefined) {
-      goto("/");
-    }
+    const { isHost, loggedIn } = data;
 </script>
 
-<NonDashNav schoolData={schoolData} loggedIn={loggedIn} />
+<Navbar isHost loggedIn />
 
 <div class="flex flex-col justify-center mt-28 mb-10 w-full">
   <h1 class="flex justify-center text-4xl mb-3">FAQs</h1>

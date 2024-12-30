@@ -7,7 +7,7 @@
     let { data } = $props();
 </script>
 
-<Navbar />
+<Navbar loggedIn={true} isHost={true} />
 
 <div class="h-24"></div>
 

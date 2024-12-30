@@ -1,17 +1,13 @@
 <script lang="ts">
     import content from "./aboutContent.json";
-    import NonDashNav from "$lib/components/navbar/NonDashNav.svelte";
+    import Navbar from "$lib/components/navbar/Navbar.svelte";
     import { goto } from "$app/navigation";
 
     const { data } = $props();
-    const { schoolData, loggedIn } = data;
-
-    if (schoolData == undefined) {
-      goto("/");
-    }
+    const { isHost, loggedIn } = data;
 </script>
 
-<NonDashNav schoolData={schoolData} loggedIn={loggedIn} />
+<Navbar isHost loggedIn />
 
 <div class="flex flex-col w-full items-center mt-24">
   <div class="flex flex-col justify-center items-center my-3 mx-2">

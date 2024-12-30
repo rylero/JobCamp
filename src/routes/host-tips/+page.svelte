@@ -1,16 +1,12 @@
 <script lang="ts">
     import { goto } from "$app/navigation";
-    import NonDashNav from "$lib/components/navbar/NonDashNav.svelte";
+    import Navbar from "$lib/components/navbar/Navbar.svelte";
 
     const { data } = $props();
-    const { schoolData, loggedIn } = data;
-
-    if (schoolData == undefined) {
-      goto("/");
-    }
+    const { isHost, loggedIn } = data;
 </script>
 
-<NonDashNav schoolData={schoolData} loggedIn={loggedIn} />
+<Navbar isHost loggedIn />
 
 <main class="w-full mt-20 p-4 flex flex-col gap-2">
     <h1 class="text-4xl text-center my-3">Host Tips</h1>

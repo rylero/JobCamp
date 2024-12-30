@@ -2,17 +2,13 @@
     import { Button } from "$lib/components/ui/button";
     import { redirect } from "@sveltejs/kit";
     import JobCampBanner from "$lib/assets/jobcampbanner.jpg";
-    import NonDashNav from "$lib/components/navbar/NonDashNav.svelte";
+    import Navbar from "$lib/components/navbar/Navbar.svelte";
 
     const { data } = $props();
-    const { schoolData, loggedIn } = data;
-
-    if (schoolData == undefined) {
-        redirect(302, "/");
-    }
+    const { isHost, loggedIn } = data;
 </script>
 
-<NonDashNav schoolData={schoolData} loggedIn={loggedIn} />
+<Navbar isHost loggedIn />
 
 <div class="w-screen h-screen bg-cover bg-center flex flex-col justify-center items-center" style="background-image: url({JobCampBanner});">
     <h1 class="text-8xl md:text-9xl text-black px-4">JobCamp</h1>

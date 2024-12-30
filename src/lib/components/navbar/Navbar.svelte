@@ -6,31 +6,49 @@
     import Settings from "lucide-svelte/icons/settings";
     import { enhance } from "$app/forms";
 
+    const { loggedIn, isHost } = $props();
+
     var form: HTMLFormElement;
 </script>
 
 <nav class="w-screen h-20 fixed top-0 left-0 bg-gray-800 flex flex-row justify-between items-center px-5 z-50">
-    <h1 class="ml-4 text-2xl text-white">JobCamp</h1>
+    <a href={isHost ? "/dashboard" : "/lghs"} class="ml-4 text-2xl text-white">JobCamp</a>
+    
+    <div class="flex flex-row gap-4 mr-4">
+        <Button href="/about" variant="link" class="text-white text-xl">About</Button>
 
-    <DropdownMenu.Root>
-        <DropdownMenu.Trigger>
-            <Button variant="outline"><User />Profile</Button>
-        </DropdownMenu.Trigger>
-        <DropdownMenu.Content>
-            <!-- <DropdownMenu.Item>
-                <button class="nav-dropdown-button">
-                    <Settings class="mr-2 h-4 w-4" />
-                    <span>Settings</span>
-                </button>
-            </DropdownMenu.Item> -->
-            <DropdownMenu.Item>
-                <form method="POST" use:enhance action="?/logOut" bind:this={form}>
-                    <DropdownMenu.Item onclick={() => form.submit()}>
-                        <LogOut class="mr-2 h-4 w-4" />
-                        <input type="submit" value="Log out" />
+        {#if loggedIn && isHost}
+            <Button href="/host-tips" variant="link" class="text-white text-xl">Host Tips</Button>
+        {/if}
+
+        <Button href="/faq" variant="link" class="text-white text-xl">FAQ</Button>
+
+        {#if !loggedIn}
+            <Button href="/signup" variant="link" class="text-white text-xl">Sign Up</Button>
+            <Button href="/login" variant="link" class="text-white text-xl">Login</Button>
+        {:else}
+            <Button href="/dashboard" variant="link" class="text-white text-xl">Dashboard</Button>
+            <DropdownMenu.Root>
+                <DropdownMenu.Trigger>
+                    <Button variant="outline" class="px-2"><User /></Button>
+                </DropdownMenu.Trigger>
+                <DropdownMenu.Content>
+                    <!-- <DropdownMenu.Item>
+                        <button class="nav-dropdown-button">
+                            <Settings class="mr-2 h-4 w-4" />
+                            <span>Settings</span>
+                        </button>
+                    </DropdownMenu.Item> -->
+                    <DropdownMenu.Item>
+                        <form method="POST" use:enhance action="?/logOut" bind:this={form}>
+                            <DropdownMenu.Item onclick={() => form.submit()}>
+                                <LogOut class="mr-2 h-4 w-4" />
+                                <input type="submit" value="Log out" />
+                            </DropdownMenu.Item>
+                        </form>
                     </DropdownMenu.Item>
-                </form>
-            </DropdownMenu.Item>
-        </DropdownMenu.Content>
-    </DropdownMenu.Root>
+                </DropdownMenu.Content>
+            </DropdownMenu.Root>
+        {/if}
+    </div>
 </nav>

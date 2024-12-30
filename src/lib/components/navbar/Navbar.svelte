@@ -40,7 +40,7 @@
                         </button>
                     </DropdownMenu.Item> -->
                     <DropdownMenu.Item>
-                        <form method="POST" use:enhance action="?/logOut" bind:this={form}>
+                        <form method="POST" use:enhance action="/dashboard/?/logOut" bind:this={form}>
                             <DropdownMenu.Item onclick={() => form.submit()}>
                                 <LogOut class="mr-2 h-4 w-4" />
                                 <input type="submit" value="Log out" />

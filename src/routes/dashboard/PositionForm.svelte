@@ -69,14 +69,14 @@
         <div class="flex w-full max-w-sm flex-col gap-1.5">
             <Label class="text-lg" for="instructions">Instructions For Students</Label>
             <Textarea name="instructions" bind:value={$form.instructions} id="instructions" placeholder="" class="h-full" />
-            <span class="italic text-sm">Include specific meeting spot (building #, lobby), bring ID, need forms signed, etc.</span>
+            <span class="italic text-sm">Include specific meeting spot (building #, lobby), bring ID? need forms signed? etc.</span>
             {#if $errors.instructions}<span class="text-sm text-red-500">{$errors.instructions}</span>{/if}
         </div>
 
         <div class="flex w-full max-w-sm flex-col gap-1.5">
             <Label class="text-lg" for="attire">Attire Requirements</Label>
             <Textarea name="attire" bind:value={$form.attire} id="attire" class="h-full" />
-            <span class="italic text-sm">E.g., Closed-toed shoes, no sneakers, no jeans, etc. The more specific, the better students will meet requirements</span>
+            <span class="italic text-sm">E.g., Closed-toed shoes, no sneakers, no jeans, etc. Please be specific if you have requirements.</span>
             {#if $errors.attire}<span class="text-sm text-red-500">{$errors.attire}</span>{/if}
         </div>
         

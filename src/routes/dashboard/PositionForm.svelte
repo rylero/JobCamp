@@ -54,7 +54,7 @@
         </div>
 
         <div class="flex w-full max-w-sm flex-col gap-1.5">
-            <Label class="text-lg w-28" for="email">Email</Label>
+            <Label class="text-lg w-28" for="email">Host's Email</Label>
             <Input class="w-full" id="email" name="email" bind:value={$form.email}  />
             <span class="italic text-sm">Email for the primary contact during Job Shadow day. This email will be shared with students attending this position.</span>
             {#if $errors.email}<span class="text-sm text-red-500">{$errors.email}</span>{/if}

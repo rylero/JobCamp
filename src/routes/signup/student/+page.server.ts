@@ -51,7 +51,7 @@ export const actions: Actions = {
             return message(form, "Account Already Exists. Login instead.");
         }
 
-        await prisma.user.update({
+        const user = await prisma.user.update({
             where: { id: userId },
             data: {
                 student: {
@@ -76,9 +76,9 @@ export const actions: Actions = {
         });
 
         // runs in background while user is redirected
-        generateEmailVerificationCode(userId, form.data.email).then(
-            (code) => sendEmailVerificationEmail(form.data.email, code)
-        );
+        const code = await generateEmailVerificationCode(userId, user.email)
+        await sendEmailVerificationEmail(userId, user.email, code);
+
         generatePermissionSlipCode(userId, form.data.parentEmail).then(
             (code) => sendPermissionSlipEmail(form.data.parentEmail, code)
         );

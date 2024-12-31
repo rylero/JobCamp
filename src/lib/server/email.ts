@@ -19,12 +19,12 @@ export function renderEmailTemplate(emailHtml: string, params: EmailParams) {
     return emailHtml;
 }
 
-export async function sendEmailVerificationEmail(email: string, code: string) {
+export async function sendEmailVerificationEmail(uid: string, email: string, code: string) {
     await emailClient.send({
         from: SENDER,
         to:  [{ email: email }],
         subject: "Verify JobCamp Email",
-        html: renderEmailTemplate(verificationEmail, {code: code})
+        html: renderEmailTemplate(verificationEmail, {uid, code})
     });
 }
 

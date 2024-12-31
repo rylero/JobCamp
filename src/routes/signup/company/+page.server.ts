@@ -68,9 +68,8 @@ export const actions: Actions = {
         })
 
         // runs in background while user is redirected
-        generateEmailVerificationCode(userId, form.data.email).then(
-            (code) => sendEmailVerificationEmail(form.data.email, code)
-        );
+        const code = await generateEmailVerificationCode(userId, user.email)
+        await sendEmailVerificationEmail(userId, user.email, code);
 
         redirect(302, "/verify-email");
     }

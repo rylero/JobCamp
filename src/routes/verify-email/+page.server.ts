@@ -35,10 +35,12 @@ export const actions: Actions = {
 
         const userId = event.locals.user?.id;
         if (!userId) { redirect(302, "/signup"); }
+        console.log("signup past")
         
         const correctCode = await prisma.emailVerificationCodes.findFirst({
             where: { user_id: userId }
         });
+        console.log("prisma query")
 
         if (!correctCode || correctCode.code != code) { 
             console.log( { msg: "Incorrect Link. Please Resend and Try again."})
@@ -56,10 +58,12 @@ export const actions: Actions = {
                 emailVerified: true,
             }
         });
+        console.log("user update")
         
         await prisma.emailVerificationCodes.delete({
             where: { user_id: userId }
         });
+        console.log("delete code")
 
         console.log("redirecting")
 

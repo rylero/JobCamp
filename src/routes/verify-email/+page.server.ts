@@ -29,7 +29,6 @@ export const actions: Actions = {
         
         const code = form.get("code")?.toString();
         if (!code) {
-            console.log({ msg: "Incorrect Link. Please contact support at admin@jobcamp.org."})
             return { msg: "Incorrect Link. Please contact support at admin@jobcamp.org."};
         }
 

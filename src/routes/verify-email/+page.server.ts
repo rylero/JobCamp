@@ -34,7 +34,7 @@ export const actions: Actions = {
         console.log(`Verify Request Code: ${code}`);
 
         const userId = event.locals.user?.id;
-        if (!userId) { redirect(302, "/signup"); }
+        if (!userId) { console.log("signup"); redirect(302, "/signup"); }
         console.log("signup past")
         
         const correctCode = await prisma.emailVerificationCodes.findFirst({

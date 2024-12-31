@@ -56,7 +56,7 @@
         <div class="flex w-full max-w-sm flex-col gap-1.5">
             <Label class="text-lg" for="email">Primary Contact's Email</Label>
             <Input class="w-full" id="email" name="email" bind:value={$form.email}  />
-            <span class="italic text-sm">This email will be shared with students attending this position.</span>
+            <span class="italic text-sm">This email will only be shared with students attending this position.</span>
             {#if $errors.email}<span class="text-sm text-red-500">{$errors.email}</span>{/if}
         </div>
 

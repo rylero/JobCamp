@@ -22,7 +22,7 @@
 
 <Navbar isHost={false} loggedIn={false} />
 
-<div class="w-full mt-28 flex flex-col sm:gap-8 justify-center items-center">
+<div class="w-full h-screen flex flex-col sm:gap-8 justify-center items-center">
     <form method="POST" class="max-w-full flex flex-col justify-between items-center gap-4 py-10 px-10 sm:border-2 sm:rounded-lg sm:shadow-2xl" use:enhance>
         <h1 class="text-4xl">Login</h1>
         {#if $message}<span class="text-sm text-red-500">{$message}</span>{/if}

@@ -3,7 +3,7 @@ generator client {
 }
 
 datasource db {
-  provider  = "sqlite"
+  provider  = "mysql"
   url       = env("DATABASE_URL")
 }
 
@@ -97,7 +97,7 @@ model Company {
   id                       String      @id @default(cuid())
 
   companyName              String      @unique
-  companyDescription       String      //@db.VarChar(1024)
+  companyDescription       String      @db.VarChar(1024)
   companyUrl               String?
 
   school                   School?     @relation(fields: [schoolId], references: [id])

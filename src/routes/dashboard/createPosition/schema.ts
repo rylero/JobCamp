@@ -2,17 +2,17 @@ import { z } from "zod"
 
 export const createNewPositionSchema = (name: string, email: string) => {
     return z.object({
-        title: z.string(),
-        career: z.string(),
-        slots: z.number(),
-        summary: z.string(),
-        fullName: z.string().default(name),
-        email: z.string().default(email),
-        address: z.string(),
+        title: z.string().min(1, "Required field"),
+        career: z.string().min(1, "Required field"),
+        slots: z.number().min(1, "Required field"),
+        summary: z.string().min(1, "Required field"),
+        fullName: z.string().min(1, "Required field").default(name),
+        email: z.string().min(1, "Required field").default(email),
+        address: z.string().min(1, "Required field"),
         instructions: z.string(),
         attire: z.string(),
-        arrival: z.string(),
-        start: z.string(),
-        release: z.string(),
+        arrival: z.string().min(1, "Required field"),
+        start: z.string().min(1, "Required field"),
+        release: z.string().min(1, "Required field"),
     });
 }

@@ -1,7 +1,17 @@
 import { z } from "zod"
 
+function twodigit(num: number) {
+    if (num < 10) {
+        return "0" + num;
+    } else {
+        return num
+    }
+}
+
 function timeFormat(a: Date) {
-    return a.getHours()+":"+a.getMinutes()+":"+a.getSeconds()
+    const h = a.getHours();
+    const m = a.getMinutes();
+    return twodigit(h)+":"+twodigit(m)
 }
 
 export const editPositionSchema = (positionProperties: any) => {
@@ -16,7 +26,7 @@ export const editPositionSchema = (positionProperties: any) => {
         address: z.string().default(positionProperties.address),
         instructions: z.string().default(positionProperties.instructions),
         attire: z.string().default(positionProperties.attire),
-        arrival: z.string().default("8:00:00"), // timeFormat(positionProperties.arrival)
+        arrival: z.string().default(timeFormat(positionProperties.arrival)),
         start: z.string().default(timeFormat(positionProperties.start)),
         release: z.string().default(timeFormat(positionProperties.end)),
     });

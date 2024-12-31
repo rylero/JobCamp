@@ -1,6 +1,6 @@
 <script lang="ts">
     import Navbar from "$lib/components/navbar/Navbar.svelte";
-    import { CirclePlus, Edit } from 'lucide-svelte';
+    import { CirclePlus, Delete, Edit, Trash } from 'lucide-svelte';
     import { Button } from "$lib/components/ui/button";
     import * as Accordion from "$lib/components/ui/accordion/index.js";
 
@@ -11,24 +11,29 @@
 
 <div class="h-24"></div>
 
-<h1 class="mx-10 my-2 text-2xl">Positions</h1>
+<h1 class="mx-10 my-2 text-2xl">Your Positions</h1>
+<p class="mx-10">Create one or more positions for job shadow day. A position represents a career you'll be exposing students to.<br />E.g., Teacher, Software developer, Architect, or Real estate agent.</p>
 
-<Accordion.Root class="w-full sm:max-w-[70%] px-10">
+<Accordion.Root class="w-full px-10 my-5">
 {#each data.positions as position}
-  <Accordion.Item value={position.id}>
-    <Accordion.Trigger class="text-xl">
+  <Accordion.Item value={position.id} class="my-2">
+    <Accordion.Trigger class="text-xl bg-slate-100 hover:bg-slate-200 rounded-t-sm px-5">
         <span>{position.title}</span>
     </Accordion.Trigger>
-    <Accordion.Content>
+    <Accordion.Content class="px-5">
+        <div class="flex gap-5">
+          <a href={"/dashboard/editPosition?posId="+position.id} class="flex gap-1 items-center align-middle text-lg mt-2"><Edit class="z-50" size={24} /> Edit</a>
+          <a href={"/dashboard/editPosition?posId="+position.id} class="flex gap-1 items-center align-middle text-lg mt-2"><Trash class="z-50" size={24} /> Delete</a>
+        </div>
+
+        <hr class="my-2">
+
         <p class=" mt-1">Career: { position.career }</p>
+        <p class=""># of slots for students: { position.slots }</p>
 
         <hr class="my-2">
 
-        <p class="">Address: { position.address }</p>
-        <p class=""># of Slots: { position.slots }</p>
-
-        <hr class="my-2">
-
+        <p class="">Address: <br>{ position.address }</p><br>
         <p class="">Summary:<br> { position.summary }</p>
         <p class=""><br>Instructions For Students:<br> { position.instructions }</p>
         <p class=""><br>Attire:<br> { position.attire }</p>
@@ -43,11 +48,9 @@
         <p class="">Arrival: { position.arrival.toLocaleTimeString() }</p>
         <p class="">Start: { position.start.toLocaleTimeString() }</p>
         <p class="">End: { position.end.toLocaleTimeString() }</p>
-
-        <a href={"/dashboard/editPosition?posId="+position.id}><Edit class="mt-3 z-50" /></a>
     </Accordion.Content>
   </Accordion.Item>
 {/each}
 </Accordion.Root>
 
-<Button href="/dashboard/createPosition" class="ml-10 mt-5"><CirclePlus size={16} /> Create New Position</Button>
+<Button href="/dashboard/createPosition" class="ml-10 mt-5 text-lg">Create New Position</Button>

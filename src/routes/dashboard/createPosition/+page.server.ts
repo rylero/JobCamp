@@ -46,17 +46,14 @@ export const load: PageServerLoad = async (event) => {
 
 export const actions: Actions = {
     createPosition: async ({ request, locals, cookies }) => {
-        console.log("create position submit")
         const { userInfo, hostInfo } = await grabUserData(locals);
         const form = await superValidate(request, zod(createNewPositionSchema(hostInfo.name, userInfo.email)));
 
         if (!form.valid) {
-            console.log("fail")
             return fail(400, { form });
         }
 
         if (!locals.user) {
-            console.log("no user")
             redirect(302, "/login");
         }
 

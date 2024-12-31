@@ -7,7 +7,7 @@
     var form: HTMLFormElement;
 </script>
 
-<div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col justify-between items-center gap-4 py-10 px-10 sm:border-2 sm:rounded-lg sm:shadow-2xl w-full">
+<div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col justify-between items-center gap-4 py-10 px-10 sm:border-2 sm:rounded-lg sm:shadow-2xl">
     <h1 class="text-xl text-center">Check your inbox for an email verification link</h1>
     <p class="text-red">{data.msg}</p>
     <form method="POST" action="?/resend" bind:this={form}>

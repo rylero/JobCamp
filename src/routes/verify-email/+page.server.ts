@@ -24,10 +24,14 @@ export const load: PageServerLoad = async (event) => {
 
 export const actions: Actions = {
     verify: async (event) => {
+        console.log("Verify Request")
         const code = (await event.request.formData()).get("code");
         if (!code) {
+            console.log({ msg: "Incorrect Link. Please contact support at admin@jobcamp.org."})
             return { msg: "Incorrect Link. Please contact support at admin@jobcamp.org."};
         }
+
+        console.log(`Verify Request Code: ${code}`);
 
         const userId = event.locals.user?.id;
         if (!userId) { redirect(302, "/signup"); }
@@ -37,10 +41,12 @@ export const actions: Actions = {
         });
 
         if (!correctCode || correctCode.code != code) { 
+            console.log( { msg: "Incorrect Link. Please Resend and Try again."})
             return { msg: "Incorrect Link. Please Resend and Try again."}
         }
 
         if (correctCode.expires_at < new Date()) {
+            console.log({ msg: "Expired Link. Please Resend and Try again."})
             return { msg: "Expired Link. Please Resend and Try again."}
         }
 
@@ -54,6 +60,8 @@ export const actions: Actions = {
         await prisma.emailVerificationCodes.delete({
             where: { user_id: userId }
         });
+
+        console.log("redirecting")
 
         redirect(302, "/dashboard")
     },

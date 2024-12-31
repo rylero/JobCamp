@@ -10,6 +10,7 @@ import { sendEmailVerificationEmail } from '$lib/server/email';
 
 
 export const load: PageServerLoad = async (event) => {
+    console.log("verify email")
     if (!event.locals.user) {
         redirect(302, "/");
     }
@@ -33,9 +34,10 @@ export const actions: Actions = {
 
         console.log(`Verify Request Code: ${code}`);
 
-        const userId = event.locals.user?.id;
-        if (!userId) { console.log("signup"); redirect(302, "/signup"); }
+        const user = event.locals.user;
+        if (!user) { console.log("signup"); redirect(302, "/signup"); }
         console.log("signup past")
+        const userId = user.id;
         
         const correctCode = await prisma.emailVerificationCodes.findFirst({
             where: { user_id: userId }

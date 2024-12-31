@@ -47,14 +47,16 @@
         </div>
         
         <div class="flex w-full max-w-sm flex-col gap-1.5">
-            <Label class="text-lg w-28" for="name">Full Name</Label>
+            <Label class="text-lg w-28" for="name">Host's full Name</Label>
             <Input class="w-full" id="name" name="name" bind:value={$form.fullName}  />
+            <span class="italic text-sm">The host is the primary contact during Job Shadow day. This name will only be shared with students attending this position.</span>
             {#if $errors.fullName}<span class="text-sm text-red-500">{$errors.fullName}</span>{/if}
         </div>
 
         <div class="flex w-full max-w-sm flex-col gap-1.5">
             <Label class="text-lg w-28" for="email">Email</Label>
             <Input class="w-full" id="email" name="email" bind:value={$form.email}  />
+            <span class="italic text-sm">Email for the primary contact during Job Shadow day. This email will be shared with students attending this position.</span>
             {#if $errors.email}<span class="text-sm text-red-500">{$errors.email}</span>{/if}
         </div>
 

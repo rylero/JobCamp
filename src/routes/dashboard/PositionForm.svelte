@@ -30,7 +30,7 @@
                     <option value={career}>{career}</option>
                 {/each}
             </select>
-       <span class="italic text-sm">More really cool italic text</span>
+       <span class="italic text-sm">If students will shadow more than 1 career, select "Multiple Careers"</span>
             {#if $errors.career}<span class="text-sm text-red-500">{$errors.career}</span>{/if}
         </div>
         <div class="flex w-full max-w-sm flex-col gap-1.5">

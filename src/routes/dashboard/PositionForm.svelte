@@ -20,7 +20,7 @@
         <div class="flex w-full max-w-sm flex-col gap-1.5">
             <Label class="text-lg" for="title">Position Title</Label>
             <Input name="title" id="title" bind:value={$form.title} />
-            <span class="italic text-sm">Really cool italic text</span>
+            <span class="italic text-sm">E.g., 3rd Grade Teacher, Orthopedic Surgeon, Electrical Engineer</span>
             {#if $errors.title}<span class="text-sm text-red-500">{$errors.title}</span>{/if}
         </div>
         <div class="flex w-full max-w-sm flex-col gap-1.5">

@@ -6,11 +6,7 @@ import { sendEmailVerificationEmail } from '$lib/server/email';
 
 
 export const load: PageServerLoad = async (event) => {
-    if (!event.locals.user) {
-        redirect(302, "/");
-    }
-
-    if (event.locals.user.emailVerified) {
+    if (event.locals.user && event.locals.user.emailVerified) {
         redirect(302, "/dashboard")
     }
 

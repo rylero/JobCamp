@@ -4,6 +4,7 @@
     import { Input } from "$lib/components/ui/input";
     import Checkbox from "$lib/components/ui/checkbox/checkbox.svelte";
     import Navbar from "$lib/components/navbar/Navbar.svelte";
+    import { buttonVariants } from "$lib/components/ui/button";
 
     interface Props {
         data: PageData;
@@ -45,5 +46,6 @@
 
         <button type="submit" class="mt-2 w-24 h-8 rounded bg-blue-500 text-white hover:bg-blue-600">Login</button>
     </form>
+    <a href="/reset-password" class="underline text-blue-500">Forgot Password?</a>
     <a href="/signup" class="underline text-blue-500">Do you want to signup?</a>
 </div>

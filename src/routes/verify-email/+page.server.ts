@@ -1,8 +1,4 @@
-import { PageType, userAccountSetupFlow } from '$lib/server/authFlow';
-import { z } from 'zod';
 import type { Actions, PageServerLoad } from './$types';
-import { zod } from 'sveltekit-superforms/adapters';
-import { fail, setError, superValidate } from "sveltekit-superforms";
 import { redirect } from '@sveltejs/kit';
 import { prisma } from '$lib/server/prisma';
 import { generateEmailVerificationCode } from '$lib/server/auth';
@@ -10,7 +6,6 @@ import { sendEmailVerificationEmail } from '$lib/server/email';
 
 
 export const load: PageServerLoad = async (event) => {
-    console.log("verify email")
     if (!event.locals.user) {
         redirect(302, "/");
     }

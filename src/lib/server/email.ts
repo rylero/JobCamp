@@ -28,12 +28,12 @@ export async function sendEmailVerificationEmail(uid: string, email: string, cod
     });
 }
 
-export async function sendPasswordResetEmail(email: string, code: string) {
+export async function sendPasswordResetEmail(uid: string, email: string, code: string) {
     await emailClient.send({
         from: SENDER,
         to:  [{ email: email }],
         subject: "Reset JobCamp Password",
-        html: renderEmailTemplate(resetPasswordEmail, {code: code})
+        html: renderEmailTemplate(resetPasswordEmail, {uid, code})
     });
 }
 

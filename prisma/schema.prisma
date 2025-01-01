@@ -111,7 +111,7 @@ model Host {
 
   name                     String
 
-  companyId                String?     @unique
+  companyId                String?
   company                  Company?    @relation(references: [id], fields: [companyId])
   
   userId                   String      @unique

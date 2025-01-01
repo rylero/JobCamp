@@ -1,7 +1,7 @@
 import type { Actions, PageServerLoad } from './$types';
 import { redirect } from '@sveltejs/kit';
 import { prisma } from '$lib/server/prisma';
-import { generateEmailVerificationCode } from '$lib/server/auth';
+import { generateEmailVerificationCode, setNewLuciaSession, updateLastLoginToNow } from '$lib/server/auth';
 import { sendEmailVerificationEmail } from '$lib/server/email';
 
 
@@ -18,34 +18,26 @@ export const actions: Actions = {
     verify: async (event) => {
         const form = await event.request.formData();
 
-        console.log("code");
-        
         const code = form.get("code")?.toString();
         if (!code) {
             return { msg: "Incorrect Link. Please contact support at admin@jobcamp.org."};
         }
 
-        console.log("user id");
         const userId = form.get("uid")?.toString();
-        console.log("userID: " + userId)
         if (!userId) { redirect(302, "/signup"); }
         
-        console.log("get user");
         const correctCode = await prisma.emailVerificationCodes.findFirst({
             where: { user_id: userId }
         });
 
-        console.log("link");
         if (!correctCode || correctCode.code != code) {
             return { msg: "Incorrect Link. Please Resend and Try again."}
         }
 
-        console.log("expire");
         if (correctCode.expires_at < new Date()) {
             return { msg: "Expired Link. Please Resend and Try again."}
         }
 
-        console.log("user");
         await prisma.user.update({
             where: { id: userId },
             data: {
@@ -53,10 +45,14 @@ export const actions: Actions = {
             }
         });
         
-        console.log("verify");
         await prisma.emailVerificationCodes.delete({
             where: { user_id: userId }
         });
+
+        if (!event.locals.user) {
+            await updateLastLoginToNow(userId);
+            await setNewLuciaSession(userId, event);
+        }
 
         redirect(302, "/dashboard")
     },

@@ -22,17 +22,17 @@ jobs:
 
       # Install dependencies
       - name: Install dependencies
-        run: pnpm install
+        run: npm install
 
       # Build the project
       - name: Run build
-        run: pnpm run build
+        run: npm run build
 
       # Run preview and test
       - name: Run preview
         run: |
-          pnpx kill-port 4173 # Ensure the port isn't in use
-          pnpm run preview &
+          npx kill-port 4173 # Ensure the port isn't in use
+          npm run preview &
           PREVIEW_PID=$!
           sleep 5 # Give the server time to start
           curl --fail http://localhost:4173 || exit 1 # Ensure the server is running

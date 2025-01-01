@@ -3,6 +3,8 @@
     import { CirclePlus, Delete, Edit, Trash } from 'lucide-svelte';
     import { Button } from "$lib/components/ui/button";
     import * as Accordion from "$lib/components/ui/accordion/index.js";
+    import * as AlertDialog from "$lib/components/ui/alert-dialog";
+    import { enhance } from "$app/forms";
 
     let { data } = $props();
 </script>
@@ -23,7 +25,21 @@
     <Accordion.Content class="px-5">
         <div class="flex gap-5">
           <a href={"/dashboard/editPosition?posId="+position.id} class="flex gap-1 items-center align-middle text-lg mt-2"><Edit class="z-50" size={24} /> Edit</a>
-          <a href={"/dashboard/editPosition?posId="+position.id} class="flex gap-1 items-center align-middle text-lg mt-2"><Trash class="z-50" size={24} /> Delete</a>
+          <AlertDialog.Root>
+            <AlertDialog.Trigger class="flex gap-1 items-center align-middle text-lg mt-2"><Trash class="z-50" size={24} /> Delete</AlertDialog.Trigger>
+              <AlertDialog.Content>
+                <AlertDialog.Header>
+                  <AlertDialog.Title>Delete this position?</AlertDialog.Title>
+                  <AlertDialog.Description>
+                    This cannot be undone.
+                  </AlertDialog.Description>
+                </AlertDialog.Header>
+                <AlertDialog.Footer>
+                  <AlertDialog.Cancel>Cancel</AlertDialog.Cancel>
+                  <AlertDialog.Action><form use:enhance method="POST" action={"?/deletePosition&posId="+position.id}><button type="submit">Delete</button></form></AlertDialog.Action>
+                </AlertDialog.Footer>
+              </AlertDialog.Content>
+          </AlertDialog.Root>
         </div>
 
         <hr class="my-2">

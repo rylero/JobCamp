@@ -49,5 +49,13 @@ export const actions: Actions = {
             cookies.delete(lucia.sessionCookieName, { path: "." });
         }
         redirect(302, "/login")
+    },
+    deletePosition: async ({ locals, cookies, url }) => {
+        const positionId = url.searchParams.get("posId")?.toString();
+        if (!positionId) {
+            redirect(302, "/about")
+        }
+
+        await prisma.position.delete({ where: { id: positionId }});
     }
 };

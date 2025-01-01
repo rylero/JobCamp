@@ -7,7 +7,7 @@ import positionUpdateEmail from "$lib/emails/positionUpdate.html?raw";
 
 export const emailClient = new MailtrapClient({ token: env.MAILTRAP_TOKEN });
 
-export const SENDER = { name: "JobCamp", email: "info@jobcamp.org" };
+export const SENDER = { name: "JobCamp", email: "admin@jobcamp.org" };
 
 export type EmailParams = { [index: string]: string }
 

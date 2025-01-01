@@ -17,6 +17,8 @@ export const load: PageServerLoad = async (event) => {
 export const actions: Actions = {
     verify: async (event) => {
         const form = await event.request.formData();
+
+        console.log("code");
         
         const code = form.get("code")?.toString();
         if (!code) {

@@ -13,7 +13,6 @@ export type EmailParams = { [index: string]: string }
 
 export function renderEmailTemplate(emailHtml: string, params: EmailParams) {
     Object.getOwnPropertyNames(params).forEach(name => {
-        console.log(name);
         emailHtml = emailHtml.replaceAll("${"+name+"}", params[name]);
     });
     return emailHtml;

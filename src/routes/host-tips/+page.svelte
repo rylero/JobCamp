@@ -6,7 +6,7 @@
     const { isHost, loggedIn } = data;
 </script>
 
-<Navbar isHost loggedIn />
+<Navbar isHost={isHost} loggedIn={loggedIn} />
 
 <main class="w-full mt-20 p-4 flex flex-col gap-2">
     <h1 class="text-4xl text-center my-3">Host Tips</h1>

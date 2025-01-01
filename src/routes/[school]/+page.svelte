@@ -8,7 +8,8 @@
     const { isHost, loggedIn } = data;
 </script>
 
-<Navbar isHost loggedIn />
+
+<Navbar isHost={isHost} loggedIn={loggedIn} />
 
 <div class="w-screen h-screen bg-cover bg-center flex flex-col justify-center items-center" style="background-image: url({JobCampBanner});">
     <h1 class="text-8xl md:text-9xl text-black px-4">JobCamp</h1>

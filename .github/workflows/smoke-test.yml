@@ -3,7 +3,7 @@ name: Smoke Test Stage
 on:
   push:
     branches:
-      - main  # Run this workflow on pushes to the main branch
+      - stage  # Run this workflow on pushes to the main branch
 
 jobs:
   smoke-test:

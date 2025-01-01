@@ -18,7 +18,7 @@
 </div>
 {:else if (data.waiting == 1 && !form) || (form && form.waiting == 1)}
 <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col justify-between items-center gap-4 py-10 px-10 sm:border-2 sm:rounded-lg sm:shadow-2xl">
-    <h1 class="text-xl text-center">Check your inbox for an password reset link</h1>
+    <h1 class="text-xl text-center">Check your email for a link to reset your password.</h1>
     {#if form && form.msg}<p class="text-red-500">{form.msg}</p>{/if}
 </div> 
 {:else}

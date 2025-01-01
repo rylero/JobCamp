@@ -11,7 +11,7 @@
     const { isHost, loggedIn } = data;
 </script>
 
-<Navbar isHost loggedIn />
+<Navbar isHost={isHost} loggedIn={loggedIn} />
 
 <div class="flex flex-col justify-center mt-28 mb-10 w-full">
   <h1 class="flex justify-center text-4xl mb-3">FAQs</h1>

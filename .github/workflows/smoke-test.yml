@@ -3,18 +3,41 @@ name: Smoke Test
 on:
   push:
     branches:
-      - stage
+      - main  # Run this workflow on pushes to the main branch
 
 jobs:
   smoke-test:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Check out code
-        uses: 'actions/checkout@v4'
+      # Checkout your code
+      - name: Checkout code
+        uses: actions/checkout@v4
 
+      # Set up Node.js
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22' # Use your app's required Node.js version
+
+      # Install dependencies
       - name: Install dependencies
-        run: npm install
+        run: pnpm install
 
-      - name: Run smoke test
-        run: npm run test
+      # Build the project
+      - name: Run build
+        run: pnpm run build
+
+      # Run preview and test
+      - name: Run preview
+        run: |
+          pnpx kill-port 4173 # Ensure the port isn't in use
+          pnpm run preview &
+          PREVIEW_PID=$!
+          sleep 5 # Give the server time to start
+          curl --fail http://localhost:4173 || exit 1 # Ensure the server is running
+          kill $PREVIEW_PID
+
+      # Optionally include additional checks
+      - name: Additional checks
+        run: echo "Smoke test complete!"

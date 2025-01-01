@@ -92,20 +92,20 @@ export const actions: Actions = {
             include: { positions: true }
         })
 
-        // sendPositionUpdateEmail(locals.user.email, {
-        //     title: form.data.title,
-        //     career: form.data.career,
-        //     slots: form.data.slots,
-        //     summary: form.data.summary,
-        //     contact_name: form.data.fullName,
-        //     contact_email: form.data.email,
-        //     address: form.data.address,
-        //     instructions: form.data.instructions,
-        //     attire: form.data.attire,
-        //     arrival: form.data.arrival,
-        //     start: form.data.start,
-        //     end: form.data.release,
-        // });
+        sendPositionUpdateEmail(locals.user.email, {
+            title: form.data.title,
+            career: form.data.career,
+            slots: form.data.slots,
+            summary: form.data.summary,
+            contact_name: form.data.fullName,
+            contact_email: form.data.email,
+            address: form.data.address,
+            instructions: form.data.instructions,
+            attire: form.data.attire,
+            arrival: form.data.arrival,
+            start: form.data.start,
+            end: form.data.release,
+        });
 
         redirect(302, "/dashboard");
     }

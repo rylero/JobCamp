@@ -16,7 +16,7 @@ function timeFormat(a: Date) {
 
 export const editPositionSchema = (positionProperties: any) => {
     return z.object({
-        positionId: z.string(),
+        positionId: z.string().default(positionProperties.id),
         title: z.string().default(positionProperties.title),
         career: z.string().default(positionProperties.career),
         slots: z.number().default(positionProperties.slots),

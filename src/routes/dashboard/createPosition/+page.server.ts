@@ -64,13 +64,11 @@ export const actions: Actions = {
 
         const schoolId = host?.company?.schoolId;
         if (!schoolId) {
-            console.log("no school")
             redirect(302, "/login");
         }
 
         const event = (await prisma.school.findFirst({where: {id: schoolId}, include: {events: true}}))?.events[0];   
         if (!event) {
-            console.log("no event")
             redirect(302, "/login")
         }
 

@@ -14,8 +14,10 @@
 </script>
 
 <div class="mt-32 mb-5 w-full flex justify-center items-center">
-    <form method="POST" action="?/createPosition" class="z-0 relative md:border-2 px-10 py-8 md:rounded-lg w-[700px] mx-5 flex flex-col gap-4 items-center justify-center" use:enhance>
+    <form method="POST" action={$form.positionId ? "?/createPosition&posId="+$form.positionId : "?/createPosition"} class="z-0 relative md:border-2 px-10 py-8 md:rounded-lg w-[700px] mx-5 flex flex-col gap-4 items-center justify-center" use:enhance>
         <h1 class="text-xl">{formTitle}</h1>
+
+        {#if $form.positionId}<input name="positionId" class="hidden" bind:value={$form.positionId} />{/if}
 
         <div class="flex w-full max-w-sm flex-col gap-1.5">
             <Label class="text-lg" for="title">Position Title</Label>

@@ -24,73 +24,46 @@ export const load: PageServerLoad = async (event) => {
 
     const form = await superValidate(zod(editPositionSchema(positionInfo)));
     
-    return { form, posId: positionId };
+    return { form };
 };
 
 export const actions: Actions = {
-    createPosition: async ({ request, locals, cookies }) => {
-        console.log("create position submit")
-
-        const positionId = (await request.formData()).get("posId")?.toString();
+    createPosition: async ({ url, request, locals, cookies }) => {
+        const positionId = url.searchParams.get("posId")?.toString();
         if (!positionId) {
-            redirect(302, "/lghs")
+            redirect(302, "/about")
         }
         const positionInfo = await prisma.position.findFirst({ where: { id: positionId } })
+        if (!positionInfo) {
+            redirect(302, "/faq")
+        }
         
         const form = await superValidate(request, zod(editPositionSchema(positionInfo)));
-
         if (!form.valid) {
-            console.log("fail")
-            return fail(400, { form, posId: positionId });
+            return fail(400, { form });
         }
 
         if (!locals.user) {
-            console.log("no user")
-            redirect(302, "/login");
+            redirect(302, "/host-tips");
         }
 
-        const host = await prisma.host.findFirst({
-            where: { userId: locals.user.id }, 
-            include: { company: { include: { school: true } } }
-        })
-
-        const schoolId = host?.company?.schoolId;
-        if (!schoolId) {
-            console.log("no school")
-            redirect(302, "/login");
-        }
-
-        const event = (await prisma.school.findFirst({where: {id: schoolId}, include: {events: true}}))?.events[0];   
-        if (!event) {
-            console.log("no event")
-            redirect(302, "/login")
-        }
-
-        const position = await prisma.host.update({
-            where: { userId: locals.user.id },
+        await prisma.position.update({
+            where: { id: positionId },
             data: {
-                positions: {
-                    create: [
-                        {
-                            title: form.data.title,
-                            career: form.data.career,
-                            slots: form.data.slots,
-                            summary: form.data.summary,
-                            contact_name: form.data.fullName,
-                            contact_email: form.data.email,
-                            address: form.data.address,
-                            instructions: form.data.instructions,
-                            attire: form.data.attire,
-                            arrival: new Date(event.date.toLocaleDateString() + " " + form.data.arrival),
-                            start: new Date(event.date.toLocaleDateString() + " " + form.data.start),
-                            end: new Date(event.date.toLocaleDateString() + " " + form.data.release),
-                            event: { connect: { id: event.id } }
-                        }
-                    ]
-                }
-            },
-            include: { positions: true }
-        })
+                title: form.data.title,
+                career: form.data.career,
+                slots: form.data.slots,
+                summary: form.data.summary,
+                contact_name: form.data.fullName,
+                contact_email: form.data.email,
+                address: form.data.address,
+                instructions: form.data.instructions,
+                attire: form.data.attire,
+                arrival: new Date(positionInfo.arrival.toLocaleDateString() + " " + form.data.arrival),
+                start: new Date(positionInfo.arrival.toLocaleDateString() + " " + form.data.start),
+                end: new Date(positionInfo.arrival.toLocaleDateString() + " " + form.data.release),
+            }
+        });
 
         sendPositionUpdateEmail(locals.user.email, {
             title: form.data.title,

@@ -7,6 +7,7 @@
     import { enhance } from "$app/forms";
     import { onMount } from "svelte";
     import { buttonVariants } from "../ui/button";
+	import logo from '$lib/assets/favicon.png';
 
     const { loggedIn, isHost } = $props();
 
@@ -29,7 +30,7 @@
 <nav class="w-screen fixed top-0 left-0 bg-gray-800 flex flex-col z-50 justify-center">
     {#if !collapsed}
     <div class="flex h-20 flex-row justify-between items-center px-5">
-        <a href={isHost ? "/dashboard" : "/lghs"} class="ml-4 text-2xl text-white">JobCamp</a>
+        <a href={isHost ? "/dashboard" : "/lghs"} class="ml-4 text-2xl text-white flex justify-center items-center"><img src={logo} alt="logo" class="h-8 pr-2" />JobCamp</a>
     <div class="hidden sm:flex flex-row gap-4 mr-4">
         <Button href="/about" variant="link" class="text-white text-xl">About</Button>
 
@@ -71,7 +72,7 @@
     </div>
     {:else}
     <div class="flex h-20 flex-row justify-between items-center px-5">
-        <a href={isHost ? "/dashboard" : "/lghs"} class="ml-4 text-2xl text-white">JobCamp</a>
+        <a href={isHost ? "/dashboard" : "/lghs"} class="ml-4 text-2xl text-white flex justify-center items-center"><img src={logo} alt="logo" class="h-8 pr-2" />JobCamp</a>
         <AlignJustify onclick={() => collapsed = !collapsed} class="text-white hover:cursor-pointer" />
     </div>
     <div class="flex flex-col gap-4 pb-5">

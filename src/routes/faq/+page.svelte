@@ -18,7 +18,7 @@
   <Accordion.Root class="w-full px-10">
       {#each questions as question, index}
         <Accordion.Item value={question}>
-          <Accordion.Trigger class="text-xl">
+          <Accordion.Trigger class="text-xl text-left">
               <span>{question}</span>
           </Accordion.Trigger>
           <Accordion.Content>

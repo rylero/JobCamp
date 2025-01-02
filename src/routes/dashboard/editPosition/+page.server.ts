@@ -46,8 +46,9 @@ export const actions: Actions = {
         if (!locals.user) {
             redirect(302, "/host-tips");
         }
+        console.log(form.data.slots)
 
-        await prisma.position.update({
+        const position = await prisma.position.update({
             where: { id: positionId },
             data: {
                 title: form.data.title,
@@ -64,6 +65,7 @@ export const actions: Actions = {
                 end: new Date(positionInfo.arrival.toLocaleDateString() + " " + form.data.release),
             }
         });
+        console.log(position);
 
         sendPositionUpdateEmail(locals.user.email, {
             title: form.data.title,

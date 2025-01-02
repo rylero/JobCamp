@@ -19,7 +19,7 @@ export const editPositionSchema = (positionProperties: any) => {
         positionId: z.string().default(positionProperties.id),
         title: z.string().default(positionProperties.title),
         career: z.string().default(positionProperties.career),
-        slots: z.number().default(positionProperties.slots),
+        slots: z.number({message: "Expected a number"}).min(1, "Minimum of 1 slot").default(positionProperties.slots),
         summary: z.string().default(positionProperties.summary),
         fullName: z.string().default(positionProperties.contact_name),
         email: z.string().default(positionProperties.contact_email),

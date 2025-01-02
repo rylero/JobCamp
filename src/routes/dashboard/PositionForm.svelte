@@ -37,7 +37,7 @@
         </div>
         <div class="flex w-full max-w-sm flex-col gap-1.5">
             <Label class="text-lg"># of slots for students</Label>
-            <Input type="number" name="slots" min={1} bind:value={$form.slots} />
+            <Input name="slots" bind:value={$form.slots} onscroll={(e)=> e.preventDefault()} />
             {#if $errors.slots}<span class="text-sm text-red-500">{$errors.slots}</span>{/if}
         </div>
 

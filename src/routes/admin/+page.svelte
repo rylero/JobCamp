@@ -1,64 +1,29 @@
 <script lang="ts">
-    import "@friendofsvelte/tipex/styles/Tipex.css";
-    import "@friendofsvelte/tipex/styles/ProseMirror.css";
-    import "@friendofsvelte/tipex/styles/Controls.css";
-    import "@friendofsvelte/tipex/styles/EditLink.css";
-    import "@friendofsvelte/tipex/styles/CodeBlock.css";
+    import { onMount } from "svelte";
+    import type { FormEventHandler } from "svelte/elements";
 
-    import { ScrollArea } from "$lib/components/ui/scroll-area/index.js";
-    import { Separator } from "$lib/components/ui/separator/index.js";
-    import Button from "$lib/components/ui/button/button.svelte";
+    var textarea: HTMLTextAreaElement;
 
-    import { Tipex } from "@friendofsvelte/tipex";
-    let htmlContent = '';
-
-    type Query = { 
-        [index : string] : { 
-            selected : boolean 
-        }
-    };
-
-    let query : Query = $state({
-        "students": {
-            selected: false,
-        },
-        "hosts": {
-            selected: false,
-        },
-        "positions": {
-            selected: false,
-        }
+    let autocomplete_box = $state({
+        displaying: false,
+        start_pos: -1,
     });
 
-    function selectQueryType(queryType: string) {
-        // set all to false
-        query["students"].selected = false;
-        query["hosts"].selected = false;
-        query["positions"].selected = false;
+    $inspect(
+        autocomplete_box
+    )
 
-        // set desired to true
-        query[queryType].selected = true;
+    const onTextAreaInput: FormEventHandler<HTMLTextAreaElement> = (event) => {
+        let content = textarea.value;
+        let currentPos = textarea.selectionEnd;
+        if (content[currentPos-2] == "$" && content[currentPos-1] == "{") {
+            autocomplete_box.start_pos = currentPos-1;
+            autocomplete_box.displaying = true;
+        }
+
+        if (autocomplete_box.displaying && autocomplete_box.start_pos == currentPos-1) {
+        }
     }
 </script>
 
-<div class="w-screen h-screen flex">
-    <!-- Left -->
-    <ScrollArea class="w-80 h-full pl-8 pt-8">
-        <Button variant={ query.students.selected ? "default" : "outline" } class="w-28" on:click={() => selectQueryType("students")}>Students</Button>
-        <Separator class="my-2" />
-        <Button variant={ query.hosts.selected ? "default" : "outline"} class="w-28" on:click={() => selectQueryType("hosts")}>Hosts</Button>
-        <Separator class="my-2" />
-        <Button variant={ query.positions.selected ? "default" : "outline"} class="w-28" on:click={() => selectQueryType("positions")}>Positions</Button>
-    </ScrollArea>
-
-    <!-- Right -->
-    <ScrollArea class="h-full w-full">
-        <div class="h-full w-full flex flex-col align-middle">
-            <Tipex {htmlContent}
-                displayDefaultControls
-                floatingMenu
-                className="border border-neutral-200 mx-8 mt-8 mb-6 min-h-96 h-[calc(100vh-8rem)]" />
-            <Button class="w-48 mx-auto">Send</Button>
-        </div>
-    </ScrollArea>
-</div>
+<textarea cols="50" rows="10" class="m-10 border rounded border-black" bind:this={textarea} oninput={onTextAreaInput}></textarea>

@@ -4,7 +4,7 @@ export const createNewPositionSchema = (name: string, email: string) => {
     return z.object({
         title: z.string().min(1, "Required field"),
         career: z.string().min(1, "Required field"),
-        slots: z.number().min(1, "Required field"),
+        slots: z.number({message: "Expected a number"}).min(1, "Minimum of 1 slot"),
         summary: z.string().min(1, "Required field"),
         fullName: z.string().min(1, "Required field").default(name),
         email: z.string().min(1, "Required field").default(email),

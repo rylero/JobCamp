@@ -17,6 +17,15 @@ export const load: PageServerLoad = async (event) => {
         redirect(302, "/dashboard")
     }
 
+    const props = event.url.searchParams;
+        
+    const code = props.get("code")?.toString();
+    const userId = props.get("uid")?.toString();
+    
+    if (code && userId) { 
+        return { waiting: 2, msg: "", code, userId };
+    }
+
     return { waiting: 0, msg: "", code: "", userId: "" };
 };
 
@@ -51,19 +60,6 @@ export const actions: Actions = {
         await login(user.email, password, event);
 
         redirect(302, "/dashboard");
-    },
-    reset: async (event) => {
-        const form = await event.request.formData();
-        
-        const code = form.get("code")?.toString();
-        if (!code) {
-            return { waiting: 1, msg: "Incorrect Link. Please contact support at admin@jobcamp.org.", code: "", userId: "" };
-        }
-
-        const userId = form.get("uid")?.toString();
-        if (!userId) { redirect(302, "/signup"); }
-        
-        return { waiting: 2, msg: "", code, userId };
     },
     send: async (event) => {
         const form = await event.request.formData();

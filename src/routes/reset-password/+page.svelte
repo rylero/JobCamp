@@ -26,8 +26,8 @@
     <h1 class="text-xl text-center">Reset Password</h1>
     {#if form && form.msg}<p class="text-red-500">{form.msg}</p>{/if}
     <form method="POST" action="?/submit" use:enhance>
-        <input type="hidden" class="hidden" name="code" value={form?.code} />
-        <input type="hidden" class="hidden" name="uid" value={form?.userId} />
+        <input type="hidden" class="hidden" name="code" value={data.code} />
+        <input type="hidden" class="hidden" name="uid" value={data.userId} />
         <Label class="text-lg">Enter New Password:</Label>
         <Input name="password" />
         <Button type="submit" class="text-xl mt-2 w-30 h-10 rounded bg-blue-500 text-white hover:bg-blue-600">Resend</Button>

@@ -4,28 +4,17 @@ import { prisma } from '$lib/server/prisma';
 import { generateEmailVerificationCode, setNewLuciaSession, updateLastLoginToNow } from '$lib/server/auth';
 import { sendEmailVerificationEmail } from '$lib/server/email';
 
-
 export const load: PageServerLoad = async (event) => {
     if (event.locals.user && event.locals.user.emailVerified) {
         redirect(302, "/dashboard")
     }
 
-    return { msg: "" };
-};
+    const props = event.url.searchParams;
 
+    const code = props.get("code")?.toString();
+    const userId = props.get("uid")?.toString();
 
-export const actions: Actions = {
-    verify: async (event) => {
-        const form = await event.request.formData();
-
-        const code = form.get("code")?.toString();
-        if (!code) {
-            return { msg: "Incorrect Link. Please contact support at admin@jobcamp.org."};
-        }
-
-        const userId = form.get("uid")?.toString();
-        if (!userId) { redirect(302, "/signup"); }
-        
+    if (code && userId) {
         const correctCode = await prisma.emailVerificationCodes.findFirst({
             where: { user_id: userId }
         });
@@ -55,7 +44,13 @@ export const actions: Actions = {
         }
 
         redirect(302, "/dashboard")
-    },
+    }
+
+    return { msg: "" };
+};
+
+
+export const actions: Actions = {
     resend: async (event) => {
         if (!event.locals.user) return;
 

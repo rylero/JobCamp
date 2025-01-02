@@ -24,7 +24,7 @@ export const load: PageServerLoad = async (event) => {
     
     if (code && userId) { 
         return { waiting: 2, msg: "", code, userId };
-    }
+    } 
 
     return { waiting: 0, msg: "", code: "", userId: "" };
 };

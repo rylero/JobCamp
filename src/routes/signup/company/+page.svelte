@@ -3,6 +3,7 @@
     import { Checkbox } from "$lib/components/ui/checkbox/index.js";
     import { superForm } from "sveltekit-superforms";
     import Navbar from "$lib/components/navbar/Navbar.svelte";
+    import { Textarea } from "$lib/components/ui/textarea/index.js";
 
     let { data } = $props();
 
@@ -36,7 +37,7 @@
 
         <div class="flex max-w-full w-96 justify-between items-center">
             <label for="companyDescription">Company Description</label>
-            <Input class="px-2 py-0.5 rounded w-52" type="text" name="companyDescription" bind:value={$form.companyDescription} />
+            <Textarea class="px-2 py-0.5 rounded w-52" bind:value={$form.companyDescription} name="companyDescription" />
         </div>
         {#if $errors.companyDescription}<span class="text-sm text-red-500">{$errors.companyDescription}</span>{/if}
 

@@ -12,7 +12,7 @@
 <div class="flex flex-col w-full items-center mt-24">
   <div class="flex flex-col justify-center items-center my-3 mx-2">
       <h1 class="text-3xl">About JobCamp</h1>
-      <a href="mailto:info@jobcamp.org" class="text-md underline text-blue-500">admin@jobcamp.org</a>
+      <a href="mailto:admin@jobcamp.org" class="text-md underline text-blue-500">admin@jobcamp.org</a>
   </div>
 
   <div class="flex justify-center items-center my-2 mx-4 flex-col md:flex-row">

@@ -12,7 +12,7 @@
     <textarea rows="20" bind:this={textarea}></textarea>
     <h1>Company</h1>
     <div class="flex flex-row">
-        <Button>Company Name</Button>
+        <Button variant="outline">Company Name</Button>
         <Button>Host Name</Button>
     </div>
 </div>

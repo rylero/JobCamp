@@ -6,7 +6,7 @@
         hosts: {
             active: false,
             emailVerified: { value: false, active: false },
-            positionCount: { value: , active: false },
+            positionCount: { value: 0, active: false },
         }
     });
 

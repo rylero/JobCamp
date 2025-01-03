@@ -5,6 +5,7 @@
     import * as Accordion from "$lib/components/ui/accordion/index.js";
     import * as AlertDialog from "$lib/components/ui/alert-dialog";
     import { enhance } from "$app/forms";
+    import Page from "../about/+page.svelte";
 
     let { data } = $props();
 </script>
@@ -49,7 +50,7 @@
 
         <hr class="my-2">
 
-<pre>
+<p class=" whitespace-pre-line">
 Address:
 { position.address }
 
@@ -61,7 +62,7 @@ Instructions For Students:
 
 Attire:
 { position.attire }        
-</pre>
+</p>
 
         <hr class="my-2">
 

@@ -44,15 +44,24 @@
 
         <hr class="my-2">
 
-        <p class=" mt-1">Career: { position.career }</p>
+        <p class=" mt-1">Career: { position.career }</p><br>
         <p class=""># of slots for students: { position.slots }</p>
 
         <hr class="my-2">
 
-        <p class="">Address: <br>{ position.address }</p><br>
-        <p class="">Summary:<br> { position.summary }</p>
-        <p class=""><br>Instructions For Students:<br> { position.instructions }</p>
-        <p class=""><br>Attire:<br> { position.attire }</p>
+<pre>
+Address:
+{ position.address }
+
+Summary:
+{ position.summary }
+
+Instructions For Students:
+{ position.instructions }
+
+Attire:
+{ position.attire }        
+</pre>
 
         <hr class="my-2">
 

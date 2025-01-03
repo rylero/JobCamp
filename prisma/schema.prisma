@@ -41,13 +41,13 @@ model Position {
   title             String
   career            String
   slots             Int
-  summary           String
+  summary           String                @db.VarChar(1024)
   contact_name      String
   contact_email     String
-  address           String
-  instructions      String
-  attire            String
-  arrival           DateTime
+  address           String                @db.VarChar(1024)
+  instructions      String                @db.VarChar(1024)
+  attire            String                @db.VarChar(1024)
+  arrival           DateTime              
   start             DateTime
   end               DateTime
   eventId           String

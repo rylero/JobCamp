@@ -13,7 +13,7 @@
 
 <div class="h-24"></div>
 
-<h1 class="mx-10 my-2 text-2xl">Your Positions for Los Gatos High School JobCamp day, March 10, 2025</h1>
+<h1 class="mx-10 my-2 text-2xl">Positions for Los Gatos High School JobCamp day: March 10, 2025</h1>
 <p class="mx-10">Create one or more positions for job shadow day. A position represents a career you'll be exposing students to.<br />E.g., Teacher, Software developer, Architect, or Real estate agent.</p>
 
 <Accordion.Root class="w-full px-10 my-5">

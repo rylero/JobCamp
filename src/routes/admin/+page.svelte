@@ -26,8 +26,8 @@
                 </select>
             </Label>
             <Label class="flex justify-between items-center text-lg w-full">
-                <span class="flex gap-3 items-center"><input bind:checked={query.hosts.emailVerified.active} class="w-4 h-4" type="checkbox" />Name</span>
-                <input bind:value={query.hosts.emailVerified.value} class="border border-slate-950 rounded px-2 w-48"/>
+                <span class="flex gap-3 items-center"><input bind:checked={query.hosts.positionCount.active} class="w-4 h-4" type="checkbox" />Position Count</span>
+                <input type="number" bind:value={query.hosts.positionCount.value} class="border border-slate-950 rounded px-2 w-48"/>
             </Label>
         </div>
         {/if}

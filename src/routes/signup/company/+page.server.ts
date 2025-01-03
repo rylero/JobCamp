@@ -32,7 +32,7 @@ export const actions: Actions = {
 
         const userId = await signup(form.data.email, form.data.password, event);
         if (userId == AuthError.AccountExists) {
-            return message(form, "Account Already Exists. Login instead.");
+            return message(form, "Account already exists. Login instead.");
         }
 
         const user = await prisma.user.update({

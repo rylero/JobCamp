@@ -28,7 +28,7 @@
 <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col justify-between items-center gap-4 py-10 px-10 sm:border-2 sm:rounded-lg sm:shadow-2xl">
     <h1 class="text-3xl mb-3">Reset Password</h1>
     {#if form && form.msg}<p class="text-red-500">{form.msg}</p>{/if}
-    <form class="flex flex-col" method="POST" action="?/send" use:enhance>
+    <form class="flex flex-col" method="POST" action="?/submit" use:enhance>
         <input type="hidden" class="hidden" name="code" value={data.code} />
         <input type="hidden" class="hidden" name="uid" value={data.userId} />
         <div class="flex gap-4 justify-center items-center">

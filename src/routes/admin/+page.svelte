@@ -20,14 +20,14 @@
         <div class="pl-8 pt-2 flex flex-col gap-2">
             <Label class="flex justify-between items-center text-lg w-full">
                 <span class="flex gap-3 items-center"><input bind:checked={query.hosts.emailVerified.active} class="w-4 h-4" type="checkbox" />Email Verified</span>
-                <select bind:value={query.hosts.emailVerified.value} class="border border-slate-950 rounded px-2">
+                <select bind:value={query.hosts.emailVerified.value} class="border border-slate-950 rounded px-2 w-20">
                     <option value={true}>True</option>
                     <option value={false}>False</option>
                 </select>
             </Label>
             <Label class="flex justify-between items-center text-lg w-full">
                 <span class="flex gap-3 items-center"><input bind:checked={query.hosts.positionCount.active} class="w-4 h-4" type="checkbox" />Position Count</span>
-                <input type="number" bind:value={query.hosts.positionCount.value} class="border border-slate-950 rounded px-2 w-48"/>
+                <input type="number" bind:value={query.hosts.positionCount.value} class="border border-slate-950 rounded px-2 w-20"/>
             </Label>
         </div>
         {/if}

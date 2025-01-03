@@ -37,7 +37,7 @@ export async function createPasswordResetToken(userId: string): Promise<string> 
 }
 
 export async function generateEmailVerificationCode(userId: string, email: string): Promise<string> {
-	await prisma.emailVerificationCodes.deleteMany({ where: { user_id: userId } });
+	// await prisma.emailVerificationCodes.deleteMany({ where: { user_id: userId } });
 
 	const code = generateRandomString(emailVerificationCodeLength, emailVerificationCodeCharacters);
 

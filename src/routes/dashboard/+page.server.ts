@@ -19,10 +19,6 @@ const grabUserData = async (locals : App.Locals) => {
     const hostInfo = await prisma.host.findFirst({
         where: { userId: userInfo.id }
     });
-    if (!hostInfo) {
-        redirect(302, "/lghs")
-    }
-
     return { userInfo, hostInfo }
 }
 
@@ -35,9 +31,15 @@ export const load: PageServerLoad = async (event) => {
     }
 
     const { userInfo, hostInfo } = await grabUserData(event.locals);
+
+    if (!hostInfo) {
+        return { positions: [], userData: event.locals.user, isCompany: false };
+    }
+
+
     const positions = await prisma.position.findMany({where: {hostId: hostInfo.id}});
 
-    return { positions, userData: event.locals.user };
+    return { positions, userData: event.locals.user, isCompany: true };
 };
 
 export const actions: Actions = {

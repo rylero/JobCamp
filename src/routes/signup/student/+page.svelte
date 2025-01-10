@@ -21,15 +21,6 @@
     <form method="POST" class="max-w-full flex flex-col justify-between items-center gap-4 py-10 px-10 sm:border-2 sm:rounded-lg sm:shadow-2xl" use:enhance>
         <h1 class="text-4xl">Sign Up</h1>
         {#if $message}<span class="text-sm text-red-500">{$message}</span>{/if}
-        <div class="flex w-96 justify-between items-center">
-            <label for="grade">School</label>
-            <select class="px-2 py-2 rounded w-52 min-w-52 border" name="grade" bind:value={$form.schoolId}>
-                {#each Object.keys(data.schoolMapping) as schoolId}
-                    <option value={schoolId} selected={$form.schoolId == schoolId}>{data.schoolMapping[schoolId]}</option>
-                {/each}
-            </select>
-        </div>
-        {#if $errors.schoolId}<span class="text-sm text-red-500">{$errors.schoolId}</span>{/if}
 
         <div class="flex w-96 justify-between">
             <label for="grade">Grade</label>
@@ -60,7 +51,7 @@
         {#if $errors.phone}<span class="text-sm text-red-500">{$errors.phone}</span>{/if}
 
         <div class="flex w-96 justify-center items-center gap-2">
-            <Checkbox class="rounded" name="allowPhoneMessaging" bind:checked={$form.allowPhoneMessaging} />
+            <input type="checkbox" class="rounded" name="allowPhoneMessaging" bind:checked={$form.allowPhoneMessaging} />
             <label for="allowPhoneMessaging">Allow SMS Messaging</label>
         </div>
         {#if $errors.allowPhoneMessaging}<span class="text-sm text-red-500">{$errors.allowPhoneMessaging}</span>{/if}

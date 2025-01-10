@@ -64,7 +64,8 @@ model Position {
 model Student {
   id                       String      @id @default(cuid())
 
-  name                     String
+  firstName                String
+  lastName                String
   phone                    String
   grade                    Int
 

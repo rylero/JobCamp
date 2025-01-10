@@ -1,25 +1,39 @@
-import { fail, superValidate } from 'sveltekit-superforms';
+    import { fail, superValidate } from 'sveltekit-superforms';
 import type { Actions, PageServerLoad } from './$types';
-import { schema } from './schema';
+import { createPermissionSlipSchema } from './schema';
 import { zod } from 'sveltekit-superforms/adapters';
 import { prisma } from '$lib/server/prisma';
 import { redirect } from '@sveltejs/kit';
 
 export const load: PageServerLoad = async (event) => {
-    const form = await superValidate(zod(schema));
+    const code = event.params.code;
+    
+    const permissionSlip = await prisma.permissionSlipCode.findFirst({
+        where: { code: code }
+    });
+    if (!permissionSlip) {
+        redirect(302, "/permission-slip/error");
+    }
+
+    const student = await prisma.student.findFirst({
+        where: { userId: permissionSlip.user_id }
+    });
+    if (!student) {
+        redirect(302, "/permission-slip/error");
+    }
+
+    const form = await superValidate(zod(createPermissionSlipSchema(student.firstName, student.lastName)));
     return { form };
 };
 
 export const actions: Actions = {
     default: async (event) => {
         const { request } = event;
-        const form = await superValidate(request, zod(schema));
+        const form = await superValidate(request, zod(createPermissionSlipSchema("", "")));
   
         if (!form.valid) {
             return fail(400, { form });
         }
-
-        console.log(form.data.sample);
 
         const userId = (await prisma.permissionSlipCode.findFirst({
             where: {code: event.params.code}

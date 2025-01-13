@@ -38,13 +38,13 @@
 <Navbar isHost={true} loggedIn={true} />
 
 <div class="flex w-full h-screen pt-20">
-    <div class="flex flex-col w-72 h-full justify-start items-start p-4 border-r-2 border-r-slate-950">
-        <h1 class="mb-2">Search positions by...</h1>
+    <div class="flex flex-col w-72 gap-2 h-full justify-start items-start p-4 border-r-2 border-r-slate-950">
+        <h1>Search positions by...</h1>
         <div class="flex justify-center items-center gap-3">
             <Button class="w-24" variant={selected == "career" ? "default" : "outline"} onclick={() => selected="career"}>Career</Button>
             <Button class="w-24" variant={selected == "career" ? "outline" : "default"} onclick={() => selected="company"}>Company</Button>
         </div>
-        <hr class="border-t-2 border-t-slate-950 w-full my-3" />
+        <hr class="border-t-2 border-t-slate-950 w-full" />
         {#each terms as term}
             <Button variant={selectedTerm == term ? 'default' : 'outline'} onclick={() => selectedTerm = term}>{term}</Button>
         {/each}

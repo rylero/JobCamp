@@ -14,7 +14,7 @@
     let collapsed = $state(false);
 
     onMount(() => {
-        var x = window.matchMedia("(max-width: 640px)")
+        var x = window.matchMedia("(max-width: 768px)")
         $effect(() => {
             if (x.matches) {
                 collapsed = false;
@@ -31,7 +31,9 @@
     {#if !collapsed}
     <div class="flex h-20 flex-row justify-between items-center px-5">
         <a href={isHost ? "/dashboard" : "/lghs"} class="ml-4 text-2xl text-white flex justify-center items-center"><img src={logo} alt="logo" class="h-8 pr-2" />JobCamp</a>
-    <div class="hidden sm:flex flex-row gap-4 mr-4">
+    <div class="hidden md:flex flex-row gap-4 mr-4">
+        <Button href="/lghs/view-companies" variant="link" class="text-white text-xl">View Companies</Button>
+
         <Button href="/about" variant="link" class="text-white text-xl">About</Button>
 
         {#if loggedIn && isHost}
@@ -68,7 +70,7 @@
         </DropdownMenu.Root>
         {/if}
         </div>
-        <AlignJustify onclick={() => collapsed = !collapsed} class="sm:hidden text-white hover:cursor-pointer" />
+        <AlignJustify onclick={() => collapsed = !collapsed} class="md:hidden text-white hover:cursor-pointer" />
     </div>
     {:else}
     <div class="flex h-20 flex-row justify-between items-center px-5">
@@ -76,6 +78,8 @@
         <AlignJustify onclick={() => collapsed = !collapsed} class="text-white hover:cursor-pointer" />
     </div>
     <div class="flex flex-col gap-4 pb-5">
+        <Button href="/lghs/view-companies" variant="link" class="text-white text-xl">View Companies</Button>
+        
         <Button href="/about" variant="link" class="text-white text-xl">About</Button>
 
         {#if loggedIn && isHost}

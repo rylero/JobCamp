@@ -87,9 +87,9 @@ export const actions: Actions = {
                             address: form.data.address,
                             instructions: form.data.instructions,
                             attire: form.data.attire,
-                            arrival: new Date(event.date.toLocaleDateString() + " " + form.data.arrival),
-                            start: new Date(event.date.toLocaleDateString() + " " + form.data.start),
-                            end: new Date(event.date.toLocaleDateString() + " " + form.data.release),
+                            arrival: form.data.arrival,
+                            start: form.data.start,
+                            end:form.data.release,
                             event: { connect: { id: event.id } }
                         }
                     ]

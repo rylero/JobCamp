@@ -60,9 +60,9 @@ export const actions: Actions = {
                 address: form.data.address,
                 instructions: form.data.instructions,
                 attire: form.data.attire,
-                arrival: new Date(positionInfo.arrival.toLocaleDateString() + " " + form.data.arrival),
-                start: new Date(positionInfo.arrival.toLocaleDateString() + " " + form.data.start),
-                end: new Date(positionInfo.arrival.toLocaleDateString() + " " + form.data.release),
+                arrival: form.data.arrival,
+                start: form.data.start,
+                end:form.data.release,
             }
         });
         console.log(position);

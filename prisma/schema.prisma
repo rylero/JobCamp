@@ -47,9 +47,9 @@ model Position {
   address           String                @db.VarChar(1024)
   instructions      String                @db.VarChar(1024)
   attire            String                @db.VarChar(1024)
-  arrival           DateTime              
-  start             DateTime
-  end               DateTime
+  arrival           String              
+  start             String
+  end               String
   eventId           String
   hostId            String
   event             Event                 @relation(fields: [eventId], references: [id])
@@ -170,7 +170,7 @@ model PermissionSlipSubmission {
   id                       String      @id @default(cuid())
   user_id                  String      @unique
   parentName               String
-  phoenNumber              String
+  phoenNumber              String      // Wrong spelling
   studentFirstName         String
   studentLastName          String
   physicalRestrictions     String?

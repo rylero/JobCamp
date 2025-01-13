@@ -42,6 +42,20 @@ export const actions: Actions = {
             return fail(400); // TODO: handle fail with message
         }
 
+        await prisma.permissionSlipSubmission.create({
+            data: {
+                user_id: userId,
+                parentName: form.data.parentName,
+                phoenNumber: form.data.phoneNumber,
+                studentFirstName: form.data.studentFirstName,
+                studentLastName: form.data.studentLastName,
+                physicalRestrictions: form.data.physicalRestrictions,
+                dietaryRestrictions: form.data.dietaryRestrictions,
+                liability: form.data.liability,
+                liabilityDate: form.data.liabilityDate
+            }
+        })
+
         await prisma.permissionSlipCode.deleteMany({
             where: {code: event.params.code}
         });

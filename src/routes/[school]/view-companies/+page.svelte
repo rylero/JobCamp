@@ -20,19 +20,33 @@
             }
         })
     })());
+
+    let terms = $derived((() => {
+        let possible: any = {};
+        data.positionData.forEach((value) => {
+            if (selected == "career") {
+                possible[value.career] = 1;
+            } else {
+                if (!value.host.company) { return -1; }
+                possible[value.host.company.companyName] = 1;
+            }
+        })
+        return Object.keys(possible).sort();
+    })());
 </script>
 
 <Navbar isHost={true} loggedIn={true} />
 
 <div class="flex w-full h-screen pt-20">
-    <div class="flex flex-col w-64 h-full gap-2 justify-start items-start p-4 border-r-2 border-r-slate-950">
-        <h1>Search by...</h1>
-        <Button class="w-24" variant={selected == "career" ? "outline" : "default"} onclick={() => selected="career"}>Career</Button>
-        <Button class="w-24" variant={selected == "career" ? "default" : "outline"} onclick={() => selected="company"}>Company</Button>
-        <hr class="border-t-2 border-t-slate-950 w-full" />
-        {#each data.positionData as position}
-            {#if selected == "career"}<Button onclick={() => selectedTerm = position.career}>{position.career}</Button>{/if}
-            {#if selected == "company" && position.host.company?.companyName != undefined}<Button onclick={() => selectedTerm = position.host.company.companyName}>{position.host.company?.companyName}</Button>{/if}
+    <div class="flex flex-col w-72 h-full justify-start items-start p-4 border-r-2 border-r-slate-950">
+        <h1 class="mb-2">Search positions by...</h1>
+        <div class="flex justify-center items-center gap-3">
+            <Button class="w-24" variant={selected == "career" ? "default" : "outline"} onclick={() => selected="career"}>Career</Button>
+            <Button class="w-24" variant={selected == "career" ? "outline" : "default"} onclick={() => selected="company"}>Company</Button>
+        </div>
+        <hr class="border-t-2 border-t-slate-950 w-full my-3" />
+        {#each terms as term}
+            <Button variant={selectedTerm == term ? 'default' : 'outline'} onclick={() => selectedTerm = term}>{term}</Button>
         {/each}
     </div>
     <div class="flex flex-col w-full h-full">

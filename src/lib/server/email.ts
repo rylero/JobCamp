@@ -41,7 +41,7 @@ export async function sendPermissionSlipEmail(parentEmail: string, code: string)
         from: SENDER,
         to:  [{ email: parentEmail }],
         subject: "Permission Slip for Student",
-        html: renderEmailTemplate(permissionSlipEmail, {link: "localhost:5173/permission-slip/"+code}) // Change url
+        html: renderEmailTemplate(permissionSlipEmail, {link: "https://jobcamp.org/permission-slip/"+code}) // Change url
     });
 }
 

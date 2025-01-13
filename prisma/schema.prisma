@@ -65,7 +65,7 @@ model Student {
   id                       String      @id @default(cuid())
 
   firstName                String
-  lastName                String
+  lastName                 String
   phone                    String
   grade                    Int
 
@@ -164,4 +164,17 @@ model PermissionSlipCode {
   id                       String      @id @default(cuid())
   user_id                  String      @unique
   code                     String
+}
+
+model PermissionSlipSubmission {
+  id                       String      @id @default(cuid())
+  user_id                  String      @unique
+  parentName               String
+  phoenNumber              String
+  studentFirstName         String
+  studentLastName          String
+  physicalRestrictions     String?
+  dietaryRestrictions      String?
+  liability                String
+  liabilityDate            String
 }

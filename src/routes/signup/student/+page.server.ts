@@ -36,9 +36,9 @@ export const actions: Actions = {
             return message(form, "Database Error");
         }
 
-        if (!schoolEmailCheck(school.emailDomain).test(form.data.email)) {
-            return setError(form, "email", "Please enter your school email.")
-        }
+        // if (!schoolEmailCheck(school.emailDomain).test(form.data.email)) {
+        //     return setError(form, "email", "Please enter your school email.")
+        // }
 
         if (form.data.parentEmail == form.data.email) {
             return setError(form, "parentEmail", "Please enter a different email.")

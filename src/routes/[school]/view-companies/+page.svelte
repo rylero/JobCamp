@@ -78,9 +78,9 @@
             
                     <hr class="my-2">
                     
-                    <p class="">Arrival: { position.arrival.toLocaleTimeString() }</p>
-                    <p class="">Start: { position.start.toLocaleTimeString() }</p>
-                    <p class="">End: { position.end.toLocaleTimeString() }</p>
+                    <p class="">Arrival: { position.arrival }</p>
+                    <p class="">Start: { position.start }</p>
+                    <p class="">End: { position.end }</p>
                 </Accordion.Content>
               </Accordion.Item>
             {/each}

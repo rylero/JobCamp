@@ -63,8 +63,7 @@ export const actions: Actions = {
         await prisma.student.update({ where: {userId: userId}, data: {
             permissionSlipCompleted: true,
         }});
-
-        // TODO: show successs message
-        redirect(302, "/");
+        
+        redirect(302, "/permission-slip/sucess");
     }
 }

@@ -54,7 +54,7 @@
             {#each filteredPositions as position}
               <Accordion.Item value={position.id} class="my-2">
                 <Accordion.Trigger class="text-xl bg-slate-100 hover:bg-slate-200 rounded-t-sm px-5">
-                    <span>{position.title}</span>
+                    <span>{position.host?.company?.companyName} - {position.title}</span>
                 </Accordion.Trigger>
                 <Accordion.Content class="px-5">
                     <p class=" mt-1">Career: { position.career }</p><br>

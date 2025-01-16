@@ -26,8 +26,8 @@ export const editPositionSchema = (positionProperties: any) => {
         address: z.string().default(positionProperties.address),
         instructions: z.string().default(positionProperties.instructions),
         attire: z.string().default(positionProperties.attire),
-        arrival: z.string().default(timeFormat(positionProperties.arrival)),
-        start: z.string().default(timeFormat(positionProperties.start)),
-        release: z.string().default(timeFormat(positionProperties.end)),
+        arrival: z.string().default(positionProperties.arrival),
+        start: z.string().default(positionProperties.start),
+        release: z.string().default(positionProperties.end),
     });
 }

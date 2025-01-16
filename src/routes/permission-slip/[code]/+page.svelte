@@ -85,7 +85,7 @@
                     <li>Write a thank-you email to the host and complete a Job Shadow survey by March 18.</li>
                 </ul>
                 <Label class="text-lg flex items-center">
-                    <input type="checkbox" class="mr-3 w-5 h-5" bind:checked={$form.studentAgreement} />My Student and I have read over the following expectations</Label>
+                    <input type="checkbox" id="studentAgreement" name="studentAgreement" class="mr-3 w-5 h-5" bind:checked={$form.studentAgreement} />My Student and I have read over the following expectations</Label>
                 {#if $errors.studentAgreement}<span class="text-sm text-red-500">{$errors.studentAgreement}</span>{/if}
             </div>
 

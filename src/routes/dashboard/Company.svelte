@@ -77,8 +77,8 @@ Attire:
 
         <hr class="my-2">
         
-        {#if position.attachment1}<a href={position.attachment1.url}>Attachment 1: { position.attachment1.name }</a>{/if}
-        {#if position.attachment2}<a href={position.attachment2.url}>Attachment 2: { position.attachment2.name }</a>{/if}
+        <!-- {#if position.attachment1}<a href={position.attachment1.url}>Attachment 1: { position.attachment1.name }</a>{/if}
+        {#if position.attachment2}<a href={position.attachment2.url}>Attachment 2: { position.attachment2.name }</a>{/if} -->
     </Accordion.Content>
   </Accordion.Item>
 {/each}

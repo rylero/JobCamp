@@ -80,13 +80,13 @@ export const actions: Actions = {
 
         if (form.data.attachment1) {
             const bytes = await form.data.attachment1.bytes();
-            await addNewFile(form.data.attachment1.name, bytes);
+            await addNewFile(form.data.title.replace(" ", "-") +  "-" + form.data.attachment1.name, bytes);
             attachments.push({ fileName: form.data.attachment1.name })
         }
 
         if (form.data.attachment2) {
             const bytes = await form.data.attachment2.bytes();
-            await addNewFile(form.data.attachment2.name, bytes);
+            await addNewFile(form.data.title.replace(" ", "-") +  "-" + form.data.attachment2.name, bytes);
             attachments.push({ fileName: form.data.attachment2.name })
         }
 

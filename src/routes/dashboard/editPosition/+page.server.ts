@@ -70,7 +70,7 @@ export const actions: Actions = {
         const attachments: any = [];
 
         attachmentsForm.forEach((element) => {
-            attachments.push({ fileName: element.fileName })
+            attachments.push({ fileName: form.data.title.replace(" ", "-") +  "-" + element.fileName })
         })
 
         for (var i = 0; i < attachments.length; i++) {

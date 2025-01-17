@@ -14,7 +14,7 @@
 </script>
 
 <div class="mt-32 mb-5 w-full flex justify-center items-center">
-    <form method="POST" action={$form.positionId ? "?/createPosition&posId="+$form.positionId : "?/createPosition"} class="z-0 relative md:border-2 px-10 py-8 md:rounded-lg w-[700px] mx-5 flex flex-col gap-4 items-center justify-center" use:enhance>
+    <form enctype="multipart/form-data" method="POST" action={$form.positionId ? "?/createPosition&posId="+$form.positionId : "?/createPosition"} class="z-0 relative md:border-2 px-10 py-8 md:rounded-lg w-[700px] mx-5 flex flex-col gap-4 items-center justify-center" use:enhance>
         <h1 class="text-xl">{formTitle}</h1>
 
         {#if $form.positionId}<input name="positionId" class="hidden" bind:value={$form.positionId} />{/if}
@@ -105,6 +105,22 @@
             </div>
             {#if $errors.release}<span class="text-sm text-red-500 text-right">{$errors.release}</span>{/if}
         </div>
+
+        <div class="flex w-full max-w-sm flex-col gap-1.5 mb-5">
+            <div class="flex justify-between items-center w-full max-w-sm gap-1.5">
+                <Label class="text-lg" for="attachment1">Attachment 1</Label>
+                <Input bind:value={$form.attachment1} class="w-64" name="attachment1" id="attachment1" type="file" />
+            </div>
+            {#if $errors.attachment1}<span class="text-sm text-red-500 text-right">{$errors.attachment1}</span>{/if}
+        </div>
+
+        <div class="flex w-full max-w-sm flex-col gap-1.5 mb-5">
+            <div class="flex justify-between items-center w-full max-w-sm gap-1.5">
+                <Label class="text-lg" for="attachments">Attachment 2</Label>
+                <Input bind:value={$form.attachment2} class="w-64" name="attachment2" id="attachment2" type="file" />
+            </div>
+            {#if $errors.attachattachment2ments}<span class="text-sm text-red-500 text-right">{$errors.attachment2}</span>{/if}
+        </div>
         
 
         <div class="w-full flex justify-center gap-4">
@@ -114,4 +130,4 @@
     </form>
 </div>
 
-<div class="h-2"></div>
+<div class="h-2"></div>=

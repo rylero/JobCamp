@@ -14,7 +14,7 @@ function timeFormat(a: Date) {
     return twodigit(h)+":"+twodigit(m)
 }
 
-export const editPositionSchema = (positionProperties: any) => {
+export const editPositionSchema = (positionProperties: any, attachment1: File | undefined, attachment2: File | undefined) => {
     return z.object({
         positionId: z.string().default(positionProperties.id),
         title: z.string().default(positionProperties.title),
@@ -29,5 +29,7 @@ export const editPositionSchema = (positionProperties: any) => {
         arrival: z.string().default(positionProperties.arrival),
         start: z.string().default(positionProperties.start),
         release: z.string().default(positionProperties.end),
+        attachment1: z.any().default(attachment1),
+        attachment2: z.any().default(attachment2),
     });
 }

@@ -56,9 +56,18 @@ model Position {
   host              Host                  @relation(fields: [hostId], references: [id])
   students          PositionsOnStudents[]
   studentsAttending Student[]
+  attachments       Attachment[]
 
   @@index([eventId], map: "Position_eventId_fkey")
   @@index([hostId], map: "Position_hostId_fkey")
+}
+
+model Attachment {
+  id                       String      @id @default(cuid())
+  position                 Position    @relation(fields: [positionId], references: [id])
+  positionId               String
+  
+  fileName                 String
 }
 
 model Student {

@@ -7,6 +7,7 @@ import { superValidate } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
 import { createNewPositionSchema } from "./schema";
 import { sendPositionUpdateEmail } from "$lib/server/email";
+import { addNewFile } from "../storage";
 
 const grabUserData = async (locals : App.Locals) => {
     if (!locals.user) {
@@ -40,7 +41,7 @@ export const load: PageServerLoad = async (event) => {
 
     const { userInfo, hostInfo } = await grabUserData(event.locals);
     const form = await superValidate(zod(createNewPositionSchema(hostInfo.name, userInfo.email)));
-    
+
     return { form };
 };
 
@@ -50,6 +51,8 @@ export const actions: Actions = {
         const form = await superValidate(request, zod(createNewPositionSchema(hostInfo.name, userInfo.email)));
 
         if (!form.valid) {
+            form.data.attachment1 = undefined;
+            form.data.attachment2 = undefined;
             return fail(400, { form });
         }
 
@@ -72,6 +75,20 @@ export const actions: Actions = {
             redirect(302, "/login")
         }
 
+        var attachments = [];
+
+        if (form.data.attachment1) {
+            const bytes = await form.data.attachment1.bytes();
+            addNewFile(form.data.attachment1.name, bytes);
+            attachments.push({ fileName: form.data.attachment1.name })
+        }
+
+        if (form.data.attachment2) {
+            const bytes = await form.data.attachment2.bytes();
+            addNewFile(form.data.attachment2.name, bytes);
+            attachments.push({ fileName: form.data.attachment2.name })
+        }
+
         const position = await prisma.host.update({
             where: { userId: locals.user.id },
             data: {
@@ -90,13 +107,14 @@ export const actions: Actions = {
                             arrival: form.data.arrival,
                             start: form.data.start,
                             end:form.data.release,
-                            event: { connect: { id: event.id } }
+                            event: { connect: { id: event.id } },
+                            attachments: { create: attachments }
                         }
                     ]
                 }
             },
             include: { positions: true }
-        })
+        });
 
         sendPositionUpdateEmail(userInfo.email, {
             title: form.data.title,

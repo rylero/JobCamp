@@ -44,13 +44,13 @@ export const load: PageServerLoad = async (event) => {
         if (element.attachments[0]) {
             element.attachment1 = { 
                 name: element.attachments[0],
-                link: await getFileUrl(element.attachments[0])
+                link: (await getFileUrl(element.attachments[0]))()
             };
         }
         if (element.attachments[1]) {
             element.attachment2 = {
                 name: element.attachments[1],
-                link: await getFileUrl(element.attachments[0])
+                link: (await getFileUrl(element.attachments[1]))()
             };
         }
         return element

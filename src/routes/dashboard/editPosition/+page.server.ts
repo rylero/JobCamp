@@ -59,24 +59,24 @@ export const actions: Actions = {
             redirect(302, "/host-tips");
         }
 
-        const attachmentsForm = [];
-        if (form.data.attachment1) {
-            attachmentsForm.push(form.data.attachment1);
-        }
-        if (form.data.attachment2) {
-            attachmentsForm.push(form.data.attachment2);
-        }
+        // const attachmentsForm = [];
+        // if (form.data.attachment1) {
+        //     attachmentsForm.push(form.data.attachment1);
+        // }
+        // if (form.data.attachment2) {
+        //     attachmentsForm.push(form.data.attachment2);
+        // }
 
-        const attachments: any = [];
+        // const attachments: any = [];
 
-        attachmentsForm.forEach((element) => {
-            attachments.push({ fileName: form.data.title.replace(" ", "-") +  "-" + element.fileName })
-        })
+        // attachmentsForm.forEach((element) => {
+        //     attachments.push({ fileName: form.data.title.replace(" ", "-") +  "-" + element.fileName })
+        // })
 
-        for (var i = 0; i < attachments.length; i++) {
-            const element = attachments[i];
-            addNewFile(element.fileName, await element.bytes());
-        }
+        // for (var i = 0; i < attachments.length; i++) {
+        //     const element = attachments[i];
+        //     addNewFile(element.fileName, await element.bytes());
+        // }
 
         const position = await prisma.position.update({
             where: { id: positionId },
@@ -93,7 +93,7 @@ export const actions: Actions = {
                 arrival: form.data.arrival,
                 start: form.data.start,
                 end:form.data.release,
-                attachments: { set: attachments }
+                // attachments: { set: attachments }
             }
         });
         console.log(position);

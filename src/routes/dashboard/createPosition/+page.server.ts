@@ -51,8 +51,8 @@ export const actions: Actions = {
         const form = await superValidate(request, zod(createNewPositionSchema(hostInfo.name, userInfo.email)));
 
         if (!form.valid) {
-            form.data.attachment1 = undefined;
-            form.data.attachment2 = undefined;
+            // form.data.attachment1 = undefined;
+            // form.data.attachment2 = undefined;
             console.log(form.errors);
             return fail(400, { form });
         }
@@ -76,19 +76,19 @@ export const actions: Actions = {
             redirect(302, "/login")
         }
 
-        var attachments = [];
+        // var attachments = [];
 
-        if (form.data.attachment1) {
-            const bytes = await form.data.attachment1.bytes();
-            await addNewFile(form.data.title.replace(" ", "-") +  "-" + form.data.attachment1.name, bytes);
-            attachments.push({ fileName: form.data.attachment1.name })
-        }
+        // if (form.data.attachment1) {
+        //     const bytes = await form.data.attachment1.bytes();
+        //     await addNewFile(form.data.title.replace(" ", "-") +  "-" + form.data.attachment1.name, bytes);
+        //     attachments.push({ fileName: form.data.attachment1.name })
+        // }
 
-        if (form.data.attachment2) {
-            const bytes = await form.data.attachment2.bytes();
-            await addNewFile(form.data.title.replace(" ", "-") +  "-" + form.data.attachment2.name, bytes);
-            attachments.push({ fileName: form.data.attachment2.name })
-        }
+        // if (form.data.attachment2) {
+        //     const bytes = await form.data.attachment2.bytes();
+        //     await addNewFile(form.data.title.replace(" ", "-") +  "-" + form.data.attachment2.name, bytes);
+        //     attachments.push({ fileName: form.data.attachment2.name })
+        // }
 
         const position = await prisma.host.update({
             where: { userId: locals.user.id },
@@ -109,7 +109,7 @@ export const actions: Actions = {
                             start: form.data.start,
                             end:form.data.release,
                             event: { connect: { id: event.id } },
-                            attachments: { create: attachments }
+                            // attachments: { create: attachments }
                         }
                     ]
                 }

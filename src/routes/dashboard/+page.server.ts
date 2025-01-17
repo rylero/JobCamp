@@ -40,21 +40,21 @@ export const load: PageServerLoad = async (event) => {
 
     var positions = await prisma.position.findMany({where: {hostId: hostInfo.id}, include: { attachments: true }});
 
-    // positions = await Promise.all(positions.map(async (element: any) => {
+    // positions = positions.map((element: any) => {
     //     if (element.attachments[0]) {
     //         element.attachment1 = { 
     //             name: element.attachments[0],
-    //             link: (await getFileUrl(element.attachments[0]))()
+    //             // link: (await getFileUrl(element.attachments[0]))()
     //         };
     //     }
     //     if (element.attachments[1]) {
     //         element.attachment2 = {
     //             name: element.attachments[1],
-    //             link: (await getFileUrl(element.attachments[1]))()
+    //             // link: (await getFileUrl(element.attachments[1]))()
     //         };
     //     }
     //     return element
-    // }));
+    // });
 
     return { positions, userData: event.locals.user, isCompany: true };
 };

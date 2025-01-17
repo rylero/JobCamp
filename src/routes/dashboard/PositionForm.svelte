@@ -106,7 +106,7 @@
             {#if $errors.release}<span class="text-sm text-red-500 text-right">{$errors.release}</span>{/if}
         </div>
 
-        <div class="flex w-full max-w-sm flex-col gap-1.5 mb-5">
+        <!-- <div class="flex w-full max-w-sm flex-col gap-1.5 mb-5">
             <div class="flex justify-between items-center w-full max-w-sm gap-1.5">
                 <Label class="text-lg" for="attachment1">Attachment 1</Label>
                 <Input bind:value={$form.attachment1} class="w-64" name="attachment1" id="attachment1" type="file" />
@@ -121,7 +121,7 @@
             </div>
             {#if $errors.attachattachment2ments}<span class="text-sm text-red-500 text-right">{$errors.attachment2}</span>{/if}
         </div>
-        
+         -->
 
         <div class="w-full flex justify-center gap-4">
             <a href="/dashboard" class={buttonVariants({ variant: "outline" }) + " w-28 py-4 border-blue-500 border-2"}>Cancel</a>

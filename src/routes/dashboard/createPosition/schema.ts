@@ -14,7 +14,6 @@ export const createNewPositionSchema = (name: string, email: string) => {
         arrival: z.string().min(1, "Required field"),
         start: z.string().min(1, "Required field"),
         release: z.string().min(1, "Required field"),
-        attachment1: z.any(),
-        attachment2: z.any(),
+        // attachment1: z.any(),s
     });
 }

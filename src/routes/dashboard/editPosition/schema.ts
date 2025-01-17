@@ -29,7 +29,7 @@ export const editPositionSchema = (positionProperties: any, attachment1: File | 
         arrival: z.string().default(positionProperties.arrival),
         start: z.string().default(positionProperties.start),
         release: z.string().default(positionProperties.end),
-        attachment1: z.any().default(attachment1),
-        attachment2: z.any().default(attachment2),
+        // attachment1: z.any().default(attachment1),
+        // attachment2: z.any().default(attachment2),
     });
 }

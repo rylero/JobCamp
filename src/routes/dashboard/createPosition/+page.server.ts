@@ -53,7 +53,7 @@ export const actions: Actions = {
         if (!form.valid) {
             form.data.attachment1 = undefined;
             form.data.attachment2 = undefined;
-            console.log("form fail")
+            console.log(form.errors);
             return fail(400, { form });
         }
 

@@ -71,6 +71,7 @@ export const actions: Actions = {
     },
     deletePosition: async ({ locals, cookies, url }) => {
         const positionId = url.searchParams.get("posId")?.toString();
+        console.log(`DELETE POSITION: ${positionId}`)
         if (!positionId) {
             redirect(302, "/about")
         }

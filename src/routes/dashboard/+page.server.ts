@@ -41,14 +41,18 @@ export const load: PageServerLoad = async (event) => {
     var positions = await prisma.position.findMany({where: {hostId: hostInfo.id}, include: { attachments: true }});
 
     positions = await Promise.all(positions.map(async (element: any) => {
-        element.attachment1 = { 
-            name: element.attachments[0].fileName,
-            link: await getFileUrl(element.attachments[0].fileName)
-        };
-        element.attachment2 = {
-            name: element.attachments[1].fileName,
-            link: await getFileUrl(element.attachments[0].fileName)
-        };
+        if (element.attachments[0]) {
+            element.attachment1 = { 
+                name: element.attachments[0].fileName,
+                link: await getFileUrl(element.attachments[0].fileName)
+            };
+        }
+        if (element.attachments[1]) {
+            element.attachment2 = {
+                name: element.attachments[1].fileName,
+                link: await getFileUrl(element.attachments[0].fileName)
+            };
+        }
         return element
     }));
 

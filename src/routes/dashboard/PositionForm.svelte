@@ -49,8 +49,8 @@
         </div>
         
         <div class="flex w-full max-w-sm flex-col gap-1.5">
-            <Label class="text-lg" for="name">Primary Contact's Name</Label>
-            <Input class="w-full" id="name" name="name" placeholder="Full name" bind:value={$form.fullName}  />
+            <Label class="text-lg" for="fullName">Primary Contact's Name</Label>
+            <Input class="w-full" id="fullName" name="fullName" placeholder="Full name" bind:value={$form.fullName}  />
             <span class="italic text-sm">This name will only be shared with students attending this position.</span>
             {#if $errors.fullName}<span class="text-sm text-red-500">{$errors.fullName}</span>{/if}
         </div>

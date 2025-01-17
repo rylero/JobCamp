@@ -3,8 +3,9 @@ import type { Actions } from "./$types";
 import { lucia } from "$lib/server/auth";
 import type { PageServerLoad } from "./$types";
 import { prisma } from "$lib/server/prisma";
+import { getFileUrl } from "./storage";
 
-const grabUserData = async (locals : App.Locals) => {
+const grabUserData: any = async (locals : App.Locals) => {
     if (!locals.user) {
         redirect(302, "/login");
     }
@@ -37,7 +38,19 @@ export const load: PageServerLoad = async (event) => {
     }
 
 
-    const positions = await prisma.position.findMany({where: {hostId: hostInfo.id}});
+    var positions = await prisma.position.findMany({where: {hostId: hostInfo.id}, include: { attachments: true }});
+
+    positions = await Promise.all(positions.map(async (element: any) => {
+        element.attachment1 = { 
+            name: element.attachments[0].fileName,
+            link: await getFileUrl(element.attachments[0].fileName)
+        };
+        element.attachment2 = {
+            name: element.attachments[1].fileName,
+            link: await getFileUrl(element.attachments[0].fileName)
+        };
+        return element
+    }));
 
     return { positions, userData: event.locals.user, isCompany: true };
 };

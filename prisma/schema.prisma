@@ -64,7 +64,7 @@ model Position {
 
 model Attachment {
   id                       String      @id @default(cuid())
-  position                 Position    @relation(fields: [positionId], references: [id])
+  position                 Position    @relation(fields: [positionId], references: [id], onDelete: Cascade)
   positionId               String
   
   fileName                 String

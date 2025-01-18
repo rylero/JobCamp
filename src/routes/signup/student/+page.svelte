@@ -3,6 +3,7 @@
     import { Checkbox } from "$lib/components/ui/checkbox/index.js";
     import { superForm } from "sveltekit-superforms";
     import Navbar from "$lib/components/navbar/Navbar.svelte";
+    import { EyeClosed, EyeClosedIcon, EyeIcon } from "lucide-svelte";
 
     let { data } = $props();
 
@@ -68,15 +69,17 @@
         </div>
         {#if $errors.parentEmail}<span class="text-sm text-red-500">{$errors.parentEmail}</span>{/if}
 
-        <div class="flex w-96 justify-between">
+        <div class="flex w-96 justify-between items-center gap-4">
             <label for="password">Password</label>
-            <Input class="px-2 py-0.5 rounded w-52 min-w-52" {...{ type: passwordEntryType }} name="password" bind:value={$form.password} />
+            <Input class="px-2 py-0.5 rounded grow min-w-52" {...{ type: passwordEntryType }} name="password" bind:value={$form.password} />
+            {#if showPassword}
+                <EyeIcon class="hover:cursor-pointer w-8" onclick={() => showPassword = false}></EyeIcon>
+            {:else}
+                <EyeClosedIcon class="hover:cursor-pointer w-8" onclick={() => showPassword = true}></EyeClosedIcon>
+            {/if}
+            <!-- <Checkbox class="rounded mr-2" bind:checked={showPassword} /> -->
         </div>
         {#if $errors.password}<span class="text-sm text-red-500">{$errors.password}</span>{/if}
-        
-        <div class="flex w-96 justify-center items-center">
-            <Checkbox class="rounded mr-2" bind:checked={showPassword} /><span>Show Password</span>
-        </div>
 
         <button type="submit" class="mt-2 w-24 h-8 rounded bg-blue-500 text-white hover:bg-blue-600">Sign Up</button>
     </form>

@@ -5,7 +5,8 @@ import { isMobilePhone } from "$lib/server/auth";
 export const createStudentSchema = (schoolId: string | undefined) => {
     return z.object({
         grade: z.number().int().min(9).max(12),
-        name: z.string().min(1),
+        firstName: z.string().min(1),
+        lastName: z.string().min(1),
         parentEmail: z.string().email("Please enter a valid email."),
         phone: z.string().refine((arg) => isMobilePhone.test(arg), "Please enter a valid phone number."),
         allowPhoneMessaging: z.literal(true, { errorMap: () => ({ message: "You must allow SMS messaging." })}),

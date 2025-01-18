@@ -58,8 +58,8 @@ export const actions: Actions = {
                             userId: userId,
                         },
                         create: {
-                            firstName: form.data.name, // TODO: lastName
-                            lastName: form.data.name,
+                            firstName: form.data.firstName, // TODO: lastName
+                            lastName: form.data.lastName,
                             grade: form.data.grade,
                             phone: form.data.phone,
                             parentEmail: form.data.parentEmail,
@@ -79,7 +79,7 @@ export const actions: Actions = {
         await sendEmailVerificationEmail(userId, user.email, code);
 
         generatePermissionSlipCode(userId, form.data.parentEmail).then(
-            (code) => sendPermissionSlipEmail(form.data.parentEmail, code, form.data.name)
+            (code) => sendPermissionSlipEmail(form.data.parentEmail, code, form.data.firstName)
         );
 
         redirect(302, "/verify-email");

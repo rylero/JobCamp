@@ -33,10 +33,16 @@
         {#if $errors.grade}<span class="text-sm text-red-500">{$errors.grade}</span>{/if}
 
         <div class="flex w-96 justify-between">
-            <label for="name">Full Name</label>
-            <Input class="px-2 py-0.5 rounded w-52 min-w-52" type="text" name="name" bind:value={$form.name} />
+            <label for="firstName">First Name</label>
+            <Input class="px-2 py-0.5 rounded w-52 min-w-52" type="text" name="firstName" bind:value={$form.firstName} />
         </div>
-        {#if $errors.name}<span class="text-sm text-red-500">{$errors.name}</span>{/if}
+        {#if $errors.firstName}<span class="text-sm text-red-500">{$errors.firstName}</span>{/if}
+
+        <div class="flex w-96 justify-between">
+            <label for="lastName">Last Name</label>
+            <Input class="px-2 py-0.5 rounded w-52 min-w-52" type="text" name="lastName" bind:value={$form.lastName} />
+        </div>
+        {#if $errors.lastName}<span class="text-sm text-red-500">{$errors.lastName}</span>{/if}
 
         <div class="flex w-96 justify-between">
             <label for="parentEmail">Parent Email</label>

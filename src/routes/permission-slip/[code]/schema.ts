@@ -9,7 +9,7 @@ export const createPermissionSlipSchema = (firstName: string, lastName: string) 
         physicalRestrictions: z.string(),
         dietaryRestrictions: z.string(),
         emergencyTreatment: z.string().min(1, "Required"),
-        studentAgreement: z.literal(true),
+        studentAgreement: z.literal(true, { required_error: "Required"}),
         liability: z.string().min(1, "Required"),
         liabilityDate: z.string().min(1, "Required"),
 

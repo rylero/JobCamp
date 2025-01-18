@@ -23,7 +23,7 @@ export const load: PageServerLoad = async (event) => {
     }
 
     const form = await superValidate(zod(createPermissionSlipSchema(student.firstName, student.lastName)));
-    return { form };
+    return { form, firstName: student.firstName, lastName: student.lastName };
 };
 
 export const actions: Actions = {
@@ -32,6 +32,7 @@ export const actions: Actions = {
         const form = await superValidate(request, zod(createPermissionSlipSchema("", "")));
   
         if (!form.valid) {
+            form.message = "error";
             return fail(400, { form });
         }
 

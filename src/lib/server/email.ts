@@ -36,12 +36,12 @@ export async function sendPasswordResetEmail(uid: string, email: string, code: s
     });
 }
 
-export async function sendPermissionSlipEmail(parentEmail: string, code: string) {
+export async function sendPermissionSlipEmail(parentEmail: string, code: string, name: string) {
     await emailClient.send({
         from: SENDER,
         to:  [{ email: parentEmail }],
-        subject: "Permission Slip for Student",
-        html: renderEmailTemplate(permissionSlipEmail, {link: "https://jobcamp.org/permission-slip/"+code}) // Change url
+        subject: `Permission Slip for ${name}`,
+        html: renderEmailTemplate(permissionSlipEmail, {link: "https://jobcamp.org/permission-slip/"+code, name: name}) // Change url
     });
 }
 

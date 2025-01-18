@@ -79,7 +79,7 @@ export const actions: Actions = {
         await sendEmailVerificationEmail(userId, user.email, code);
 
         generatePermissionSlipCode(userId, form.data.parentEmail).then(
-            (code) => sendPermissionSlipEmail(form.data.parentEmail, code)
+            (code) => sendPermissionSlipEmail(form.data.parentEmail, code, form.data.name)
         );
 
         redirect(302, "/verify-email");

@@ -3,6 +3,7 @@
     import type { PageData } from "./$types";
     import { Label } from "$lib/components/ui/label";
     import { Input } from "$lib/components/ui/input";
+    import { boolean } from "zod";
  
     interface Props {
         data: PageData;
@@ -10,7 +11,7 @@
 
     let { data }: Props = $props();
 
-    const { form, errors, enhance } = superForm(data.form, {
+    const { form, errors, enhance, message } = superForm(data.form, {
         resetForm: false,
 		clearOnSubmit: 'none'
     });
@@ -18,7 +19,7 @@
 
 <div class="mt-32 mb-5 w-full flex justify-center items-center">
     <form method="POST" class="z-0 relative md:border-2 px-10 py-8 md:rounded-lg w-[700px] mx-5 flex flex-col gap-4 items-center justify-center" use:enhance>
-        <h1 class="text-4xl">Permission Slip</h1>
+        <h1 class="text-4xl">Permission Slip for { data.firstName }</h1>
         <p>This form is required for every student participating in Job Shadow Day on March 10, 2025.<br>
             It includes:<br>
             - Contact Information<br>
@@ -110,11 +111,14 @@
                 {#if $errors.liability}<span class="text-sm text-red-500">{$errors.liability}</span>{/if}
             </div>
 
-            <div class="flex justify-between items-center w-full gap-1.5">
+            <div class="flex w-full flex-col gap-1.5">
                 <Label class="text-lg" for="liabilityDate">Date</Label>
-                <Input bind:value={$form.liabilityDate} class="w-max" name="liabilityDate" id="liabilityDate" type="time" />
+                <Input bind:value={$form.liabilityDate} class="w-max" name="liabilityDate" id="liabilityDate" type="date" />
+                {#if $errors.liabilityDate}<span class="text-sm text-red-500">{$errors.liabilityDate}</span>{/if}
             </div>
-            {#if $errors.liabilityDate}<span class="text-sm text-red-500 text-right">{$errors.liabilityDate}</span>{/if}
+
+            
+            {#if $message}<span class="text-sm text-red-500">See errors above</span>{/if}
 
         <button type="submit" class="my-2 p-4 py-2 rounded-md shadow-xl bg-blue-500 text-white hover:bg-blue-600">Complete</button>
     </form>

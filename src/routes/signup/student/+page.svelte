@@ -23,16 +23,6 @@
         {#if $message}<span class="text-sm text-red-500">{$message}</span>{/if}
 
         <div class="flex w-96 justify-between">
-            <label for="grade">Grade</label>
-            <select class="px-2 py-2 rounded w-52 min-w-52 border" name="grade" bind:value={$form.grade}>
-                {#each [9,10,11,12] as grade}
-                    <option value={grade} selected={$form.grade == grade}>{grade}th Grade</option>
-                {/each}
-            </select>
-        </div>
-        {#if $errors.grade}<span class="text-sm text-red-500">{$errors.grade}</span>{/if}
-
-        <div class="flex w-96 justify-between">
             <label for="firstName">First Name</label>
             <Input class="px-2 py-0.5 rounded w-52 min-w-52" type="text" name="firstName" bind:value={$form.firstName} />
         </div>
@@ -45,10 +35,14 @@
         {#if $errors.lastName}<span class="text-sm text-red-500">{$errors.lastName}</span>{/if}
 
         <div class="flex w-96 justify-between">
-            <label for="parentEmail">Parent Email</label>
-            <Input class="px-2 py-0.5 rounded w-52 min-w-52" type="text" name="parentEmail" bind:value={$form.parentEmail} />
+            <label for="grade">Grade</label>
+            <select class="px-2 py-2 rounded w-52 min-w-52 border" name="grade" bind:value={$form.grade}>
+                {#each [9,10,11,12] as grade}
+                    <option value={grade} selected={$form.grade == grade}>{grade}th Grade</option>
+                {/each}
+            </select>
         </div>
-        {#if $errors.parentEmail}<span class="text-sm text-red-500">{$errors.parentEmail}</span>{/if}
+        {#if $errors.grade}<span class="text-sm text-red-500">{$errors.grade}</span>{/if}
 
         <div class="flex w-96 justify-between">
             <label for="phone">Phone</label>
@@ -58,7 +52,7 @@
 
         <div class="flex w-96 justify-center items-center gap-2">
             <input type="checkbox" class="rounded" name="allowPhoneMessaging" bind:checked={$form.allowPhoneMessaging} />
-            <label for="allowPhoneMessaging">Allow SMS Messaging</label>
+            <label for="allowPhoneMessaging">I Accept SMS Messages</label>
         </div>
         {#if $errors.allowPhoneMessaging}<span class="text-sm text-red-500">{$errors.allowPhoneMessaging}</span>{/if}
         
@@ -67,6 +61,12 @@
             <Input class="px-2 py-0.5 rounded w-52 min-w-52" type="text" name="email" bind:value={$form.email} />
         </div>
         {#if $errors.email}<span class="text-sm text-red-500">{$errors.email}</span>{/if}
+
+        <div class="flex w-96 justify-between">
+            <label for="parentEmail">Parent Email</label>
+            <Input class="px-2 py-0.5 rounded w-52 min-w-52" type="text" name="parentEmail" bind:value={$form.parentEmail} />
+        </div>
+        {#if $errors.parentEmail}<span class="text-sm text-red-500">{$errors.parentEmail}</span>{/if}
 
         <div class="flex w-96 justify-between">
             <label for="password">Password</label>

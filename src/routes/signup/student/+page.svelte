@@ -18,7 +18,7 @@
 
 <Navbar isHost={false} loggedIn={false} />
 
-<div class="w-full mt-28 flex flex-col sm:gap-8 justify-center items-center">
+<div class="w-full mt-28 flex flex-col sm:gap-8 justify-center items-center px-6">
     <form method="POST" class="max-w-full flex flex-col justify-between items-center gap-4 py-10 px-10 sm:border-2 sm:rounded-lg sm:shadow-2xl" use:enhance>
         <h1 class="text-4xl">Sign Up</h1>
         {#if $message}<span class="text-sm text-red-500">{$message}</span>{/if}
@@ -46,6 +46,12 @@
         {#if $errors.grade}<span class="text-sm text-red-500">{$errors.grade}</span>{/if}
 
         <div class="flex w-96 justify-between">
+            <label for="email">Email</label>
+            <Input class="px-2 py-0.5 rounded w-52 min-w-52" type="text" name="email" bind:value={$form.email} />
+        </div>
+        {#if $errors.email}<span class="text-sm text-red-500">{$errors.email}</span>{/if}
+        
+        <div class="flex w-96 justify-between">
             <label for="phone">Phone</label>
             <Input class="px-2 py-0.5 rounded w-52 min-w-52" type="text" name="phone" bind:value={$form.phone} />
         </div>
@@ -57,11 +63,6 @@
         </div>
         {#if $errors.allowPhoneMessaging}<span class="text-sm text-red-500">{$errors.allowPhoneMessaging}</span>{/if}
         
-        <div class="flex w-96 justify-between">
-            <label for="email">Email</label>
-            <Input class="px-2 py-0.5 rounded w-52 min-w-52" type="text" name="email" bind:value={$form.email} />
-        </div>
-        {#if $errors.email}<span class="text-sm text-red-500">{$errors.email}</span>{/if}
 
         <div class="flex w-96 justify-between">
             <label for="parentEmail">Parent Email</label>

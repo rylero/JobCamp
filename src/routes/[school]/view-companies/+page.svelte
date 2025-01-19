@@ -57,7 +57,9 @@
                     <span>{position.host?.company?.companyName} - {position.title}</span>
                 </Accordion.Trigger>
                 <Accordion.Content class="px-5">
-                    <p class=" mt-1">Career: { position.career }</p><br>
+                    <p class="mt-1">Career: { position.career }</p><br>
+                    <p class="mt-1">Description: { position.host?.company?.companyDescription}</p>
+                    <p class="mt-1">URL: {position.host?.company?.companyUrl}</p>
                     <p class=""># of slots for students: { position.slots }</p>
             
                     <hr class="my-2">

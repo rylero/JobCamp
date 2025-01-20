@@ -3,6 +3,7 @@ export const careers = [
     "Creative Arts/Design",
     "Engineering/Manufacturing",
     "Education",
+    "Entrepreneurship",
     "Finance/Accounting",
     "Government/Legal",
     "Healthcare",

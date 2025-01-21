@@ -34,7 +34,7 @@ export const load: PageServerLoad = async (event) => {
     const { userInfo, hostInfo } = await grabUserData(event.locals);
 
     if (!hostInfo) {
-        return { positions: [], userData: event.locals.user, isCompany: false };
+        redirect(302, "/dashboard/student");
     }
 
 

@@ -1,14 +1,54 @@
 {
     "dates": [
         {
-            "date": "1/20/2024",
-            "title": "A very important date",
-            "description": "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Totam reprehenderit illo sint reiciendis velit earum esse, adipisci facilis neque soluta culpa saepe doloremque odit quibusdam eum veniam obcaecati animi cum."
+            "date": "Thurs, Jan 30",
+            "title": "Informational Kickoff Session",
+            "description": "Come learn how Job Shadow Day works at an info session in the College & Career Center during Tutorial."
         },
         {
-            "date": "1/20/2024",
-            "title": "A second very important date",
-            "description": "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Totam reprehenderit illo sint reiciendis velit earum esse, adipisci facilis neque soluta culpa saepe doloremque odit quibusdam eum veniam obcaecati animi cum."
+            "date": "Sat, Feb 1",
+            "title": "JobCamp.org opens for student signups",
+            "description": "Create a new account at JobCamp.org and browse company listings. Start doing your research and thinking about your top choices."
+        },
+        {
+            "date": "Tues, Feb 25",
+            "title": "Student Top Choices are due!",
+            "description": "Select up to 10 job positions to shadow. You must have a parent permission slip submitted in order to select positions on JobCamp.org."
+        },
+        {
+            "date": "Tues, Feb 25 7-8pm @ Library",
+            "title": "Matt Abrahams: Speaking Up Without Freaking Out",
+            "description": "Come to the LGHS Library to get practical, actionable advice on how to speak to people without the nerves! Matt is a podcast host, Stanford professor, author, speaker, and LGHS alum!"
+        },
+        {
+            "date": "Thurs, Feb 27",
+            "title": "Students are assigned to job shadow positions",
+            "description": "JobCamp lottery will run and students will be notified of their job shadow positions."
+        },
+        {
+            "date": "Fri, Feb 28",
+            "title": "MANDATORY Job Shadow Orientation",
+            "description": "Meet in the theater during tutorial for a mandatory meeting regarding student job shadow responsibilities and expectations."
+        },
+        {
+            "date": "Fri, Feb 28 Tutorial @ Theater",
+            "title": "MANDATORY Job Shadow Orientation",
+            "description": "Meet in the theater during tutorial for a mandatory meeting regarding student job shadow responsibilities and expectations."
+        },
+        {
+            "date": "Feb 28 thru Mar 6",
+            "title": "Email your host",
+            "description": "Email your job shadow host, introducting yourself and confirming your attendance."
+        },
+         {
+            "date": "Mon Mar 10",
+            "title": "JOB SHADOW DAY!",
+            "description": "Be on time, go prepared with questions, and learn!"
+        },
+        {
+            "date": "Tues Mar 18",
+            "title": "Thank yous and Survey",
+            "description": "Email your job shadow host, thanking them for the opportunity. Complete the JobCamp.org survey."
         }
     ]
 }

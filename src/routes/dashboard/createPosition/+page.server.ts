@@ -116,7 +116,7 @@ export const actions: Actions = {
             },
             include: { positions: true }
         });
-
+        
         sendPositionUpdateEmail(userInfo.email, {
             title: form.data.title,
             career: form.data.career,

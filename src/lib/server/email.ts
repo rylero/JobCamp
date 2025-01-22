@@ -46,6 +46,15 @@ export async function sendPermissionSlipEmail(parentEmail: string, code: string,
 }
 
 export async function sendPositionUpdateEmail(hostEmail: string, position: any) {
+    if (hostEmail != position.contact_email) {
+        await emailClient.send({
+            from: SENDER,
+            to:  [{ email: position.contact_email }],
+            subject: "JobCamp.org position created/updated for March 10, 2025",
+            html: renderEmailTemplate(positionUpdateEmail, position)
+        });
+    }
+
     await emailClient.send({
         from: SENDER,
         to:  [{ email: hostEmail }],

@@ -11,6 +11,8 @@
     <h1 class="text-xl text-center">Check your inbox for an email verification link</h1>
     {#if data.msg}<p class="text-red">{data.msg}</p>{/if}
     <form method="POST" action="?/resend" bind:this={formEl}>
-        <Button onclick={() => formEl.submit()} variant="outline" >Resend Email</Button>
+        <Button onclick={() => formEl.submit()} variant="outline" class="mb-16 text-lg" >Resend Email</Button>
     </form>
+
+    <Button variant="link" class="-mb-32 text-lg" href="/login">Return to login</Button>
 </div> 

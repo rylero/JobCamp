@@ -33,12 +33,20 @@
         })
         return Object.keys(possible).sort();
     })());
+
+    const selectTerm = (term: string) => {
+        if (term == selectedTerm) {
+            selectedTerm = "";
+            return;
+        }
+        selectedTerm = term;
+    }
 </script>
 
 <Navbar isHost={true} loggedIn={true} />
 
-<div class="flex w-full h-screen pt-20">
-    <div class="flex flex-col min-w-72 gap-2 h-full justify-start items-start p-4 border-r-2 border-r-slate-950">
+<div class="flex sm:flex-row flex-col w-full h-screen pt-20">
+    <div class="flex flex-col px-4 gap-2 h-full justify-start items-start p-4 border-r-2 border-r-slate-950">
         <h1>Search positions by...</h1>
         <div class="flex justify-center items-center gap-3">
             <Button class="w-24" variant={selected == "career" ? "default" : "outline"} onclick={() => selected="career"}>Career</Button>
@@ -46,10 +54,54 @@
         </div>
         <hr class="border-t-2 border-t-slate-950 w-full" />
         {#each terms as term}
-            <Button variant={selectedTerm == term ? 'default' : 'outline'} onclick={() => selectedTerm = term}>{term}</Button>
+            <Button class="text-xl sm:text-sm" variant={selectedTerm == term ? 'default' : 'outline'} onclick={() => selectTerm(term)}>{term}</Button>
+            {#if selectedTerm == term}
+            <div class="flex sm:hidden flex-col w-full h-full">
+                <Accordion.Root class="w-full">
+                    {#each filteredPositions as position}
+                      <Accordion.Item value={position.id} class="my-2">
+                        <Accordion.Trigger class="text-xl bg-slate-100 hover:bg-slate-200 rounded-t-sm px-5">
+                            <span>{position.host?.company?.companyName} - {position.title}</span>
+                        </Accordion.Trigger>
+                        <Accordion.Content class="px-5">
+                            <p class="mt-1">Career: { position.career }</p><br>
+                            <p class="mt-1">Description: { position.host?.company?.companyDescription}</p>
+                            <p class="mt-1">URL: {position.host?.company?.companyUrl}</p>
+                            <p class=""># of slots for students: { position.slots }</p>
+                    
+                            <hr class="my-2">
+                    
+                    <p class=" whitespace-pre-line">
+                    Address:
+                    { position.address }
+                    
+                    Summary:
+                    { position.summary }
+                    
+                    Instructions For Students:
+                    { position.instructions }
+                    
+                    Attire:
+                    { position.attire }        
+                    </p>
+                    
+                            <hr class="my-2">
+                            
+                            <p class="">Arrival: { position.arrival }</p>
+                            <p class="">Start: { position.start }</p>
+                            <p class="">End: { position.end }</p>
+                        </Accordion.Content>
+                      </Accordion.Item>
+                    {/each}
+                </Accordion.Root>
+            </div>
+            {/if}
         {/each}
     </div>
-    <div class="flex flex-col w-full h-full">
+    <div class="hidden sm:flex flex-col w-full h-full">
+        {#if selectedTerm == ""}
+            <h1 class="text-xl text-center mt-5">Please select a carrer or company to view positions.</h1>
+        {/if}
         <Accordion.Root class="w-full px-10 my-5">
             {#each filteredPositions as position}
               <Accordion.Item value={position.id} class="my-2">

@@ -44,6 +44,8 @@
         selectedTerm = term;
     }
 
+    let count = $state(data.countSelected);
+
     const togglePosition = async (posID: string) => {
         const fdata = new FormData();
         fdata.append("id", posID);
@@ -56,6 +58,11 @@
         data.positionData.map((val: any) => {
             if (val.id == posID) {
                 val.selected = !val.selected;
+                if (val.selected == true) {
+                    count += 1;
+                } else {
+                    count -= 1;
+                }
             }
             return val;
         })
@@ -83,7 +90,7 @@
                             <span>{position.host?.company?.companyName} - {position.title}</span>
                         </Accordion.Trigger>
                         <Accordion.Content class="px-5">
-                            <label class="flex gap-2 text-lg my-3 items-center"><input type="checkbox" name="selected" bind:checked={position.selected} onchange={() => togglePosition(position.id)} /> Add to My Favorite Jobs</label>
+                            <label class="flex gap-2 text-lg my-3 items-center"><input disabled={count >= 10} type="checkbox" name="selected" bind:checked={position.selected} onchange={() => togglePosition(position.id)} /> Add to My Favorite Jobs</label>
 
                             <p class="mt-1">Career: { position.career }</p><br>
                             <p class="mt-1">Description: { position.host?.company?.companyDescription}</p>
@@ -132,7 +139,17 @@
                     <span>{position.host?.company?.companyName} - {position.title}</span>
                 </Accordion.Trigger>
                 <Accordion.Content class="px-5">
-                    <label class="flex gap-2 text-lg my-3 items-center"><input type="checkbox" name="selected" bind:checked={position.selected} onchange={() => togglePosition(position.id)} /> Add to My Favorite Jobs</label>
+                    <label class="flex gap-2 text-lg my-3 items-center">
+                        {#if count < 10}
+                            <input type="checkbox" name="selected" class="w-4 h-4 rounded" disabled={count >= 10} bind:checked={position.selected} onchange={() => togglePosition(position.id)} />
+                            Add to My Favorite Jobs
+                        {:else}
+                            You have 10 Favorite Jobs selected. If you want to add this one, you'll need to delete one from your list.
+                        {/if}
+                    </label>
+                    {#if count >= 10}
+                        <Button variant="link" class="text-md -ml-4 text-black -mt-2 mb-3" href="/dashboard/student">Manage Positions</Button>
+                    {/if}
 
                     <p class="mt-1">Career: { position.career }</p><br>
                     <p class="mt-1">Description: { position.host?.company?.companyDescription}</p>

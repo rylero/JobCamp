@@ -56,7 +56,7 @@ export const load: PageServerLoad = async ({ params, locals }) => {
 
     const posData: any = positionData;
 
-    return { positionData: posData };
+    return { positionData: posData, countSelected: positionsOnStudents.length };
 }
 
 

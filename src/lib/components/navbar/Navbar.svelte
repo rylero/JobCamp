@@ -32,7 +32,13 @@
     <div class="flex h-20 flex-row justify-between items-center px-5">
         <a href={isHost ? "/dashboard" : "/lghs"} class="ml-4 text-2xl text-white flex justify-center items-center"><img src={logo} alt="logo" class="h-8 pr-2" />JobCamp</a>
     <div class="hidden md:flex flex-row gap-4 mr-4">
-        <Button href="/lghs/view-companies" variant="link" class="text-white text-xl">View Companies</Button>
+        {#if loggedIn && !isHost}
+            <Button href="/dashboard/student/pick" variant="link" class="text-white text-xl">Pick Positions</Button>
+        {/if}
+
+        {#if !loggedIn}
+            <Button href="/lghs/view-companies" variant="link" class="text-white text-xl">View Companies</Button>
+        {/if}
 
         <Button href="/about" variant="link" class="text-white text-xl">About</Button>
 

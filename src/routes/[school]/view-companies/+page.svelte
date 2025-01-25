@@ -100,7 +100,7 @@
     </div>
     <div class="hidden sm:flex flex-col w-full h-full">
         {#if selectedTerm == ""}
-            <h1 class="text-xl text-center mt-5">Please select a carrer or company to view positions.</h1>
+            <h1 class="text-xl text-center mt-5">Nothing selected. Choose a Company or Career to view positions.</h1>
         {/if}
         <Accordion.Root class="w-full px-10 my-5">
             {#each filteredPositions as position}

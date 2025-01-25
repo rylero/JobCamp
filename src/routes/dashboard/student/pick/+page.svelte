@@ -144,12 +144,9 @@
                             <input type="checkbox" name="selected" class="w-4 h-4 rounded" disabled={count >= 10} bind:checked={position.selected} onchange={() => togglePosition(position.id)} />
                             Add to My Favorite Jobs
                         {:else}
-                            You have 10 Favorite Jobs selected. If you want to add this one, you'll need to delete one from your list.
+                            <span class="bg-red-200 px-1">You have 10 Favorite Jobs selected. If you want to add this one, you'll need to <a class="underline" href="/dashboard/student">delete one from your list.</a></span>
                         {/if}
                     </label>
-                    {#if count >= 10}
-                        <Button variant="link" class="text-md -ml-4 text-black -mt-2 mb-3" href="/dashboard/student">Manage Positions</Button>
-                    {/if}
 
                     <p class="mt-1">Career: { position.career }</p><br>
                     <p class="mt-1">Description: { position.host?.company?.companyDescription}</p>

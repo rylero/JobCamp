@@ -43,7 +43,7 @@
     }
 </script>
 
-<Navbar isHost={data.isHost} loggedIn={data.loggedIn} />
+<Navbar isHost={true} loggedIn={true} />
 
 <div class="flex sm:flex-row flex-col w-full h-screen pt-20">
     <div class="flex flex-col px-4 gap-2 h-full justify-start items-start p-4 border-r-2 border-r-slate-950">

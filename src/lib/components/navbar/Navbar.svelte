@@ -78,7 +78,13 @@
         <AlignJustify onclick={() => collapsed = !collapsed} class="text-white hover:cursor-pointer" />
     </div>
     <div class="flex flex-col gap-4 pb-5">
-        <Button href="/lghs/view-companies" variant="link" class="text-white text-xl">View Companies</Button>
+        {#if loggedIn && !isHost}
+            <Button href="/dashboard/student/pick" variant="link" class="text-white text-xl">Pick Positions</Button>
+        {/if}
+
+        {#if !loggedIn}
+            <Button href="/lghs/view-companies" variant="link" class="text-white text-xl">View Companies</Button>
+        {/if}
         
         <Button href="/about" variant="link" class="text-white text-xl">About</Button>
 

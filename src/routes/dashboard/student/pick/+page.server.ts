@@ -56,7 +56,7 @@ export const load: PageServerLoad = async ({ params, locals }) => {
 
     const posData: any = positionData;
 
-    return { positionData: posData, countSelected: positionsOnStudents.length };
+    return { positionData: posData, countSelected: positionsOnStudents.length, permissionSlipCompleted: student.permissionSlipCompleted, parentEmail: student.parentEmail };
 }
 
 

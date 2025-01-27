@@ -4,6 +4,7 @@
     import * as Accordion from "$lib/components/ui/accordion/index.js";
     import { Input } from '$lib/components/ui/input';
     import { enhance } from '$app/forms';
+    import Label from '$lib/components/ui/label/label.svelte';
 
     let { data } = $props();
 
@@ -73,6 +74,16 @@
 
 <div class="flex sm:flex-row flex-col w-full h-screen pt-20">
     <div class="flex flex-col px-4 gap-2 h-full justify-start items-start p-4 border-r-2 border-r-slate-950">
+        {#if !data.permissionSlipCompleted}
+        <div class="sm:hidden flex flex-col px-10 py-4 border rounded-lg m-3 bg-yellow-100">
+            <span class="text-2xl">To add positions to your Top Picks, your parent permission slip must be completed. To resend the permission slip, enter your parent's email address:</span>
+            <form class="flex items-end gap-6 mt-3" method="post" action="?/send-permission-slip">
+                <Label>Parent Email<Input name="parent-email" bind:value={data.parentEmail} class="max-w-72" /></Label>
+                <Button class="px-6">Send</Button>
+            </form>
+        </div>
+        {/if}
+
         <h1>Search positions by...</h1>
         <div class="flex justify-center items-center gap-3">
             <Button class="w-24" variant={selected == "career" ? "default" : "outline"} onclick={() => selected="career"}>Career</Button>
@@ -129,6 +140,16 @@
         {/each}
     </div>
     <div class="hidden sm:flex flex-col w-full h-full">
+        {#if !data.permissionSlipCompleted}
+        <div class="flex flex-col px-10 py-4 border rounded-lg m-3 bg-yellow-100">
+            <span class="text-2xl">To add positions to your Top Picks, your parent permission slip must be completed. To resend the permission slip, enter your parent's email address:</span>
+            <form class="flex gap-6 mt-3" method="post" action="?/send-permission-slip">
+                <label class="flex gap-2 items-center"><span class="w-full">Parent Email:</span><Input name="parent-email" bind:value={data.parentEmail} class="min-w-64 w-full" /></label>
+                <Button class="px-6">Send</Button>
+            </form>
+        </div>
+        {/if}
+
         {#if selectedTerm == ""}
             <h1 class="text-xl text-center mt-5">Please select a carrer or company to view positions.</h1>
         {/if}
@@ -144,7 +165,7 @@
                             <input type="checkbox" name="selected" class="w-4 h-4 rounded" disabled={count >= 10} bind:checked={position.selected} onchange={() => togglePosition(position.id)} />
                             Add to My Favorite Jobs
                         {:else}
-                            <span class="bg-red-200 px-1">You have 10 Favorite Jobs selected. If you want to add this one, you'll need to <a class="underline" href="/dashboard/student">delete one from your list.</a></span>
+                            <span class="bg-red-200 px-1">You have 10 Favorite Jobs selected. If you want to add this one, you'll need to <a href="/dashboard/student">delete one from your list.</a></span>
                         {/if}
                     </label>
 

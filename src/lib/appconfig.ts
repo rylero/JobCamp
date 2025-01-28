@@ -8,7 +8,6 @@ export const careers = [
     "Government/Legal",
     "Healthcare",
     "Human Resources",
-    "Information Technology",
     "Leisure/Sports/Tourism",
     "Law",
     "Marketing/Public Relations",

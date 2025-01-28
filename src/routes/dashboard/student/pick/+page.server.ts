@@ -1,6 +1,8 @@
 import { prisma } from '$lib/server/prisma';
 import { redirect } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
+import { generatePermissionSlipCode } from '$lib/server/auth';
+import { sendPermissionSlipEmail } from '$lib/server/email';
 
 export const load: PageServerLoad = async ({ params, locals }) => {
     if (!locals.user) {
@@ -61,8 +63,31 @@ export const load: PageServerLoad = async ({ params, locals }) => {
 
 
 export const actions: Actions = {
-    sendPermissionSlip: async(event) => {
-        // TODO: Implement
+    sendPermissionSlip: async({ request, locals, cookies }) => {
+        const data = await request.formData();
+        console.log(data);
+        
+        const parentEmail = await data.get("parent-email");
+        if (!parentEmail) {
+            return { sent: false, err: true };
+        }
+
+        const id = locals.user?.id;
+        if (!id) {
+            redirect(302, "/login");
+        }
+
+        const user = await prisma.user.findFirst({ where: { id }, include: { student: true }})
+        const firstName = user?.student?.firstName;
+        if (!firstName) {
+            redirect(302, "/login");
+        }
+        
+        generatePermissionSlipCode(id, parentEmail.toString()).then(
+            (code) => sendPermissionSlipEmail(parentEmail.toString(), code, firstName)
+        );
+
+        return { sent: true, err: false };
     },
     togglePosition: async ({ request, locals, cookies }) => {
         const data = await request.formData();
@@ -117,5 +142,7 @@ export const actions: Actions = {
                 }
             });
         }
+
+        return { sent: false, err: false };
     }
 }

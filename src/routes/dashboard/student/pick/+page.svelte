@@ -6,7 +6,7 @@
     import { enhance } from '$app/forms';
     import Label from '$lib/components/ui/label/label.svelte';
 
-    let { data } = $props();
+    let { data, form } = $props();
 
     let carrerWise = $derived(JSON.stringify(data.positionData));
     let companyWise = $derived(JSON.stringify(data.positionData));
@@ -77,14 +77,20 @@
         {#if !data.permissionSlipCompleted}
         <div class="sm:hidden flex flex-col px-10 py-4 border rounded-lg m-3 bg-yellow-100">
             <span class="text-2xl">To add positions to your Top Picks, your parent permission slip must be completed. To resend the permission slip, enter your parent's email address:</span>
-            <form class="flex items-end gap-6 mt-3" method="post" action="?/send-permission-slip">
-                <Label>Parent Email<Input name="parent-email" bind:value={data.parentEmail} class="max-w-72" /></Label>
-                <Button class="px-6">Send</Button>
+            <form class="flex items-end gap-6 mt-3" method="post" action="?/sendPermissionSlip" use:enhance>
+                <Label>Parent Email<Input type="email" name="parent-email" bind:value={data.parentEmail} class="max-w-72" /></Label>
+                <button type="submit" class="px-5 py-2 bg-blue-600 hover:bg-blue-500 rounded-md text-white">Send</button>
+                {#if form && form.sent}
+                    <span class="text-green-500 text-lg font-bold pb-1.5">Sent</span>
+                {/if}
+                {#if form && form.err}
+                    <span class="text-green-500 text-lg font-bold pb-1.5">Internal Error</span>
+                {/if}
             </form>
         </div>
         {/if}
 
-        <h1>Search positions by...</h1>
+        <h1>Search positions by...</h1>        
         <div class="flex justify-center items-center gap-3">
             <Button class="w-24" variant={selected == "career" ? "default" : "outline"} onclick={() => selected="career"}>Career</Button>
             <Button class="w-24" variant={selected == "career" ? "outline" : "default"} onclick={() => selected="company"}>Company</Button>
@@ -149,11 +155,17 @@
     </div>
     <div class="hidden sm:flex flex-col w-full h-full">
         {#if !data.permissionSlipCompleted}
-        <div class="flex flex-col px-10 py-4 border rounded-lg m-3 bg-yellow-100">
+        <div class="hidden sm:flex flex-col px-10 py-4 border rounded-lg m-3 bg-yellow-100">
             <span class="text-2xl">To add positions to your Top Picks, your parent permission slip must be completed. To resend the permission slip, enter your parent's email address:</span>
-            <form class="flex gap-6 mt-3" method="post" action="?/sendPermissionSlip">
-                <label class="flex gap-2 items-center"><span class="w-full">Parent Email:</span><Input name="parent-email" bind:value={data.parentEmail} class="min-w-64 w-full" /></label>
-                <Button class="px-6">Send</Button>
+            <form class="flex items-end gap-6 mt-3" method="post" action="?/sendPermissionSlip" use:enhance>
+                <Label>Parent Email<Input type="email" name="parent-email" bind:value={data.parentEmail} class="max-w-72" /></Label>
+                <button type="submit" class="px-5 py-2 bg-blue-600 hover:bg-blue-500 rounded-md text-white">Send</button>
+                {#if form && form.sent}
+                    <span class="text-green-500 text-lg font-bold pb-1.5">Sent</span>
+                {/if}
+                {#if form && form.err}
+                    <span class="text-green-500 text-lg font-bold pb-1.5">Internal Error</span>
+                {/if}
             </form>
         </div>
         {/if}

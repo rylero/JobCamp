@@ -61,6 +61,9 @@ export const load: PageServerLoad = async ({ params, locals }) => {
 
 
 export const actions: Actions = {
+    sendPermissionSlip: async(event) => {
+        // TODO: Implement
+    },
     togglePosition: async ({ request, locals, cookies }) => {
         const data = await request.formData();
 

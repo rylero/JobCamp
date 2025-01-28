@@ -101,8 +101,16 @@
                             <span>{position.host?.company?.companyName} - {position.title}</span>
                         </Accordion.Trigger>
                         <Accordion.Content class="px-5">
-                            <label class="flex gap-2 text-lg my-3 items-center"><input disabled={count >= 10} type="checkbox" name="selected" bind:checked={position.selected} onchange={() => togglePosition(position.id)} /> Add to My Favorite Jobs</label>
-
+                            {#if !data.permissionSlipCompleted}
+                            <label class="flex gap-2 text-lg my-3 items-center">
+                                {#if count < 10}
+                                    <input type="checkbox" name="selected" class="w-4 h-4 rounded" disabled={count >= 10} bind:checked={position.selected} onchange={() => togglePosition(position.id)} />
+                                    Add to My Favorite Jobs
+                                {:else}
+                                    <span class="bg-red-200 px-1">You have 10 Favorite Jobs selected. If you want to add this one, you'll need to <a href="/dashboard/student">delete one from your list.</a></span>
+                                {/if}
+                            </label>
+                            {/if}
                             <p class="mt-1">Career: { position.career }</p><br>
                             <p class="mt-1">Description: { position.host?.company?.companyDescription}</p>
                             <p class="mt-1">URL: {position.host?.company?.companyUrl}</p>
@@ -143,7 +151,7 @@
         {#if !data.permissionSlipCompleted}
         <div class="flex flex-col px-10 py-4 border rounded-lg m-3 bg-yellow-100">
             <span class="text-2xl">To add positions to your Top Picks, your parent permission slip must be completed. To resend the permission slip, enter your parent's email address:</span>
-            <form class="flex gap-6 mt-3" method="post" action="?/send-permission-slip">
+            <form class="flex gap-6 mt-3" method="post" action="?/sendPermissionSlip">
                 <label class="flex gap-2 items-center"><span class="w-full">Parent Email:</span><Input name="parent-email" bind:value={data.parentEmail} class="min-w-64 w-full" /></label>
                 <Button class="px-6">Send</Button>
             </form>
@@ -160,6 +168,7 @@
                     <span>{position.host?.company?.companyName} - {position.title}</span>
                 </Accordion.Trigger>
                 <Accordion.Content class="px-5">
+                    {#if !data.permissionSlipCompleted}
                     <label class="flex gap-2 text-lg my-3 items-center">
                         {#if count < 10}
                             <input type="checkbox" name="selected" class="w-4 h-4 rounded" disabled={count >= 10} bind:checked={position.selected} onchange={() => togglePosition(position.id)} />
@@ -168,6 +177,7 @@
                             <span class="bg-red-200 px-1">You have 10 Favorite Jobs selected. If you want to add this one, you'll need to <a href="/dashboard/student">delete one from your list.</a></span>
                         {/if}
                     </label>
+                    {/if}
 
                     <p class="mt-1">Career: { position.career }</p><br>
                     <p class="mt-1">Description: { position.host?.company?.companyDescription}</p>

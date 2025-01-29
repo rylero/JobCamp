@@ -76,7 +76,7 @@
     <div class="flex flex-col px-4 gap-2 h-full justify-start items-start p-4 border-r-2 border-r-slate-950">
         {#if !data.permissionSlipCompleted}
         <div class="sm:hidden flex flex-col px-10 py-4 border rounded-lg m-3 bg-yellow-100">
-            <span class="text-2xl">To add positions to your Top Picks, your parent permission slip must be completed. To resend the permission slip, enter your parent's email address:</span>
+            <span class="text-2xl">To add Favorite Jobs, your parent permission slip must be completed. To resend the permission slip, enter your parent's email address:</span>
             <form class="flex items-end gap-6 mt-3" method="post" action="?/sendPermissionSlip" use:enhance>
                 <Label>Parent Email<Input type="email" name="parent-email" bind:value={data.parentEmail} class="max-w-72" /></Label>
                 <button type="submit" class="px-5 py-2 bg-blue-600 hover:bg-blue-500 rounded-md text-white">Send</button>
@@ -156,7 +156,7 @@
     <div class="hidden sm:flex flex-col w-full h-full">
         {#if !data.permissionSlipCompleted}
         <div class="hidden sm:flex flex-col px-10 py-4 border rounded-lg m-3 bg-yellow-100">
-            <span class="text-2xl">To add positions to your Top Picks, your parent permission slip must be completed. To resend the permission slip, enter your parent's email address:</span>
+            <span class="text-2xl">To add Favorite Jobs, your parent permission slip must be completed. To resend the permission slip, enter your parent's email address:</span>
             <form class="flex items-end gap-6 mt-3" method="post" action="?/sendPermissionSlip" use:enhance>
                 <Label>Parent Email<Input type="email" name="parent-email" bind:value={data.parentEmail} class="max-w-72" /></Label>
                 <button type="submit" class="px-5 py-2 bg-blue-600 hover:bg-blue-500 rounded-md text-white">Send</button>
@@ -171,7 +171,7 @@
         {/if}
 
         {#if selectedTerm == ""}
-            <h1 class="text-xl text-center mt-5">Please select a carrer or company to view positions.</h1>
+            <h1 class="text-xl text-center mt-5">Please select a career or company to view positions.</h1>
         {/if}
         <Accordion.Root class="w-full px-10 my-5">
             {#each filteredPositions as position, index}

@@ -33,7 +33,7 @@
         <a href={isHost ? "/dashboard" : "/lghs"} class="ml-4 text-2xl text-white flex justify-center items-center"><img src={logo} alt="logo" class="h-8 pr-2" />JobCamp</a>
     <div class="hidden md:flex flex-row gap-4 mr-4">
         {#if loggedIn && !isHost}
-            <Button href="/dashboard/student/pick" variant="link" class="text-white text-xl">Pick Positions</Button>
+            <Button href="/dashboard/student/pick" variant="link" class="text-white text-xl">Pick Favorites</Button>
         {/if}
 
         {#if !loggedIn}
@@ -85,7 +85,7 @@
     </div>
     <div class="flex flex-col gap-4 pb-5">
         {#if loggedIn && !isHost}
-            <Button href="/dashboard/student/pick" variant="link" class="text-white text-xl">Pick Positions</Button>
+            <Button href="/dashboard/student/pick" variant="link" class="text-white text-xl">Pick Favorites</Button>
         {/if}
 
         {#if !loggedIn}

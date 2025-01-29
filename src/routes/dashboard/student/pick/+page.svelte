@@ -107,7 +107,7 @@
                             <span>{position.host?.company?.companyName} - {position.title}</span>
                         </Accordion.Trigger>
                         <Accordion.Content class="px-5">
-                            {#if !data.permissionSlipCompleted}
+                            {#if data.permissionSlipCompleted}
                             <label class="flex gap-2 text-lg my-3 items-center">
                                 {#if count < 10}
                                     <input type="checkbox" name="selected" class="w-4 h-4 rounded" disabled={count >= 10} bind:checked={position.selected} onchange={() => togglePosition(position.id)} />
@@ -180,7 +180,7 @@
                     <span>{position.host?.company?.companyName} - {position.title}</span>
                 </Accordion.Trigger>
                 <Accordion.Content class="px-5">
-                    {#if !data.permissionSlipCompleted}
+                    {#if data.permissionSlipCompleted}
                     <label class="flex gap-2 text-lg my-3 items-center">
                         {#if count < 10}
                             <input type="checkbox" name="selected" class="w-4 h-4 rounded" disabled={count >= 10} bind:checked={position.selected} onchange={() => togglePosition(position.id)} />

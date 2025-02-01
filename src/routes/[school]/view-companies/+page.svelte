@@ -56,7 +56,7 @@
         {#each terms as term}
             <Button class="text-xl sm:text-sm" variant={selectedTerm == term ? 'default' : 'outline'} onclick={() => selectTerm(term)}>{term}</Button>
             {#if selectedTerm == term}
-            <div class="mx-4 mt-2 w-fit">
+            <div class="sm:hidden mx-4 mt-2 w-fit">
                 <Accordion.Root type="multiple">
                     {#each filteredPositions as position, index}
                     <Accordion.Item value={position.id} class="my-2">

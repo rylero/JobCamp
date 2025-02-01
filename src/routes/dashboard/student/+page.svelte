@@ -70,55 +70,57 @@
 <Navbar loggedIn={true} isHost={false} />
 
 <div class="flex flex-col md:flex-row w-full min-h-screen pt-20">
-    <div class={"w-fit flex flex-col gap-2 justify-start items-start p-4" + leftWidth}>
-        <h1 class="text-2xl pb-4">My Favorite Jobs</h1>
+    <div class={"w-full flex flex-col gap-2 justify-start items-start md:m-4" + leftWidth}>
+        <h1 class="text-2xl pt-6 text-center w-full">My Favorite Jobs</h1>
         {#if positions.posList.length != 0}
-        <Accordion.Root type="multiple">
-            {#each positions.posList as position, i}
-                <Accordion.Item value={position.id} class="my-2 relative">
-                <Accordion.Trigger class={"relative text-xl text-left bg-slate-100 hover:bg-slate-200 rounded-t-sm px-5" + ((i == positions.posList.length-1 || i == 0) ? " min-h-[60px]" : " min-h-[90px]")}>
-                    <span class="pl-12 pr-32">{position.host?.company?.companyName} - {position.title}</span>
-                    {#if i != positions.posList.length-1}<ArrowBigDown class={"absolute left-5 hover:cursor-pointer" + ((i == 0) ? " top-3" : " top-12")} size={32} onclick={() => moveUp(position.id)} />{/if}
+        <div class="md:mx-4 mt-2 w-full">
+                <Accordion.Root type="multiple">
+                {#each positions.posList as position, i}
+                    <Accordion.Item value={position.id} class="my-2 relative">
+                    <Accordion.Trigger class={"relative text-xl text-left bg-slate-600 hover:bg-slate-200 rounded-t-sm px-5" + ((i == positions.posList.length-1 || i == 0) ? " min-h-[60px]" : " min-h-[90px]")}>
+                        <span class="pl-12 pr-32">{position.host?.company?.companyName} - {position.title}</span>
+                        {#if i != positions.posList.length-1}<ArrowBigDown class={"absolute left-5 hover:cursor-pointer" + ((i == 0) ? " top-3" : " top-12")} size={32} onclick={() => moveUp(position.id)} />{/if}
                         {#if i != 0}<ArrowBigUp class="absolute top-3 left-5 hover:cursor-pointer" size={32} onclick={() => moveDown(position.id)} />{/if}
-                    <Trash2Icon class="absolute right-[60px] top-1/2 -translate-y-1/2 hover:cursor-pointer" onclick={() => deletePosition(position.id)} size={32} />
-                </Accordion.Trigger>
-                <Accordion.Content class="px-5">
-                    <p class="mt-1">Career: { position.career }</p><br>
-                    <p class="mt-1">Description: { position.host?.company?.companyDescription}</p>
-                    <p class="mt-1">URL: {position.host?.company?.companyUrl}</p>
-                    <p class=""># of slots for students: { position.slots }</p>
-            
-                    <hr class="my-2">
-            
-            <p class=" whitespace-pre-line">
-            Address:
-            { position.address }
-            
-            Summary:
-            { position.summary }
-            
-            Instructions For Students:
-            { position.instructions }
-            
-            Attire:
-            { position.attire }        
-            </p>
-            
-                    <hr class="my-2">
-                    
-                    <p class="">Arrival: { position.arrival }</p>
-                    <p class="">Start: { position.start }</p>
-                    <p class="">End: { position.end }</p>
-                </Accordion.Content>
-                </Accordion.Item>
-            {/each}
-        </Accordion.Root>
+                        <Trash2Icon class="absolute right-[60px] top-1/2 -translate-y-1/2 hover:cursor-pointer" onclick={() => deletePosition(position.id)} size={32} />
+                    </Accordion.Trigger>
+                    <Accordion.Content class="px-5">
+                        <p class="mt-1">Career: { position.career }</p><br>
+                        <p class="mt-1">Description: { position.host?.company?.companyDescription}</p>
+                        <p class="mt-1">URL: {position.host?.company?.companyUrl}</p>
+                        <p class=""># of slots for students: { position.slots }</p>
+                
+                        <hr class="my-2">
+                
+                <p class=" whitespace-pre-line">
+                Address:
+                { position.address }
+                
+                Summary:
+                { position.summary }
+                
+                Instructions For Students:
+                { position.instructions }
+                
+                Attire:
+                { position.attire }        
+                </p>
+                
+                        <hr class="my-2">
+                        
+                        <p class="">Arrival: { position.arrival }</p>
+                        <p class="">Start: { position.start }</p>
+                        <p class="">End: { position.end }</p>
+                    </Accordion.Content>
+                    </Accordion.Item>
+                {/each}
+            </Accordion.Root>
+        </div>
         {:else}
             <h1 class="text-center">No favorite jobs selected.</h1>
         {/if}
     </div>
     <div class="flex flex-col w-full md:border-l-2 md:border-l-slate-950">
-        <h1 class="text-2xl px-4 py-4">Important Dates</h1>
+        <h1 class="text-2xl px-4 py-4 text-center w-full">Important Dates</h1>
         {#each dates as info}
             <div class="m-2 p-4 rounded-md shadow-xl border-2">
                 <h1 class="text-xl mb-2">{ info.date } - { info.title }</h1>

@@ -73,7 +73,7 @@
     <div class={"w-full flex flex-col gap-2 justify-start items-center md:m-4" + leftWidth}>
         <h1 class="text-2xl text-center w-full mt-4 md:mt-0">My Favorite Jobs</h1>
         {#if positions.posList.length != 0}
-            <Accordion.Root type="multiple"  class="mt-2 w-screen px-4">
+            <Accordion.Root type="multiple"  class="mt-2 w-screen md:w-full px-4">
                 {#each positions.posList as position, i}
                     <Accordion.Item value={position.id} class="my-2 relative">
                     <Accordion.Trigger class={"relative text-md md:text-lg text-left bg-slate-100 hover:bg-slate-200 rounded-t-sm px-5 pl-9" + ((i == positions.posList.length-1 || i == 0) ? " min-h-[60px]" : " min-h-[110px]")}>

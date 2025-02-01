@@ -7,7 +7,6 @@
     let { data } = $props();
 
     let positions = $state({ posList: data.positions });
-    let leftWidth = $derived(positions.posList.length == 0 ? " w-72" : " min-w-[32rem] w-full");
 
 
     const deletePosition = async (posID: string) => {
@@ -65,15 +64,17 @@
             body: fdata
         });
     }
+    
+    let leftWidth = $derived(positions.posList.length == 0 ? " w-72" : " w-full");
 </script>
 
 <Navbar loggedIn={true} isHost={false} />
 
 <div class="flex flex-col md:flex-row w-full min-h-screen pt-20">
-    <div class={"w-full flex flex-col gap-2 justify-start items-center md:m-4" + leftWidth}>
+    <div class={"flex flex-col gap-2 justify-start items-center md:m-4" + leftWidth}>
         <h1 class="text-2xl text-center w-full mt-4 md:mt-0">My Favorite Jobs</h1>
         {#if positions.posList.length != 0}
-            <Accordion.Root type="multiple"  class="mt-2 w-screen md:w-full px-4">
+            <Accordion.Root type="multiple"  class="mt-2 max-w-screen md:w-full md:px-4 mx-4">
                 {#each positions.posList as position, i}
                     <Accordion.Item value={position.id} class="my-2 relative">
                     <Accordion.Trigger class={"relative text-md md:text-lg text-left bg-slate-100 hover:bg-slate-200 rounded-t-sm px-5 pl-9" + ((i == positions.posList.length-1 || i == 0) ? " min-h-[60px]" : " min-h-[110px]")}>

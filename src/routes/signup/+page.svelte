@@ -19,8 +19,8 @@
         <h1 class="text-5xl">Sign Up</h1>
         <div class="flex flex-col justify-center items-center gap-2">
             <Button class="w-32 text-lg" onclick={companySignup}>Company</Button>
-            <Button disabled variant="outline" class="w-32 text-lg" onclick={studentSignup}>Student</Button>
-            <span class="text-sm italic w-40 text-center">Student signups start Feb 1st</span>
+            <Button class="w-32 text-lg" onclick={studentSignup}>Student*</Button>
+            <span class="text-sm italic w-40 text-center">*Last years account will not work.</span>
         </div>
         <a href='/login' class="text-lg">I already have an account</a>
     </div>

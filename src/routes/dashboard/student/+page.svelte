@@ -71,18 +71,17 @@
 
 <div class="flex flex-col md:flex-row w-full min-h-screen pt-20">
     <div class={"w-full flex flex-col gap-2 justify-start items-start md:m-4" + leftWidth}>
-        <h1 class="text-2xl pt-6 text-center w-full">My Favorite Jobs</h1>
+        <h1 class="text-2xl text-center w-full">My Favorite Jobs</h1>
         {#if positions.posList.length != 0}
-        <div class="md:mx-4 mt-2 w-full">
-                <Accordion.Root type="multiple">
+            <Accordion.Root type="multiple"  class="mx-4 mt-2 w-[calc(100%-64px)]">
                 {#each positions.posList as position, i}
                     <Accordion.Item value={position.id} class="my-2 relative">
-                    <Accordion.Trigger class={"relative text-xl text-left bg-slate-600 hover:bg-slate-200 rounded-t-sm px-5" + ((i == positions.posList.length-1 || i == 0) ? " min-h-[60px]" : " min-h-[90px]")}>
-                        <span class="pl-12 pr-32">{position.host?.company?.companyName} - {position.title}</span>
-                        {#if i != positions.posList.length-1}<ArrowBigDown class={"absolute left-5 hover:cursor-pointer" + ((i == 0) ? " top-3" : " top-12")} size={32} onclick={() => moveUp(position.id)} />{/if}
-                        {#if i != 0}<ArrowBigUp class="absolute top-3 left-5 hover:cursor-pointer" size={32} onclick={() => moveDown(position.id)} />{/if}
-                        <Trash2Icon class="absolute right-[60px] top-1/2 -translate-y-1/2 hover:cursor-pointer" onclick={() => deletePosition(position.id)} size={32} />
+                    <Accordion.Trigger class={"relative text-xl text-left bg-slate-100 hover:bg-slate-200 rounded-t-sm px-5" + ((i == positions.posList.length-1 || i == 0) ? " min-h-[60px]" : " min-h-[90px]")}>
+                        <span class="pl-12 pr-32 text-wrap">{position.host?.company?.companyName} - {position.title}</span>
                     </Accordion.Trigger>
+                    {#if i != positions.posList.length-1}<ArrowBigDown class={"absolute left-5 hover:cursor-pointer" + ((i == 0) ? " top-3" : " top-12")} size={32} onclick={() => moveUp(position.id)} />{/if}
+                        {#if i != 0}<ArrowBigUp class="absolute top-3 left-5 hover:cursor-pointer" size={32} onclick={() => moveDown(position.id)} />{/if}
+                        <Trash2Icon class={"absolute right-[60px] hover:cursor-pointer" + ((i == positions.posList.length-1 || i == 0) ? " top-3" : " top-7")} onclick={() => deletePosition(position.id)} size={32} />
                     <Accordion.Content class="px-5">
                         <p class="mt-1">Career: { position.career }</p><br>
                         <p class="mt-1">Description: { position.host?.company?.companyDescription}</p>
@@ -114,7 +113,6 @@
                     </Accordion.Item>
                 {/each}
             </Accordion.Root>
-        </div>
         {:else}
             <h1 class="text-center">No favorite jobs selected.</h1>
         {/if}

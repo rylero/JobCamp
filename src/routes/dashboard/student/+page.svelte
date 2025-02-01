@@ -79,8 +79,8 @@
                     <Accordion.Trigger class={"relative text-md md:text-lg text-left bg-slate-100 hover:bg-slate-200 rounded-t-sm px-5 pl-9" + ((i == positions.posList.length-1 || i == 0) ? " min-h-[60px]" : " min-h-[110px]")}>
                         <span class="pl-12 pr-32 text-wrap">{position.host?.company?.companyName} - {position.title}</span>
                     </Accordion.Trigger>
-                    {#if i != positions.posList.length-1}<ArrowBigDown class={"absolute left-3 hover:cursor-pointer" + ((i == 0) ? " top-2" : " top-12")} size={48} onclick={() => moveUp(position.id)} />{/if}
-                    {#if i != 0}<ArrowBigUp class="absolute top-3 left-3 hover:cursor-pointer" size={48} onclick={() => moveDown(position.id)} />{/if}
+                    {#if i != positions.posList.length-1}<ArrowBigDown class={"absolute left-3 hover:cursor-pointer" + ((i == 0) ? " top-2" : " top-14")} size={48} onclick={() => moveUp(position.id)} />{/if}
+                    {#if i != 0}<ArrowBigUp class="absolute top-1.5 left-3 hover:cursor-pointer" size={48} onclick={() => moveDown(position.id)} />{/if}
                     <Trash2Icon class={"absolute right-[60px] hover:cursor-pointer" + ((i == positions.posList.length-1 || i == 0) ? " top-4" : " top-10")} onclick={() => deletePosition(position.id)} size={32} />
                     <Accordion.Content class="px-5">
                         <p class="mt-1">Career: { position.career }</p><br>

@@ -20,7 +20,7 @@
         <div class="flex flex-col justify-center items-center gap-2">
             <Button class="w-32 text-lg" onclick={companySignup}>Company</Button>
             <Button class="w-32 text-lg" onclick={studentSignup}>Student*</Button>
-            <span class="text-sm italic w-40 text-center">*Last years account will not work.</span>
+            <span class="text-sm italic w-40 text-center">*Student accounts from last year will not work.</span>
         </div>
         <a href='/login' class="text-lg">I already have an account</a>
     </div>

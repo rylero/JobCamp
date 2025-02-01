@@ -73,7 +73,7 @@
     <div class={"w-fit flex flex-col gap-2 justify-start items-start p-4" + leftWidth}>
         <h1 class="text-2xl pb-4">My Favorite Jobs</h1>
         {#if positions.posList.length != 0}
-        <Accordion.Root class="w-fit md:w-full mr-7">
+        <Accordion.Root type="multiple">
             {#each positions.posList as position, i}
                 <Accordion.Item value={position.id} class="my-2 relative">
                 <Accordion.Trigger class={"relative text-xl text-left bg-slate-100 hover:bg-slate-200 rounded-t-sm px-5" + ((i == positions.posList.length-1 || i == 0) ? " min-h-[60px]" : " min-h-[90px]")}>

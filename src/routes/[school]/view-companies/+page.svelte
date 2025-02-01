@@ -56,10 +56,10 @@
         {#each terms as term}
             <Button class="text-xl sm:text-sm" variant={selectedTerm == term ? 'default' : 'outline'} onclick={() => selectTerm(term)}>{term}</Button>
             {#if selectedTerm == term}
-            <div class="flex sm:hidden flex-col w-full h-full">
-                <Accordion.Root class="w-full">
-                    {#each filteredPositions as position}
-                      <Accordion.Item value={position.id} class="my-2">
+            <div class="mx-4 mt-2 w-fit">
+                <Accordion.Root type="multiple">
+                    {#each filteredPositions as position, index}
+                    <Accordion.Item value={position.id} class="my-2">
                         <Accordion.Trigger class="text-xl bg-slate-100 hover:bg-slate-200 rounded-t-sm px-5">
                             <span>{position.host?.company?.companyName} - {position.title}</span>
                         </Accordion.Trigger>
@@ -91,7 +91,7 @@
                             <p class="">Start: { position.start }</p>
                             <p class="">End: { position.end }</p>
                         </Accordion.Content>
-                      </Accordion.Item>
+                    </Accordion.Item>
                     {/each}
                 </Accordion.Root>
             </div>
@@ -102,42 +102,44 @@
         {#if selectedTerm == ""}
             <h1 class="text-xl text-center mt-5">Nothing selected. Choose a Company or Career to view positions.</h1>
         {/if}
-        <Accordion.Root class="w-full px-10 my-5">
-            {#each filteredPositions as position}
-              <Accordion.Item value={position.id} class="my-2">
-                <Accordion.Trigger class="text-xl bg-slate-100 hover:bg-slate-200 rounded-t-sm px-5">
-                    <span>{position.host?.company?.companyName} - {position.title}</span>
-                </Accordion.Trigger>
-                <Accordion.Content class="px-5">
-                    <p class="mt-1">Career: { position.career }</p><br>
-                    <p class="mt-1">Description: { position.host?.company?.companyDescription}</p>
-                    <p class="mt-1">URL: {position.host?.company?.companyUrl}</p>
-                    <p class=""># of slots for students: { position.slots }</p>
-            
-                    <hr class="my-2">
-            
-            <p class=" whitespace-pre-line">
-            Address:
-            { position.address }
-            
-            Summary:
-            { position.summary }
-            
-            Instructions For Students:
-            { position.instructions }
-            
-            Attire:
-            { position.attire }        
-            </p>
-            
-                    <hr class="my-2">
-                    
-                    <p class="">Arrival: { position.arrival }</p>
-                    <p class="">Start: { position.start }</p>
-                    <p class="">End: { position.end }</p>
-                </Accordion.Content>
-              </Accordion.Item>
-            {/each}
-        </Accordion.Root>
+        <div class="mx-4 mt-2">
+            <Accordion.Root type="multiple">
+                {#each filteredPositions as position, index}
+                <Accordion.Item value={position.id} class="my-2">
+                    <Accordion.Trigger class="text-xl bg-slate-100 hover:bg-slate-200 rounded-t-sm px-5">
+                        <span>{position.host?.company?.companyName} - {position.title}</span>
+                    </Accordion.Trigger>
+                    <Accordion.Content class="px-5">
+                        <p class="mt-1">Career: { position.career }</p><br>
+                        <p class="mt-1">Description: { position.host?.company?.companyDescription}</p>
+                        <p class="mt-1">URL: {position.host?.company?.companyUrl}</p>
+                        <p class=""># of slots for students: { position.slots }</p>
+                
+                        <hr class="my-2">
+                
+                <p class=" whitespace-pre-line">
+                Address:
+                { position.address }
+                
+                Summary:
+                { position.summary }
+                
+                Instructions For Students:
+                { position.instructions }
+                
+                Attire:
+                { position.attire }        
+                </p>
+                
+                        <hr class="my-2">
+                        
+                        <p class="">Arrival: { position.arrival }</p>
+                        <p class="">Start: { position.start }</p>
+                        <p class="">End: { position.end }</p>
+                    </Accordion.Content>
+                </Accordion.Item>
+                {/each}
+            </Accordion.Root>
+        </div>
     </div>
 </div>

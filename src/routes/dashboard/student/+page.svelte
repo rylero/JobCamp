@@ -70,17 +70,17 @@
 <Navbar loggedIn={true} isHost={false} />
 
 <div class="flex flex-col md:flex-row w-full min-h-screen pt-20">
-    <div class={"flex flex-col gap-2 justify-start items-start p-4" + leftWidth}>
+    <div class={"w-fit flex flex-col gap-2 justify-start items-start p-4" + leftWidth}>
         <h1 class="text-2xl pb-4">My Favorite Jobs</h1>
         {#if positions.posList.length != 0}
-        <Accordion.Root class="w-full">
+        <Accordion.Root class="w-fit md:w-full mr-7">
             {#each positions.posList as position, i}
                 <Accordion.Item value={position.id} class="my-2 relative">
-                {#if i != positions.posList.length-1}<ArrowBigDown class={"absolute left-5 hover:cursor-pointer" + ((i == 0) ? " top-12" : " top-20")} size={32} onclick={() => moveUp(position.id)} />{/if}
-                {#if i != 0}<ArrowBigUp class="absolute top-12 left-5 hover:cursor-pointer" size={32} onclick={() => moveDown(position.id)} />{/if}
-                <Trash2Icon class="absolute left-[20px] top-3 hover:cursor-pointer" onclick={() => deletePosition(position.id)} size={32} />
-                <Accordion.Trigger class={"text-xl text-left bg-slate-100 hover:bg-slate-200 rounded-t-sm px-5" + ((i == positions.posList.length-1 || i == 0) ? " h-[90px]" : " h-[120px]")}>
-                    <span class="pl-12 pr-2">{position.host?.company?.companyName} - {position.title}</span>
+                <Accordion.Trigger class={"relative text-xl text-left bg-slate-100 hover:bg-slate-200 rounded-t-sm px-5" + ((i == positions.posList.length-1 || i == 0) ? " min-h-[60px]" : " min-h-[90px]")}>
+                    <span class="pl-12 pr-32">{position.host?.company?.companyName} - {position.title}</span>
+                    {#if i != positions.posList.length-1}<ArrowBigDown class={"absolute left-5 hover:cursor-pointer" + ((i == 0) ? " top-3" : " top-12")} size={32} onclick={() => moveUp(position.id)} />{/if}
+                        {#if i != 0}<ArrowBigUp class="absolute top-3 left-5 hover:cursor-pointer" size={32} onclick={() => moveDown(position.id)} />{/if}
+                    <Trash2Icon class="absolute right-[60px] top-1/2 -translate-y-1/2 hover:cursor-pointer" onclick={() => deletePosition(position.id)} size={32} />
                 </Accordion.Trigger>
                 <Accordion.Content class="px-5">
                     <p class="mt-1">Career: { position.career }</p><br>

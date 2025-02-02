@@ -41,7 +41,7 @@
         {#if $errors.password}<span class="text-sm text-red-500">{$errors.password}</span>{/if}
         
         <div class="flex max-w-full w-96 justify-center">
-            <label><Checkbox bind:checked={showPassword} /> Show Password</label>
+            <label><input type="checkbox" bind:checked={showPassword} /> Show Password</label>
         </div>
 
         <button type="submit" class="mt-2 w-24 h-8 rounded bg-blue-500 text-white hover:bg-blue-600">Login</button>

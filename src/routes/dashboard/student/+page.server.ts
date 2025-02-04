@@ -78,9 +78,9 @@ export const actions: Actions = {
 
         let newPositionsOnStudents = positionsOnStudents.filter(val => val.positionId != posId);
 
-        let positions = newPositionsOnStudents.map((val) => {
+        let positions = newPositionsOnStudents.map((val, i) => {
             return { 
-                rank: val.rank, 
+                rank: i,
                 studentId: val.studentId,
                 positionId: val.positionId,
             };

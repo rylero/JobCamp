@@ -3,7 +3,7 @@ ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
 RUN corepack disable
 RUN corepack enable
-RUN corepack prepare pnpm@latest --activate
+RUN COREPACK_INTEGRITY_KEYS=0 corepack prepare pnpm@latest --activate
 
 RUN apt-get update -y
 RUN apt-get install -y openssl

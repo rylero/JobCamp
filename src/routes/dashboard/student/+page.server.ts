@@ -39,11 +39,15 @@ export const load: PageServerLoad = async (event) => {
 
 
 export const actions: Actions = {
-    deletePosition: async({ request, locals, cookies }) => {
+    update: async({ request, locals, cookies }) => {
         const data = await request.formData();
 
-        const posId = data.get("id")?.toString();
-        if (!posId) {
+        let posIdsString = data.get("posIds")?.toString();
+        if (!posIdsString) {
+            redirect(302, "/about");
+        }
+        let posIds = JSON.parse(posIdsString).positions;
+        if (!posIds) {
             redirect(302, "/about");
         }
 
@@ -58,102 +62,21 @@ export const actions: Actions = {
             redirect(302, "/login");
         }
 
-        let positionsOnStudents = await prisma.positionsOnStudents.findMany({
-            where: {studentId: student.id},
-            orderBy: { rank: "asc" },
-            include: { position: {
-                include: {
-                    host: {
-                        include: {
-                            company: true
-                        }
-                    }
-                }
-            } }
-        });
-
-        await prisma.positionsOnStudents.deleteMany({
-            where: { studentId: studentId}
-        })
-
-        let newPositionsOnStudents = positionsOnStudents.filter(val => val.positionId != posId);
-
-        let positions = newPositionsOnStudents.map((val, i) => {
+        let positions = posIds.map((val: string, i: number) => {
             return { 
                 rank: i,
-                studentId: val.studentId,
-                positionId: val.positionId,
+                studentId: student.id,
+                positionId: val,
             };
         })
 
-        await prisma.positionsOnStudents.createMany({
-            data: positions
-        });
+        await prisma.$transaction([
+            prisma.positionsOnStudents.deleteMany({
+                where: { studentId: studentId}
+            }),
+            prisma.positionsOnStudents.createMany({
+                data: positions
+            })
+        ]);
     },
-    move: async({request, locals, cookies}) => {
-        const data = await request.formData();
-
-        const posId = data.get("id")?.toString();
-        if (!posId) {
-            redirect(302, "/about");
-        }
-
-        const direction = data.get("dir")?.toString();
-        if (!direction) {
-            redirect(302, "/about");
-        }
-
-        const id = locals.user?.id;
-        if (!id) {
-            redirect(302, "/login");
-        }
-
-        const student = await prisma.student.findFirst({where: {userId: id}});
-        const studentId = student?.id;
-        if (!studentId) {
-            redirect(302, "/login");
-        }
-
-        let positionsOnStudents = await prisma.positionsOnStudents.findMany({
-            where: {studentId: student.id},
-            orderBy: { rank: "asc" },
-            include: { position: {
-                include: {
-                    host: {
-                        include: {
-                            company: true
-                        }
-                    }
-                }
-            } }
-        });
-
-        await prisma.positionsOnStudents.deleteMany({
-            where: { studentId: studentId}
-        })
-
-        let posRankIndex = 0;
-        for (let i = 0; i < positionsOnStudents.length; i++) {
-            if (positionsOnStudents[i].positionId == posId) {
-                posRankIndex = i;
-            }
-        }
-
-        var dir = direction == "down" ? -1 : 1;
-        var temp = positionsOnStudents[posRankIndex - dir];
-        positionsOnStudents[posRankIndex - dir] = positionsOnStudents[posRankIndex];
-        positionsOnStudents[posRankIndex] = temp;
-
-        let positions = positionsOnStudents.map((val, i) => {
-            return { 
-                rank: i, 
-                studentId: val.studentId,
-                positionId: val.positionId,
-            };
-        })
-
-        await prisma.positionsOnStudents.createMany({
-            data: positions
-        });
-    }
 }

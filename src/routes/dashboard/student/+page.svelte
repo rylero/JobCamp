@@ -11,11 +11,13 @@
 
     const deletePosition = async (posID: string) => {
         positions.posList = positions.posList.filter((val) => val.id != posID);
-
+        
+        let posIds = positions.posList.map(val => val.id);
+        
         const fdata = new FormData();
-        fdata.append("id", posID);
+        fdata.append("posIds", JSON.stringify({ positions: posIds }));
 
-        await fetch("?/deletePosition", {
+        await fetch("?/update", {
             method: "post",
             body: fdata
         });
@@ -33,11 +35,12 @@
         positions.posList[posRankIndex + 1] = positions.posList[posRankIndex];
         positions.posList[posRankIndex] = temp;
 
+        let posIds = positions.posList.map(val => val.id);
+        
         const fdata = new FormData();
-        fdata.append("id", posID);
-        fdata.append("dir", "down");
+        fdata.append("posIds", JSON.stringify({ positions: posIds }));
 
-        await fetch("?/move", {
+        await fetch("?/update", {
             method: "post",
             body: fdata
         });
@@ -55,11 +58,12 @@
         positions.posList[posRankIndex - 1] = positions.posList[posRankIndex];
         positions.posList[posRankIndex] = temp;
 
+        let posIds = positions.posList.map(val => val.id);
+        
         const fdata = new FormData();
-        fdata.append("id", posID);
-        fdata.append("dir", "up");
+        fdata.append("posIds", JSON.stringify({ positions: posIds }));
 
-        await fetch("?/move", {
+        await fetch("?/update", {
             method: "post",
             body: fdata
         });

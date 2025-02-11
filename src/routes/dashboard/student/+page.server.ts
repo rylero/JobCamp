@@ -63,7 +63,7 @@ export const actions: Actions = {
         }
 
         let positions = posIds.map((val: string, i: number) => {
-            return { 
+            return {
                 rank: i,
                 studentId: student.id,
                 positionId: val,

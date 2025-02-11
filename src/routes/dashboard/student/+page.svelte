@@ -13,6 +13,7 @@
         positions.posList = positions.posList.filter((val) => val.id != posID);
         
         let posIds = positions.posList.map(val => val.id);
+        console.log(posIds);
         
         const fdata = new FormData();
         fdata.append("posIds", JSON.stringify({ positions: posIds }));

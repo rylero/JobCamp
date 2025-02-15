@@ -103,7 +103,7 @@
                 <Accordion.Root type="multiple">
                     {#each filteredPositions as position, index}
                     <Accordion.Item value={position.id} class="my-2">
-                        <Accordion.Trigger class="text-xl bg-slate-100 hover:bg-slate-200 rounded-t-sm px-5">
+                        <Accordion.Trigger class="text-xl bg-slate-100 hover:bg-slate-200 rounded-t-sm px-5" onclick={(event) => window.scrollTo(0, event.clientY)}>
                             <span>{position.host?.company?.companyName} - {position.title}</span>
                         </Accordion.Trigger>
                         <Accordion.Content class="px-5">
@@ -176,7 +176,7 @@
             <Accordion.Root type="multiple">
                 {#each filteredPositions as position, index}
                 <Accordion.Item value={position.id} class="my-2">
-                    <Accordion.Trigger class="text-xl bg-slate-100 hover:bg-slate-200 rounded-t-sm px-5">
+                    <Accordion.Trigger class="text-xl bg-slate-100 hover:bg-slate-200 rounded-t-sm px-5" onclick={(event) => window.scrollTo(0, event.clientY)}>
                         <span>{position.host?.company?.companyName} - {position.title}</span>
                     </Accordion.Trigger>
                     <Accordion.Content class="px-5">

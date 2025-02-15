@@ -1,7 +1,9 @@
 FROM node:22-bookworm-slim AS build
 ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
+RUN corepack disable
 RUN corepack enable
+RUN COREPACK_INTEGRITY_KEYS=0 corepack prepare pnpm@latest --activate
 
 RUN apt-get update -y
 RUN apt-get install -y openssl

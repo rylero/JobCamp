@@ -54,7 +54,11 @@
         </div>
         <hr class="border-t-2 border-t-slate-950 w-full" />
         {#each terms as term}
-            <Button class="text-xl sm:text-sm" variant={selectedTerm == term ? 'default' : 'outline'} onclick={() => selectTerm(term)}>{term}</Button>
+            <Button class="text-xl sm:text-sm hidden sm:block" variant={selectedTerm == term ? 'default' : 'outline'} onclick={() => {
+                selectTerm(term);
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }}>{term}</Button>
+            <Button  class="text-xl sm:text-sm sm:hidden" variant={selectedTerm == term ? 'default' : 'outline'} onclick={() => selectTerm(term)}>{term}</Button>
             {#if selectedTerm == term}
             <div class="sm:hidden mx-4 mt-2 w-fit">
                 <Accordion.Root type="multiple">
@@ -106,7 +110,7 @@
             <Accordion.Root type="multiple">
                 {#each filteredPositions as position, index}
                 <Accordion.Item value={position.id} class="my-2">
-                    <Accordion.Trigger class="text-xl bg-slate-100 hover:bg-slate-200 rounded-t-sm px-5" onclick={(event) => window.scrollTo(0, 0)}>
+                    <Accordion.Trigger class="text-xl bg-slate-100 hover:bg-slate-200 rounded-t-sm px-5" onclick={(event) => window.scrollTo({ top: 0, behavior: 'smooth' })}>
                         <span>{position.host?.company?.companyName} - {position.title}</span>
                     </Accordion.Trigger>
                     <Accordion.Content class="px-5">

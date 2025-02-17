@@ -108,40 +108,32 @@ export const actions: Actions = {
             redirect(302, "/login");
         }
 
-        const positionOnStudent = await prisma.positionsOnStudents.deleteMany({
-            where: { studentId: studentId, positionId: posId}
+        let posIds: any = await prisma.positionsOnStudents.findMany({ where: { studentId: studentId }});
+
+        posIds.push({ positionId: posId });
+
+        let deleted = false
+        posIds = posIds.filter((val: any) => {
+            deleted = true;
+            return val.positionId == posId;
+        });
+
+        let positions = posIds.map((val: any, i: number) => {
+            return {
+                rank: i,
+                studentId: student.id,
+                positionId: val.positionId,
+            };
         })
 
-        if (positionOnStudent.count == 0) { // no record exsited, we should add one as this means the checkbox was just checked
-            const highestRank = await prisma.positionsOnStudents.findFirst({
-                where: { studentId: studentId },
-                orderBy: {
-                    rank: "desc"
-                },
-            });
-
-            let max = 0;
-            if (highestRank) {
-                max = highestRank.rank+1;
-            }
-
-
-            const res = await prisma.positionsOnStudents.create({
-                data: {
-                    student: {
-                        connect: {
-                            id: studentId,
-                        }
-                    },
-                    position: {
-                        connect: {
-                            id: posId,
-                        }
-                    },
-                    rank: max
-                }
-            });
-        }
+        await prisma.$transaction([
+            prisma.positionsOnStudents.deleteMany({
+                where: { studentId: studentId }
+            }),
+            prisma.positionsOnStudents.createMany({
+                data: positions
+            })
+        ]);
 
         return { sent: false, err: false };
     }

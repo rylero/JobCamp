@@ -72,7 +72,7 @@ export const actions: Actions = {
 
         await prisma.$transaction([
             prisma.positionsOnStudents.deleteMany({
-                where: { studentId: studentId}
+                where: { studentId: studentId }
             }),
             prisma.positionsOnStudents.createMany({
                 data: positions

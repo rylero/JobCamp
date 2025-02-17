@@ -110,9 +110,11 @@ export const actions: Actions = {
 
         let posIds: any = await prisma.positionsOnStudents.findMany({ where: { studentId: studentId }});
 
-        let deleted = false
+        let deleted = false;
         posIds = posIds.filter((val: any) => {
-            deleted = true;
+            if (val.positionId == posId) {
+                deleted = true;
+            }
             return val.positionId != posId;
         });
 

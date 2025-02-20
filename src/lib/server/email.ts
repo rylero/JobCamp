@@ -4,6 +4,7 @@ import verificationEmail from "$lib/emails/emailVerification.html?raw";
 import resetPasswordEmail from "$lib/emails/resetPassword.html?raw";
 import permissionSlipEmail from "$lib/emails/permissionSlip.html?raw";
 import positionUpdateEmail from "$lib/emails/positionUpdate.html?raw";
+import hostEmailTemp from "$lib/emails/hostEmailTemp.html?raw";
 
 export const emailClient = new MailtrapClient({ token: env.MAILTRAP_TOKEN });
 
@@ -60,5 +61,15 @@ export async function sendPositionUpdateEmail(hostEmail: string, position: any) 
         to:  [{ email: hostEmail }],
         subject: "JobCamp.org position created/updated for March 10, 2025",
         html: renderEmailTemplate(positionUpdateEmail, position)
+    });
+}
+
+export async function sendHostEmail(hostEmail: string, info: any) {
+    // console.log(hostEmail, renderEmailTemplate(hostEmailTemp, info), "\n\n\n\n\n");
+    await emailClient.send({
+        from: SENDER,
+        to:  [{ email: hostEmail }],
+        subject: "Job Shadow Day update",
+        html: renderEmailTemplate(hostEmailTemp, info)
     });
 }

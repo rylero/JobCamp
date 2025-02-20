@@ -18,9 +18,9 @@
     <div class="flex flex-col justify-between items-center gap-16 py-10 px-10 border-2 rounded-lg shadow-2xl">
         <h1 class="text-5xl">Sign Up</h1>
         <div class="flex flex-col justify-center items-center gap-2">
-            <Button class="w-32 text-lg" onclick={companySignup}>Company</Button>
-            <Button class="w-32 text-lg" onclick={studentSignup}>Student*</Button>
-            <span class="text-sm italic w-40 text-center">*Student accounts from last year will not work.</span>
+            <Button class="w-32 text-lg" onclick={studentSignup}>Student</Button>
+            <Button disabled class="w-32 text-lg" onclick={companySignup}>Company</Button>
+            <span class="text-sm italic w-40 text-center">*The company signup window has past.</span>
         </div>
         <a href='/login' class="text-lg">I already have an account</a>
     </div>

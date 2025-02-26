@@ -85,7 +85,7 @@
     </div>
     <div class="flex flex-col gap-4 pb-5">
         {#if loggedIn && !isHost}
-            <Button href="/dashboard/student/pick" variant="link" class="text-white text-xl">Pick Favorites</Button>
+            <!-- <Button href="/dashboard/student/pick" variant="link" class="text-white text-xl">Pick Favorites</Button> -->
         {/if}
 
         {#if !loggedIn}

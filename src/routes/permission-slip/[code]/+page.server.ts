@@ -12,6 +12,7 @@ export const load: PageServerLoad = async (event) => {
         where: { code: code }
     });
     if (!permissionSlip) {
+        console.log("Test");
         redirect(302, "/permission-slip/error");
     }
 
@@ -19,6 +20,7 @@ export const load: PageServerLoad = async (event) => {
         where: { userId: permissionSlip.user_id }
     });
     if (!student) {
+        console.log("Tes2t");
         redirect(302, "/permission-slip/error");
     }
 

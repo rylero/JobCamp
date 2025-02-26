@@ -77,8 +77,8 @@
 
 <div class="flex flex-col md:flex-row w-full min-h-screen pt-20">
     <div class={"flex flex-col gap-2 justify-start items-center md:m-4" + leftWidth}>
-        <h1 class="text-2xl text-center w-full mt-4 md:mt-0">My Favorite Jobs</h1>
-        {#if positions.posList.length != 0}
+        <h1 class="text-2xl text-center w-full mt-4 md:mt-0">Check back soon. The lottery is being run!</h1>
+        <!-- {#if positions.posList.length != 0}
             <Accordion.Root type="multiple"  class="mt-2 max-w-screen md:w-full md:px-4 mx-4">
                 {#each positions.posList as position, i}
                     <Accordion.Item value={position.id} class="my-2 relative">
@@ -121,7 +121,7 @@
             </Accordion.Root>
         {:else}
             <h1 class="text-center">No favorite jobs selected.</h1>
-        {/if}
+        {/if} -->
     </div>
     <div class="flex flex-col w-full md:border-l-2 md:border-l-slate-950">
         <h1 class="text-2xl px-4 py-4 text-center w-full">Important Dates</h1>

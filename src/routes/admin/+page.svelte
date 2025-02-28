@@ -83,13 +83,13 @@
         value: v.id, 
         label: v.firstName + " " + v.lastName
     }
-    })
+    }).sort((a, b) => a.label.localeCompare(b.label));
 
     let positionNames = positions.map(v => {return { 
         value: v.id, 
         label: v.host.company?.companyName + " - " + v.title
     }
-    })
+    }).sort((a, b) => a.label.localeCompare(b.label));
     
     let open = $state(false);
     let value = $state("");

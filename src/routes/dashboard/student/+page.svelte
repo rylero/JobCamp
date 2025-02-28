@@ -3,8 +3,11 @@
     import * as Accordion from "$lib/components/ui/accordion/index.js";
     import { ArrowBigDown, ArrowBigUp, Trash2Icon } from "lucide-svelte";
     import { dates } from "./important-dates.json";
+    import { Label } from "$lib/components/ui/label";
+    import { Input } from "$lib/components/ui/input";
+    import { enhance } from "$app/forms";
 
-    let { data } = $props();
+    let { data, form } = $props();
 
     // const deletePosition = async (posID: string) => {
     //     positions.posList = positions.posList.filter((val) => val.id != posID);
@@ -129,6 +132,21 @@
         {/if}
     </div>
     <div class="flex flex-col w-full md:border-l-2 md:border-l-slate-950">
+        {#if !data.permissionSlipCompleted}
+        <div class="hidden sm:flex flex-col px-10 py-4 border rounded-lg m-3 bg-yellow-100">
+            <span class="text-2xl">To add Favorite Jobs, your parent permission slip must be completed. To resend the permission slip, enter your parent's email address:</span>
+            <form class="flex items-end gap-6 mt-3" method="post" action="?/sendPermissionSlip" use:enhance>
+                <Label>Parent Email<Input type="email" name="parent-email" bind:value={data.parentEmail} class="max-w-72" /></Label>
+                <button type="submit" class="px-5 py-2 bg-blue-600 hover:bg-blue-500 rounded-md text-white">Send</button>
+                {#if form && form.sent}
+                    <span class="text-green-500 text-lg font-bold pb-1.5">Sent</span>
+                {/if}
+                {#if form && form.err}
+                    <span class="text-green-500 text-lg font-bold pb-1.5">Internal Error</span>
+                {/if}
+            </form>
+        </div>
+        {/if}
         <h1 class="text-2xl px-4 py-4 text-center w-full">Important Dates</h1>
         {#each dates as info}
             <div class="m-2 mx-4 p-4 rounded-md shadow-xl border-2">

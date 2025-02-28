@@ -74,7 +74,6 @@
 
 <div class="flex flex-col md:flex-row w-full min-h-screen pt-20">
     <div class={"flex flex-col gap-2 justify-start items-center md:m-4" + leftWidth}>
-
         {#if data.lotteryResult}
             <h1 class="text-2xl text-center w-full mt-4 md:mt-0">
                 PLEASE CHECK ALL DETAILS OF THE POSITION, INCLUDING FORMS TO COMPLETE, START TIME, LOCATION, REQUIRED ID (if needed) and INFO TO SEND TO admin@jobcamp.org
@@ -123,7 +122,9 @@
                 </Accordion.Item>
             </Accordion.Root>
         {:else}
-            <h1 class="text-center">The positions you selected are full. We have many available openings. If interested, please email admin@jobcamp.org and we'll respond right away with options.</h1>
+            <h1 class="text-center">
+                The positions you selected are full. We have many available openings. View them <a class="text-blue-500" href="https://docs.google.com/spreadsheets/d/1pN_QKfq2xJNiTxP2p20PWGmJYC_lOK_I2iOfDw_kS9k/edit?gid=0#gid=0">here.</a>
+            </h1>
         {/if}
     </div>
     <div class="flex flex-col w-full md:border-l-2 md:border-l-slate-950">

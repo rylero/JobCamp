@@ -92,6 +92,12 @@
                     <p class=""># of slots for students: { data.lotteryResult.slots }</p>
             
                     <hr class="my-2">
+                    
+                    <p class="">Arrival: { data.lotteryResult.arrival }</p>
+                    <p class="">Start: { data.lotteryResult.start }</p>
+                    <p class="">End: { data.lotteryResult.end }</p>
+                    
+                    <hr class="my-2">
             
             <p class=" whitespace-pre-line">
             Address:
@@ -113,11 +119,6 @@
             { data.lotteryResult.attire }        
             </p>
             
-                    <hr class="my-2">
-                    
-                    <p class="">Arrival: { data.lotteryResult.arrival }</p>
-                    <p class="">Start: { data.lotteryResult.start }</p>
-                    <p class="">End: { data.lotteryResult.end }</p>
                 </Accordion.Content>
                 </Accordion.Item>
             </Accordion.Root>

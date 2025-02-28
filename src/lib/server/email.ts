@@ -5,6 +5,7 @@ import resetPasswordEmail from "$lib/emails/resetPassword.html?raw";
 import permissionSlipEmail from "$lib/emails/permissionSlip.html?raw";
 import positionUpdateEmail from "$lib/emails/positionUpdate.html?raw";
 import hostEmailTemp from "$lib/emails/hostEmailTemp.html?raw";
+import lotteryResults from "$lib/emails/lotteryResults.html?raw";
 
 export const emailClient = new MailtrapClient({ token: env.MAILTRAP_TOKEN });
 
@@ -17,6 +18,15 @@ export function renderEmailTemplate(emailHtml: string, params: EmailParams) {
         emailHtml = emailHtml.replaceAll("${"+name+"}", params[name]);
     });
     return emailHtml;
+}
+
+export async function sendEmailLotteryEmail(email:string) {
+    await emailClient.send({
+        from: SENDER,
+        to:  [{ email: email }],
+        subject: "JobCamp lottery results are out!",
+        html: lotteryResults
+    });
 }
 
 export async function sendEmailVerificationEmail(uid: string, email: string, code: string) {

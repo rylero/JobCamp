@@ -1,75 +1,238 @@
 <script lang="ts">
-    import Button from "$lib/components/ui/button/button.svelte";
-    import Input from "$lib/components/ui/input/input.svelte";
-    import Label from "$lib/components/ui/label/label.svelte";
-    import * as Table from "$lib/components/ui/table/index.js";
-    import Textarea from "$lib/components/ui/textarea/textarea.svelte";
+    import Check from "lucide-svelte/icons/check";
+    import ChevronsUpDown from "lucide-svelte/icons/chevrons-up-down";
+    import { tick } from "svelte";
+    import * as Command from "$lib/components/ui/command/index.js";
+    import * as Popover from "$lib/components/ui/popover/index.js";
+    import { Button } from "$lib/components/ui/button/index.js";
+    import { cn } from "$lib/utils.js";
 
-    let showingDraft = $state(false);
+    // import Button from "$lib/components/ui/button/button.svelte";
+    // import Input from "$lib/components/ui/input/input.svelte";
+    // import Label from "$lib/components/ui/label/label.svelte";
+    // import * as Table from "$lib/components/ui/table/index.js";
+    // import Textarea from "$lib/components/ui/textarea/textarea.svelte";
 
-    let query = $state({
-        hosts: {
-            active: false,
-            emailVerified: { value: false, active: false },
-            positions: { value: "=0", active: false },
-        }
-    });
+    // let showingDraft = $state(false);
 
-    let queryString = $derived(JSON.stringify(query))
+    // let query = $state({
+    //     hosts: {
+    //         active: false,
+    //         emailVerified: { value: false, active: false },
+    //         positions: { value: "=0", active: false },
+    //     }
+    // });
 
-    let data: any = $state(null);
-    async function getData() {
-        let res = await fetch('api/adminQuery', {
-            method: "POST",
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(query)
-        })
-        return await res.json();
-    };
+    // let queryString = $derived(JSON.stringify(query))
 
-    function addPrefixToProps(obj: any, prefix: string) {
-        let newObj: any = {};
-        for (const key in obj) {
-            if (obj.hasOwnProperty(key)) {
-                newObj[prefix + key] = obj[key];
-            }
-        }
-        return newObj;
+    // let data: any = $state(null);
+    // async function getData() {
+    //     let res = await fetch('api/adminQuery', {
+    //         method: "POST",
+    //         headers: {
+    //             'Content-Type': 'application/json'
+    //         },
+    //         body: JSON.stringify(query)
+    //     })
+    //     return await res.json();
+    // };
+
+    // function addPrefixToProps(obj: any, prefix: string) {
+    //     let newObj: any = {};
+    //     for (const key in obj) {
+    //         if (obj.hasOwnProperty(key)) {
+    //             newObj[prefix + key] = obj[key];
+    //         }
+    //     }
+    //     return newObj;
+    // }
+
+    // export const flattenObject = (obj: any) => {
+    //     let flattened: any = {};
+
+    //     Object.keys(obj).forEach((key) => {
+    //         const value = obj[key]
+
+    //         if (typeof value === 'object' && value !== null && !Array.isArray(value)) {
+    //             Object.assign(flattened, flattenObject(addPrefixToProps(value, key + ".")))
+    //         } else {
+    //             flattened[key] = value
+    //         }
+    //     })
+
+    //     return flattened;
+    // }
+
+    // const props = (data: any) => {
+    //     if (!data || data.length == 0) {
+    //         return [];
+    //     }
+    //     let row = data[0];
+    //     return Object.keys(flattenObject(row));
+    // }
+
+    // const switchScreens = () => {
+    //     showingDraft = !showingDraft;
+    // }
+
+    let { data } = $props();
+    let positions = data.positions;
+    let students = data.students;
+
+    let studentNames = students.map(v => {return { 
+        value: v.id, 
+        label: v.firstName + " " + v.lastName
+    }
+    })
+
+    let positionNames = positions.map(v => {return { 
+        value: v.id, 
+        label: v.host.company?.companyName + " - " + v.title
+    }
+    })
+    
+    let open = $state(false);
+    let value = $state("");
+    let triggerRef = $state<HTMLButtonElement>(null!);
+    
+    const selectedValue = $derived(
+        studentNames.find((f) => f.value === value)?.label
+    );
+    
+    // We want to refocus the trigger button when the user selects
+    // an item from the list so users can continue navigating the
+    // rest of the form with the keyboard.
+    function closeAndFocusTrigger() {
+        open = false;
+        tick().then(() => {
+        triggerRef.focus();
+        });
     }
 
-    export const flattenObject = (obj: any) => {
-        let flattened: any = {};
 
-        Object.keys(obj).forEach((key) => {
-            const value = obj[key]
-
-            if (typeof value === 'object' && value !== null && !Array.isArray(value)) {
-                Object.assign(flattened, flattenObject(addPrefixToProps(value, key + ".")))
-            } else {
-                flattened[key] = value
-            }
-        })
-
-        return flattened;
+    let open2 = $state(false);
+    let value2 = $state("");
+    let triggerRef2 = $state<HTMLButtonElement>(null!);
+    
+    const selectedValue2 = $derived(
+        positionNames.find((f) => f.value === value2)?.label
+    );
+    
+    // We want to refocus the trigger button when the user selects
+    // an item from the list so users can continue navigating the
+    // rest of the form with the keyboard.
+    function closeAndFocusTrigger2() {
+        open2 = false;
+        tick().then(() => {
+        triggerRef2.focus();
+        });
     }
 
-    const props = (data: any) => {
-        if (!data || data.length == 0) {
-            return [];
-        }
-        let row = data[0];
-        return Object.keys(flattenObject(row));
-    }
 
-    const switchScreens = () => {
-        showingDraft = !showingDraft;
-    }
+    let studentPermissionSlip = $derived(students.filter(v => v.id == value)[0]?.permissionSlipCompleted);
 </script>
 
-<div class="flex">
-    {#if !showingDraft}
+<div>
+<Popover.Root bind:open>
+  <Popover.Trigger bind:ref={triggerRef}>
+    {#snippet child({ props })}
+      <Button
+        variant="outline"
+        class="w-[200px] justify-between"
+        {...props}
+        role="combobox"
+        aria-expanded={open}
+      >
+        {selectedValue || "Select a student..."}
+        <ChevronsUpDown class="ml-2 size-4 shrink-0 opacity-50" />
+      </Button>
+    {/snippet}
+  </Popover.Trigger>
+  <Popover.Content class="w-[200px] p-0">
+    <Command.Root>
+      <Command.Input placeholder="Search framework..." />
+      <Command.List>
+        <Command.Empty>No framework found.</Command.Empty>
+        <Command.Group>
+          {#each studentNames as framework}
+            <Command.Item
+              value={framework.value}
+              onSelect={() => {
+                value = framework.value;
+                closeAndFocusTrigger();
+              }}
+            >
+              <Check
+                class={cn(
+                  "mr-2 size-4",
+                  value !== framework.value && "text-transparent"
+                )}
+              />
+              {framework.label}
+            </Command.Item>
+          {/each}
+        </Command.Group>
+      </Command.List>
+    </Command.Root>
+  </Popover.Content>
+</Popover.Root>
+
+
+<Popover.Root bind:open={open2}>
+    <Popover.Trigger bind:ref={triggerRef2}>
+      {#snippet child({ props })}
+        <Button
+          variant="outline"
+          class="min-w-[300px] justify-between"
+          {...props}
+          role="combobox"
+          aria-expanded={open2}
+        >
+          {selectedValue2 || "Select a position..."}
+          <ChevronsUpDown class="ml-2 size-4 shrink-0 opacity-50" />
+        </Button>
+      {/snippet}
+    </Popover.Trigger>
+    <Popover.Content class="min-w-[300px] p-0">
+      <Command.Root>
+        <Command.Input placeholder="Search framework..." />
+        <Command.List>
+          <Command.Empty>No framework found.</Command.Empty>
+          <Command.Group>
+            {#each positionNames as framework}
+              <Command.Item
+                value={framework.value}
+                onSelect={() => {
+                  value2 = framework.value;
+                  closeAndFocusTrigger2();
+                }}
+              >
+                <Check
+                  class={cn(
+                    "mr-2 size-4",
+                    value2 !== framework.value && "text-transparent"
+                  )}
+                />
+                {framework.label}
+              </Command.Item>
+            {/each}
+          </Command.Group>
+        </Command.List>
+      </Command.Root>
+    </Popover.Content>
+  </Popover.Root>
+</div>
+<div>
+    Permission Slip: {studentPermissionSlip}
+    <form method="POST" action="?/add">
+        <input type="hidden" name="studentid" bind:value={value} />
+        <input type="hidden" name="positionid" bind:value={value2} />
+        <Button type="submit">Set</Button>
+    </form>
+</div>
+<!-- <div class="flex"> -->
+
+    <!-- {#if !showingDraft}
     <div class="p-4 border-r-2 border-slate-900 min-h-screen min-w-[24rem]">
         <Button class="text-lg" onclick={() => {
             query.hosts.active = !query.hosts.active;
@@ -149,5 +312,5 @@
     </div>
 
     <Button onclick={() => switchScreens()} class="fixed bottom-4 right-4 text-lg">Back</Button>
-    {/if}
-</div>
+    {/if} -->
+<!-- </div> -->

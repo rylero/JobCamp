@@ -93,10 +93,10 @@
             
                     <hr class="my-2">
                     
-                    <p class="">Arrival: { data.lotteryResult.arrival }</p>
-                    <p class="">Start: { data.lotteryResult.start }</p>
-                    <p class="">End: { data.lotteryResult.end }</p>
-                    
+                    <p class=" font-bold">Arrival: { data.lotteryResult.arrival }</p>
+                    <p class="font-bold">Start: { data.lotteryResult.start }</p>
+                    <p class="font-bold">End: { data.lotteryResult.end }</p>
+
                     <hr class="my-2">
             
             <p class=" whitespace-pre-line">

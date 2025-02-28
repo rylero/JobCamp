@@ -6,122 +6,125 @@
 
     let { data } = $props();
 
-    let positions = $state({ posList: data.positions });
-
-
-    const deletePosition = async (posID: string) => {
-        positions.posList = positions.posList.filter((val) => val.id != posID);
+    // const deletePosition = async (posID: string) => {
+    //     positions.posList = positions.posList.filter((val) => val.id != posID);
         
-        let posIds = positions.posList.map(val => val.id);
-        console.log(posIds);
+    //     let posIds = positions.posList.map(val => val.id);
+    //     console.log(posIds);
         
-        const fdata = new FormData();
-        fdata.append("posIds", JSON.stringify({ positions: posIds }));
+    //     const fdata = new FormData();
+    //     fdata.append("posIds", JSON.stringify({ positions: posIds }));
 
-        await fetch("?/update", {
-            method: "post",
-            body: fdata
-        });
-    }
+    //     await fetch("?/update", {
+    //         method: "post",
+    //         body: fdata
+    //     });
+    // }
 
-    const moveUp = async (posID: string) => {
-        let posRankIndex = 0;
-        for (let i = 0; i < positions.posList.length; i++) {
-            if (positions.posList[i].id == posID) {
-                posRankIndex = i;
-            }
-        }
+    // const moveUp = async (posID: string) => {
+    //     let posRankIndex = 0;
+    //     for (let i = 0; i < positions.posList.length; i++) {
+    //         if (positions.posList[i].id == posID) {
+    //             posRankIndex = i;
+    //         }
+    //     }
 
-        var temp = positions.posList[posRankIndex + 1];
-        positions.posList[posRankIndex + 1] = positions.posList[posRankIndex];
-        positions.posList[posRankIndex] = temp;
+    //     var temp = positions.posList[posRankIndex + 1];
+    //     positions.posList[posRankIndex + 1] = positions.posList[posRankIndex];
+    //     positions.posList[posRankIndex] = temp;
 
-        let posIds = positions.posList.map(val => val.id);
+    //     let posIds = positions.posList.map(val => val.id);
         
-        const fdata = new FormData();
-        fdata.append("posIds", JSON.stringify({ positions: posIds }));
+    //     const fdata = new FormData();
+    //     fdata.append("posIds", JSON.stringify({ positions: posIds }));
 
-        await fetch("?/update", {
-            method: "post",
-            body: fdata
-        });
-    }
+    //     await fetch("?/update", {
+    //         method: "post",
+    //         body: fdata
+    //     });
+    // }
 
-    const moveDown = async (posID: string) => {
-        let posRankIndex = 0;
-        for (let i = 0; i < positions.posList.length; i++) {
-            if (positions.posList[i].id == posID) {
-                posRankIndex = i;
-            }
-        }
+    // const moveDown = async (posID: string) => {
+    //     let posRankIndex = 0;
+    //     for (let i = 0; i < positions.posList.length; i++) {
+    //         if (positions.posList[i].id == posID) {
+    //             posRankIndex = i;
+    //         }
+    //     }
 
-        var temp = positions.posList[posRankIndex - 1];
-        positions.posList[posRankIndex - 1] = positions.posList[posRankIndex];
-        positions.posList[posRankIndex] = temp;
+    //     var temp = positions.posList[posRankIndex - 1];
+    //     positions.posList[posRankIndex - 1] = positions.posList[posRankIndex];
+    //     positions.posList[posRankIndex] = temp;
 
-        let posIds = positions.posList.map(val => val.id);
+    //     let posIds = positions.posList.map(val => val.id);
         
-        const fdata = new FormData();
-        fdata.append("posIds", JSON.stringify({ positions: posIds }));
+    //     const fdata = new FormData();
+    //     fdata.append("posIds", JSON.stringify({ positions: posIds }));
 
-        await fetch("?/update", {
-            method: "post",
-            body: fdata
-        });
-    }
+    //     await fetch("?/update", {
+    //         method: "post",
+    //         body: fdata
+    //     });
+    // }
     
-    let leftWidth = $derived(positions.posList.length == 0 ? " w-72" : " w-full");
+    let leftWidth = $derived(data.lotteryResult ? " w-full" : " w-72");
 </script>
 
 <Navbar loggedIn={true} isHost={false} />
 
 <div class="flex flex-col md:flex-row w-full min-h-screen pt-20">
     <div class={"flex flex-col gap-2 justify-start items-center md:m-4" + leftWidth}>
-        <h1 class="text-2xl text-center w-full mt-4 md:mt-0">Check back soon. The lottery is being run!</h1>
-        <!-- {#if positions.posList.length != 0}
-            <Accordion.Root type="multiple"  class="mt-2 max-w-screen md:w-full md:px-4 mx-4">
-                {#each positions.posList as position, i}
-                    <Accordion.Item value={position.id} class="my-2 relative">
-                    <Accordion.Trigger class={"relative text-md md:text-lg text-left bg-slate-100 hover:bg-slate-200 rounded-t-sm px-5 pl-9" + ((i == positions.posList.length-1 || i == 0) ? " min-h-[60px]" : " min-h-[110px]")}>
-                        <span class="pl-12 pr-32 text-wrap">{position.host?.company?.companyName} - {position.title}</span>
-                    </Accordion.Trigger>
-                    {#if i != positions.posList.length-1}<ArrowBigDown class={"absolute left-3 hover:cursor-pointer" + ((i == 0) ? " top-2" : " top-14")} size={48} onclick={() => moveUp(position.id)} />{/if}
-                    {#if i != 0}<ArrowBigUp class="absolute top-1.5 left-3 hover:cursor-pointer" size={48} onclick={() => moveDown(position.id)} />{/if}
-                    <Trash2Icon class={"absolute right-[60px] hover:cursor-pointer" + ((i == positions.posList.length-1 || i == 0) ? " top-4" : " top-10")} onclick={() => deletePosition(position.id)} size={32} />
-                    <Accordion.Content class="px-5">
-                        <p class="mt-1">Career: { position.career }</p><br>
-                        <p class="mt-1">Description: { position.host?.company?.companyDescription}</p>
-                        <p class="mt-1">URL: {position.host?.company?.companyUrl}</p>
-                        <p class=""># of slots for students: { position.slots }</p>
-                
-                        <hr class="my-2">
-                
-                <p class=" whitespace-pre-line">
-                Address:
-                { position.address }
-                
-                Summary:
-                { position.summary }
-                
-                Instructions For Students:
-                { position.instructions }
-                
-                Attire:
-                { position.attire }        
-                </p>
-                
-                        <hr class="my-2">
-                        
-                        <p class="">Arrival: { position.arrival }</p>
-                        <p class="">Start: { position.start }</p>
-                        <p class="">End: { position.end }</p>
-                    </Accordion.Content>
-                    </Accordion.Item>
-                {/each}
+
+        {#if data.lotteryResult}
+            <h1 class="text-2xl text-center w-full mt-4 md:mt-0">
+                PLEASE CHECK ALL DETAILS OF THE POSITION, INCLUDING FORMS TO COMPLETE, START TIME, LOCATION, REQUIRED ID (if needed) and INFO TO SEND TO admin@jobcamp.org
+                <br />
+                You've been assigned to the following position:
+            </h1>
+            <Accordion.Root type="single" value={data.lotteryResult.id}  class="mt-2 max-w-screen md:w-full md:px-4 mx-4">
+                <Accordion.Item value={data.lotteryResult.id} class="my-2 relative">
+                <Accordion.Trigger class="relative text-md md:text-lg text-left bg-slate-100 hover:bg-slate-200 rounded-t-sm px-5 pl-9 min-h-[110px]">
+                    <span class="pl-12 pr-32 text-wrap">{data.lotteryResult.host?.company?.companyName} - {data.lotteryResult.title}</span>
+                </Accordion.Trigger>
+                <Accordion.Content class="px-5">
+                    <p class="mt-1">Career: { data.lotteryResult.career }</p><br>
+                    <p class="mt-1">Description: { data.lotteryResult.host?.company?.companyDescription}</p>
+                    <p class="mt-1">URL: {data.lotteryResult.host?.company?.companyUrl}</p>
+                    <p class=""># of slots for students: { data.lotteryResult.slots }</p>
+            
+                    <hr class="my-2">
+            
+            <p class=" whitespace-pre-line">
+            Address:
+            { data.lotteryResult.address }
+            
+            Summary:
+            { data.lotteryResult.summary }
+            
+            Instructions For Students:
+            { data.lotteryResult.instructions }
+
+            Contact Name:
+            { data.lotteryResult.contact_name }
+
+            Contact Email:
+            { data.lotteryResult.contact_email }
+            
+            Attire:
+            { data.lotteryResult.attire }        
+            </p>
+            
+                    <hr class="my-2">
+                    
+                    <p class="">Arrival: { data.lotteryResult.arrival }</p>
+                    <p class="">Start: { data.lotteryResult.start }</p>
+                    <p class="">End: { data.lotteryResult.end }</p>
+                </Accordion.Content>
+                </Accordion.Item>
             </Accordion.Root>
         {:else}
-            <h1 class="text-center">No favorite jobs selected.</h1>
-        {/if} -->
+            <h1 class="text-center">The positions you selected are full. We have many available openings. If interested, please email admin@jobcamp.org and we'll respond right away with options.</h1>
+        {/if}
     </div>
     <div class="flex flex-col w-full md:border-l-2 md:border-l-slate-950">
         <h1 class="text-2xl px-4 py-4 text-center w-full">Important Dates</h1>

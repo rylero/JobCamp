@@ -10,31 +10,42 @@ export const load: PageServerLoad = async (event) => {
         redirect(302, "/verify-email");
     }
 
-    const student = await prisma.student.findFirst({ where: {
-        userId: event.locals.user.id
-    }});
+    const student = await prisma.student.findFirst({ 
+        where: { userId: event.locals.user.id },
+        include: { 
+            lotteryResult: {
+                include: {
+                    host: {
+                        include: {
+                            company: true
+                        }
+                    }
+                }
+            },
+        }
+    });
     
     if (!student) {
         redirect(302, "/dashboard");
     }
 
-    let positionsOnStudents = await prisma.positionsOnStudents.findMany({
-        where: {studentId: student.id},
-        orderBy: { rank: "asc" },
-        include: { position: {
-            include: {
-                host: {
-                    include: {
-                        company: true
-                    }
-                }
-            }
-        } }
-    });
+    // let positionsOnStudents = await prisma.positionsOnStudents.findMany({
+    //     where: {studentId: student.id},
+    //     orderBy: { rank: "asc" },
+    //     include: { position: {
+    //         include: {
+    //             host: {
+    //                 include: {
+    //                     company: true
+    //                 }
+    //             }
+    //         }
+    //     } }
+    // });
 
-    let positions = positionsOnStudents.map(val => val.position);
+    // let positions = positionsOnStudents.map(val => val.position);
 
-    return { positions: positions };
+    return { lotteryResult: student.lotteryResult };
 };
 
 

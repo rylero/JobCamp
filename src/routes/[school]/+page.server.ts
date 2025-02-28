@@ -5,7 +5,7 @@ export const load : PageServerLoad = async ({ cookies, params, locals }) => {
     const loggedIn = locals.user != null;
     
     if (loggedIn) {
-        redirect(302, "/dashboard")
+        // redirect(302, "/dashboard")
     }
 
     let isHost = false;

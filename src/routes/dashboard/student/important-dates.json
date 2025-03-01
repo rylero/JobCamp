@@ -3,7 +3,7 @@
         {
             "date": "Slides from Mandatory Orientation on Feb 28 ",
             "title": "PLEASE READ",
-            "description": "If you did not attend the mandatory orientation, <a href='https://docs.google.com/presentation/d/1bjl8s29xR7YkYcTkZsGhYbqb_v02Z2uF1ncsPqfazU0/edit?usp=sharing'>please read through this deck.</a> Companies have different requirements for forms, attire, IDs, etc. You need to know the expectations."
+            "description": "If you did not attend the mandatory orientation, <a class='text-blue-500 underline' href='https://docs.google.com/presentation/d/1bjl8s29xR7YkYcTkZsGhYbqb_v02Z2uF1ncsPqfazU0/edit?usp=sharing'>please read through this deck.</a> Companies have different requirements for forms, attire, IDs, etc. You need to know the expectations."
         },
         {
             "date": "Fri, Feb 28",

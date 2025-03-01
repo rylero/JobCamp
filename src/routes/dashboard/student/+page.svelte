@@ -151,7 +151,7 @@
         {#each dates as info}
             <div class="m-2 mx-4 p-4 rounded-md shadow-xl border-2">
                 <h1 class="text-xl mb-2">{ info.date } - { info.title }</h1>
-                <p>{ info.description }</p>
+                <p>{@html info.description }</p>
             </div>
         {/each}
     </div>

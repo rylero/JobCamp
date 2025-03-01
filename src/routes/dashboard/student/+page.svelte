@@ -127,7 +127,7 @@
             </Accordion.Root>
         {:else}
             <h1 class="text-center">
-                The positions you selected are full. We have many available openings. View them <a class="text-blue-500" href="https://docs.google.com/spreadsheets/d/1pN_QKfq2xJNiTxP2p20PWGmJYC_lOK_I2iOfDw_kS9k/edit?gid=0#gid=0">here.</a>
+                Job Shadow Day sign-ups are closed.
             </h1>
         {/if}
     </div>
@@ -151,7 +151,7 @@
         {#each dates as info}
             <div class="m-2 mx-4 p-4 rounded-md shadow-xl border-2">
                 <h1 class="text-xl mb-2">{ info.date } - { info.title }</h1>
-                <p>{ info.description }</p>
+                <p>{@html info.description }</p>
             </div>
         {/each}
     </div>

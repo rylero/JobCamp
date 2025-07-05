@@ -1,0 +1,4 @@
+-- AlterTable
+ALTER TABLE `Position` MODIFY `arrival` VARCHAR(191) NOT NULL,
+    MODIFY `start` VARCHAR(191) NOT NULL,
+    MODIFY `end` VARCHAR(191) NOT NULL;

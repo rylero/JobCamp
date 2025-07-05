@@ -31,14 +31,12 @@ export const actions: Actions = {
             return fail(400, { form });
         }
 
-        const schoolId = form.data.schoolId;
-        console.log(schoolId);
-        const schoolData = await prisma.school.findFirst({where: {id: schoolId}});
-        if (!schoolData) {
-            return setError(form, "schoolId", "School does not exist.");
+        const school = (await prisma.school.findFirst()); // TODO: SCHOOL FIELD for multiple schools
+        if (!school) {
+            return message(form, "Database Error");
         }
 
-        if (!schoolEmailCheck(schoolData.emailDomain).test(form.data.email)) {
+        if (!schoolEmailCheck(school.emailDomain).test(form.data.email)) {
             return setError(form, "email", "Please enter your school email.")
         }
 
@@ -51,7 +49,7 @@ export const actions: Actions = {
             return message(form, "Account Already Exists. Login instead.");
         }
 
-        await prisma.user.update({
+        const user = await prisma.user.update({
             where: { id: userId },
             data: {
                 student: {
@@ -60,13 +58,14 @@ export const actions: Actions = {
                             userId: userId,
                         },
                         create: {
-                            name: form.data.name,
+                            firstName: form.data.firstName, // TODO: lastName
+                            lastName: form.data.lastName,
                             grade: form.data.grade,
                             phone: form.data.phone,
                             parentEmail: form.data.parentEmail,
                             school: {
                                 connect: {
-                                    id: schoolId
+                                    id: school.id
                                 }
                             }
                         }
@@ -76,11 +75,11 @@ export const actions: Actions = {
         });
 
         // runs in background while user is redirected
-        generateEmailVerificationCode(userId, form.data.email).then(
-            (code) => sendEmailVerificationEmail(form.data.email, code)
-        );
+        const code = await generateEmailVerificationCode(userId, user.email)
+        await sendEmailVerificationEmail(userId, user.email, code);
+
         generatePermissionSlipCode(userId, form.data.parentEmail).then(
-            (code) => sendPermissionSlipEmail(form.data.parentEmail, code)
+            (code) => sendPermissionSlipEmail(form.data.parentEmail, code, form.data.firstName)
         );
 
         redirect(302, "/verify-email");

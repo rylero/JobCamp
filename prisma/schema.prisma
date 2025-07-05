@@ -41,30 +41,40 @@ model Position {
   title             String
   career            String
   slots             Int
-  summary           String
+  summary           String                @db.VarChar(1024)
   contact_name      String
   contact_email     String
-  address           String
-  instructions      String
-  attire            String
-  arrival           DateTime
-  start             DateTime
-  end               DateTime
+  address           String                @db.VarChar(1024)
+  instructions      String                @db.VarChar(1024)
+  attire            String                @db.VarChar(1024)
+  arrival           String              
+  start             String
+  end               String
   eventId           String
   hostId            String
   event             Event                 @relation(fields: [eventId], references: [id])
   host              Host                  @relation(fields: [hostId], references: [id])
   students          PositionsOnStudents[]
   studentsAttending Student[]
+  attachments       Attachment[]
 
   @@index([eventId], map: "Position_eventId_fkey")
   @@index([hostId], map: "Position_hostId_fkey")
 }
 
+model Attachment {
+  id                       String      @id @default(cuid())
+  position                 Position    @relation(fields: [positionId], references: [id], onDelete: Cascade)
+  positionId               String
+  
+  fileName                 String
+}
+
 model Student {
   id                       String      @id @default(cuid())
 
-  name                     String
+  firstName                String
+  lastName                 String
   phone                    String
   grade                    Int
 
@@ -88,6 +98,7 @@ model PositionsOnStudents {
   positionId               String
   student                  Student     @relation(fields: [studentId], references: [id])
   studentId                String
+  rank                     Int
 
   @@id([positionId, studentId])
 }
@@ -110,7 +121,7 @@ model Host {
 
   name                     String
 
-  companyId                String?     @unique
+  companyId                String?
   company                  Company?    @relation(references: [id], fields: [companyId])
   
   userId                   String      @unique
@@ -162,4 +173,17 @@ model PermissionSlipCode {
   id                       String      @id @default(cuid())
   user_id                  String      @unique
   code                     String
+}
+
+model PermissionSlipSubmission {
+  id                       String      @id @default(cuid())
+  user_id                  String      @unique
+  parentName               String
+  phoenNumber              String      // Wrong spelling
+  studentFirstName         String
+  studentLastName          String
+  physicalRestrictions     String?
+  dietaryRestrictions      String?
+  liability                String
+  liabilityDate            String
 }

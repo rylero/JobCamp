@@ -88,7 +88,7 @@ export async function updateLastLoginToNow(userId: string) {
 	})
 }
 
-export async function login(email: string, password: string, event: RequestEvent): Promise<AuthError | string> {
+export async function login(email: string, password: string, event: RequestEvent): Promise<AuthError.IncorrectCredentials | string> {
 	const existingUser = await prisma.user.findFirst({ where: { email } });
 	if (!existingUser) {
 		return AuthError.IncorrectCredentials;

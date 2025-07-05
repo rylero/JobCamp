@@ -1,20 +1,17 @@
-import type { PageServerLoad } from './$types';
-import { prisma } from '$lib/server/prisma';
 import { redirect } from '@sveltejs/kit';
+import type { PageServerLoad } from './$types';
 
 export const load : PageServerLoad = async ({ cookies, params, locals }) => {
-    const schoolData = await prisma.school.findFirst({ where: { webAddr: params.school }});
-
-    // school addr dosent exist
-    if (schoolData == undefined) {
-        redirect(302, "/");
+    const loggedIn = locals.user != null;
+    
+    if (loggedIn) {
+        // redirect(302, "/dashboard")
     }
 
-    cookies.set("school", schoolData.id, {
-		    path: ".",
-    });
+    let isHost = false;
+    if (locals.user) {
+        isHost = locals.user.host != null;
+    }
 
-    const loggedIn = locals.user != null;
-
-    return { schoolData, loggedIn };
+    return { isHost, loggedIn };
 };

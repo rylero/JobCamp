@@ -1,45 +1,31 @@
-import { PageType, userAccountSetupFlow } from '$lib/server/authFlow';
-import { z } from 'zod';
 import type { Actions, PageServerLoad } from './$types';
-import { zod } from 'sveltekit-superforms/adapters';
-import { fail, setError, superValidate } from "sveltekit-superforms";
 import { redirect } from '@sveltejs/kit';
 import { prisma } from '$lib/server/prisma';
-import { generateEmailVerificationCode } from '$lib/server/auth';
+import { generateEmailVerificationCode, setNewLuciaSession, updateLastLoginToNow } from '$lib/server/auth';
 import { sendEmailVerificationEmail } from '$lib/server/email';
 
-const schema = z.object({
-    code: z.string()
-});
-
 export const load: PageServerLoad = async (event) => {
-    userAccountSetupFlow(event.locals, PageType.EmailVerify);
+    if (event.locals.user && event.locals.user.emailVerified) {
+        redirect(302, "/dashboard")
+    }
 
-    const form = await superValidate(zod(schema));
-    return { form };
-};
+    const props = event.url.searchParams;
 
+    const code = props.get("code")?.toString();
+    const userId = props.get("uid")?.toString();
 
-export const actions: Actions = {
-    verify: async (event) => {
-        const { request } = event;
-        const form = await superValidate(request, zod(schema));
-  
-        if (!form.valid) {
-            return fail(400, { form });
-        }
-
-        const code = form.data.code;
-
-        const userId = event.locals.user?.id;
-        if (!userId) { redirect(302, "/signup"); }
-        
+    if (code && userId) {
         const correctCode = await prisma.emailVerificationCodes.findFirst({
             where: { user_id: userId }
         });
 
-        if (!correctCode) { redirect(302, "/signup"); }
-        if (correctCode.code != code) { return setError(form, "code", "Inncorrect Verification Code.") };
+        if (!correctCode || correctCode.code != code) {
+            return { msg: "Incorrect Link. Please Resend and Try again."}
+        }
+
+        if (correctCode.expires_at < new Date()) {
+            return { msg: "Expired Link. Please Resend and Try again."}
+        }
 
         await prisma.user.update({
             where: { id: userId },
@@ -52,14 +38,24 @@ export const actions: Actions = {
             where: { user_id: userId }
         });
 
+        if (!event.locals.user) {
+            await updateLastLoginToNow(userId);
+            await setNewLuciaSession(userId, event);
+        }
+
         redirect(302, "/dashboard")
-    },
+    }
+
+    return { msg: "" };
+};
+
+
+export const actions: Actions = {
     resend: async (event) => {
         if (!event.locals.user) return;
 
         const email = event.locals.user.email;
-        await generateEmailVerificationCode(event.locals.user.id, email).then(
-            (code) => sendEmailVerificationEmail(email, code)
-        );
+        const code = await generateEmailVerificationCode(event.locals.user.id, email)
+        await sendEmailVerificationEmail(event.locals.user.id, email, code);
     }
 };

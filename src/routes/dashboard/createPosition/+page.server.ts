@@ -7,6 +7,7 @@ import { superValidate } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
 import { createNewPositionSchema } from "./schema";
 import { sendPositionUpdateEmail } from "$lib/server/email";
+import { addNewFile } from "../storage";
 
 const grabUserData = async (locals : App.Locals) => {
     if (!locals.user) {
@@ -34,26 +35,29 @@ export const load: PageServerLoad = async (event) => {
     if (!event.locals.user) {
         redirect(302, "/login");
     }
+    if (!event.locals.user.emailVerified) {
+        redirect(302, "/verify-email");
+    }
 
     const { userInfo, hostInfo } = await grabUserData(event.locals);
     const form = await superValidate(zod(createNewPositionSchema(hostInfo.name, userInfo.email)));
-    
+
     return { form };
 };
 
 export const actions: Actions = {
     createPosition: async ({ request, locals, cookies }) => {
-        console.log("create position submit")
         const { userInfo, hostInfo } = await grabUserData(locals);
         const form = await superValidate(request, zod(createNewPositionSchema(hostInfo.name, userInfo.email)));
 
         if (!form.valid) {
-            console.log("fail")
+            // form.data.attachment1 = undefined;
+            // form.data.attachment2 = undefined;
+            console.log(form.errors);
             return fail(400, { form });
         }
 
         if (!locals.user) {
-            console.log("no user")
             redirect(302, "/login");
         }
 
@@ -64,15 +68,27 @@ export const actions: Actions = {
 
         const schoolId = host?.company?.schoolId;
         if (!schoolId) {
-            console.log("no school")
             redirect(302, "/login");
         }
 
         const event = (await prisma.school.findFirst({where: {id: schoolId}, include: {events: true}}))?.events[0];   
         if (!event) {
-            console.log("no event")
             redirect(302, "/login")
         }
+
+        // var attachments = [];
+
+        // if (form.data.attachment1) {
+        //     const bytes = await form.data.attachment1.bytes();
+        //     await addNewFile(form.data.title.replace(" ", "-") +  "-" + form.data.attachment1.name, bytes);
+        //     attachments.push({ fileName: form.data.attachment1.name })
+        // }
+
+        // if (form.data.attachment2) {
+        //     const bytes = await form.data.attachment2.bytes();
+        //     await addNewFile(form.data.title.replace(" ", "-") +  "-" + form.data.attachment2.name, bytes);
+        //     attachments.push({ fileName: form.data.attachment2.name })
+        // }
 
         const position = await prisma.host.update({
             where: { userId: locals.user.id },
@@ -89,17 +105,18 @@ export const actions: Actions = {
                             address: form.data.address,
                             instructions: form.data.instructions,
                             attire: form.data.attire,
-                            arrival: new Date(event.date.toLocaleDateString() + " " + form.data.arrival),
-                            start: new Date(event.date.toLocaleDateString() + " " + form.data.start),
-                            end: new Date(event.date.toLocaleDateString() + " " + form.data.release),
-                            event: { connect: { id: event.id } }
+                            arrival: form.data.arrival,
+                            start: form.data.start,
+                            end:form.data.release,
+                            event: { connect: { id: event.id } },
+                            // attachments: { create: attachments }
                         }
                     ]
                 }
             },
             include: { positions: true }
-        })
-
+        });
+        
         sendPositionUpdateEmail(userInfo.email, {
             title: form.data.title,
             career: form.data.career,

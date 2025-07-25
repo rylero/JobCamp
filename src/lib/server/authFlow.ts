@@ -31,11 +31,13 @@ export function userAccountSetupFlow(locals: App.Locals, pageType: PageType) {
         redirect(302, "/verify-email");
     }
 
-    var permissionSlipNeeded = locals.user.student && locals.user.student.permissionSlipCompleted == false;
-    if (permissionSlipNeeded && pageType != PageType.PermissionSlip) {
-        redirect(302, "/permission-slip");
-    } else if (!permissionSlipNeeded && pageType == PageType.PermissionSlip) {
-        redirect(302, "/dashboard");
+    if (locals.user.student) {
+        var permissionSlipNeeded = locals.user.student && locals.user.student.permissionSlipCompleted == false;
+        if (permissionSlipNeeded && pageType != PageType.PermissionSlip) {
+            redirect(302, "/permission-slip");
+        } else if (!permissionSlipNeeded && pageType == PageType.PermissionSlip) {
+            redirect(302, "/dashboard");
+        }
     }
 
     return;

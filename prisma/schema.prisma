@@ -3,37 +3,36 @@ generator client {
 }
 
 datasource db {
-  provider  = "mysql"
-  url       = env("DATABASE_URL")
+  provider = "mysql"
+  url      = env("DATABASE_URL")
 }
 
 model Event {
-  id                       String      @id @default(cuid())
+  id String @id @default(cuid())
 
-  schoolId                 String
-  school                   School      @relation(references: [id], fields: [schoolId], onDelete: Cascade)
+  schoolId String
+  school   School @relation(references: [id], fields: [schoolId], onDelete: Cascade)
 
-  date                     DateTime
+  date DateTime
 
-  displayLotteryResults    Boolean
+  displayLotteryResults Boolean
 
-  positions                Position[]
+  positions Position[]
 }
 
 model School {
-  id                       String      @id @default(cuid())
-  
-  name                     String
-  emailDomain              String
-  webAddr                  String
+  id String @id @default(cuid())
 
-  adminId                  String      @unique
-  admin                    User        @relation(references: [id], fields: [adminId], onDelete: Cascade)
+  name        String
+  emailDomain String
+  webAddr     String
 
-  events                   Event[]
+  admins User[] @relation("SchoolAdmins")
 
-  students                 Student[]
-  companies                Company[]
+  events Event[]
+
+  students  Student[]
+  companies Company[]
 }
 
 model Position {
@@ -47,7 +46,7 @@ model Position {
   address           String                @db.VarChar(1024)
   instructions      String                @db.VarChar(1024)
   attire            String                @db.VarChar(1024)
-  arrival           String              
+  arrival           String
   start             String
   end               String
   eventId           String
@@ -63,127 +62,128 @@ model Position {
 }
 
 model Attachment {
-  id                       String      @id @default(cuid())
-  position                 Position    @relation(fields: [positionId], references: [id], onDelete: Cascade)
-  positionId               String
-  
-  fileName                 String
+  id         String   @id @default(cuid())
+  position   Position @relation(fields: [positionId], references: [id], onDelete: Cascade)
+  positionId String
+
+  fileName String
 }
 
 model Student {
-  id                       String      @id @default(cuid())
+  id String @id @default(cuid())
 
-  firstName                String
-  lastName                 String
-  phone                    String
-  grade                    Int
+  firstName String
+  lastName  String
+  phone     String
+  grade     Int
 
-  parentEmail              String
-  permissionSlipCompleted  Boolean     @default(false)
+  parentEmail             String
+  permissionSlipCompleted Boolean @default(false)
 
-  school                   School?     @relation(fields: [schoolId], references: [id])
-  schoolId                 String?
+  school   School? @relation(fields: [schoolId], references: [id])
+  schoolId String?
 
-  userId                   String?     @unique
-  user                     User?       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String? @unique
+  user   User?   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  positionsSignedUpFor     PositionsOnStudents[]
+  positionsSignedUpFor PositionsOnStudents[]
 
-  lotteryPositionId        String?
-  lotteryResult            Position?   @relation(fields: [lotteryPositionId], references: [id])
+  lotteryPositionId String?
+  lotteryResult     Position? @relation(fields: [lotteryPositionId], references: [id])
 }
 
 model PositionsOnStudents {
-  position                 Position    @relation(fields: [positionId], references: [id])
-  positionId               String
-  student                  Student     @relation(fields: [studentId], references: [id])
-  studentId                String
-  rank                     Int
+  position   Position @relation(fields: [positionId], references: [id])
+  positionId String
+  student    Student  @relation(fields: [studentId], references: [id])
+  studentId  String
+  rank       Int
 
   @@id([positionId, studentId])
 }
 
 model Company {
-  id                       String      @id @default(cuid())
+  id String @id @default(cuid())
 
-  companyName              String      @unique
-  companyDescription       String      @db.VarChar(1024)
-  companyUrl               String?
+  companyName        String  @unique
+  companyDescription String  @db.VarChar(1024)
+  companyUrl         String?
 
-  school                   School?     @relation(fields: [schoolId], references: [id])
-  schoolId                 String?
+  school   School? @relation(fields: [schoolId], references: [id])
+  schoolId String?
 
-  hosts                    Host[]
+  hosts Host[]
 }
 
 model Host {
-  id                       String      @id @default(cuid())
+  id String @id @default(cuid())
 
-  name                     String
+  name String
 
-  companyId                String?
-  company                  Company?    @relation(references: [id], fields: [companyId])
-  
-  userId                   String      @unique
-  user                     User        @relation(references: [id], fields: [userId], onDelete: Cascade)
+  companyId String?
+  company   Company? @relation(references: [id], fields: [companyId])
 
-  positions                Position[]
+  userId String @unique
+  user   User   @relation(references: [id], fields: [userId], onDelete: Cascade)
+
+  positions Position[]
 }
 
 model User {
-  id                       String      @id @default(cuid())
-  email                    String      @unique
-  passwordHash             String
-  passwordSalt             String
-  emailVerified            Boolean     @default(false)
-  
-  student                  Student?
-  host                     Host?
-  school                   School?
-  
-  lastLogin                DateTime
-  
-  sessions                 Session[]
+  id            String  @id @default(cuid())
+  email         String  @unique
+  passwordHash  String
+  passwordSalt  String
+  emailVerified Boolean @default(false)
+
+  student Student?
+  host    Host?
+
+  adminOfSchools School[] @relation("SchoolAdmins")
+
+  lastLogin DateTime
+
+  sessions Session[]
 }
 
 model Session {
-  id                       String      @id
-  expiresAt                DateTime
+  id        String   @id
+  expiresAt DateTime
 
-  userId                   String
-  user                     User        @relation(references: [id], fields: [userId], onDelete: Cascade)
+  userId String
+  user   User   @relation(references: [id], fields: [userId], onDelete: Cascade)
 }
 
 model EmailVerificationCodes {
-  id                       String      @id @default(cuid())
-  user_id                  String      @unique
-  email                    String
-  code                     String
-  expires_at               DateTime
+  id         String   @id @default(cuid())
+  user_id    String   @unique
+  email      String
+  code       String
+  expires_at DateTime
 }
 
 model PasswordResetTokens {
-  id                       String      @id @default(cuid())
-  user_id                  String      @unique
-  token_hash               String      @unique
-  expires_at               DateTime
+  id         String   @id @default(cuid())
+  user_id    String   @unique
+  token_hash String   @unique
+  expires_at DateTime
 }
 
 model PermissionSlipCode {
-  id                       String      @id @default(cuid())
-  user_id                  String      @unique
-  code                     String
+  id      String @id @default(cuid())
+  user_id String @unique
+  code    String
 }
 
 model PermissionSlipSubmission {
-  id                       String      @id @default(cuid())
-  user_id                  String      @unique
-  parentName               String
-  phoenNumber              String      // Wrong spelling
-  studentFirstName         String
-  studentLastName          String
-  physicalRestrictions     String?
-  dietaryRestrictions      String?
-  liability                String
-  liabilityDate            String
+  id                   String  @id @default(cuid())
+  user_id              String  @unique
+  parentName           String
+  phoenNumber          String // Wrong spelling
+  studentFirstName     String
+  studentLastName      String
+  physicalRestrictions String?
+  dietaryRestrictions  String?
+  liability            String
+  liabilityDate        String
 }

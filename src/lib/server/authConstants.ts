@@ -24,6 +24,7 @@ export interface DatabaseUserAttributes {
 	emailVerified: boolean;
     student: Student | null;
     host: Host | null;
+	admminOfSchools: School[];
     school: School | null;
 	accountSetupFinished: boolean;
     lastLogin: Date;

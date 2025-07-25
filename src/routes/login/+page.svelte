@@ -2,10 +2,7 @@
     import { superForm } from "sveltekit-superforms";
     import type { PageData } from "./$types";
     import { Input } from "$lib/components/ui/input";
-    import Checkbox from "$lib/components/ui/checkbox/checkbox.svelte";
     import Navbar from "$lib/components/navbar/Navbar.svelte";
-    import { buttonVariants } from "$lib/components/ui/button";
-
     interface Props {
         data: PageData;
     }
@@ -21,7 +18,7 @@
     let passwordEntryType = $derived(showPassword ? 'text' : 'password')
 </script>
 
-<Navbar isHost={false} loggedIn={false} />
+<Navbar isHost={false} loggedIn={false} isAdmin={false} />
 
 <div class="w-full h-screen flex flex-col sm:gap-8 justify-center items-center">
     <form method="POST" class="max-w-full flex flex-col justify-between items-center gap-4 py-10 px-10 sm:border-2 sm:rounded-lg sm:shadow-2xl" use:enhance>

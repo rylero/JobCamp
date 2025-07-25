@@ -3,7 +3,6 @@ import type { Actions } from "./$types";
 import { lucia } from "$lib/server/auth";
 import type { PageServerLoad } from "./$types";
 import { prisma } from "$lib/server/prisma";
-import { getFileUrl } from "./storage";
 
 const grabUserData: any = async (locals : App.Locals) => {
     if (!locals.user) {
@@ -11,7 +10,10 @@ const grabUserData: any = async (locals : App.Locals) => {
     }
 
     const userInfo = await prisma.user.findFirst({
-        where: { id: locals.user.id }
+        where: { id: locals.user.id },
+        include: {
+            adminOfSchools: true,
+        }
     });
     if (!userInfo) {
         redirect(302, "/lghs")
@@ -33,28 +35,16 @@ export const load: PageServerLoad = async (event) => {
 
     const { userInfo, hostInfo } = await grabUserData(event.locals);
 
+    if (userInfo.adminOfSchools && userInfo.adminOfSchools.length > 0) {
+        redirect(302, "/dashboard/admin");
+    }
+
     if (!hostInfo) {
         redirect(302, "/dashboard/student");
     }
 
 
     var positions = await prisma.position.findMany({where: {hostId: hostInfo.id}, include: { attachments: true }});
-
-    // positions = positions.map((element: any) => {
-    //     if (element.attachments[0]) {
-    //         element.attachment1 = { 
-    //             name: element.attachments[0],
-    //             // link: (await getFileUrl(element.attachments[0]))()
-    //         };
-    //     }
-    //     if (element.attachments[1]) {
-    //         element.attachment2 = {
-    //             name: element.attachments[1],
-    //             // link: (await getFileUrl(element.attachments[1]))()
-    //         };
-    //     }
-    //     return element
-    // });
 
     return { positions, userData: event.locals.user, isCompany: true };
 };

@@ -35,7 +35,23 @@
             <Button href="/edit-data" variant="link" class="text-white text-xl">Edit Data</Button>
             <Button href="/lottery" variant="link" class="text-white text-xl">Lottery</Button>
             <Button href="/dashboard" variant="link" class="text-white text-xl">Dashboard</Button>
-            <Button href="/logout" variant="link" class="ml-auto text-white text-xl"><LogOut class="mr-2 h-4 w-4" /></Button>
+            <DropdownMenu.Root>
+                <DropdownMenu.Trigger>
+                    <span class="px-2 rounded border border-gray-300 bg-white hover:bg-gray-100 flex items-center justify-center cursor-pointer" style="height: 2.5rem; width: 2.5rem;">
+                        <User />
+                    </span>
+                </DropdownMenu.Trigger>
+                <DropdownMenu.Content>
+                    <DropdownMenu.Item>
+                        <form method="POST" use:enhance action="/dashboard/?/logOut" bind:this={form}>
+                            <DropdownMenu.Item onclick={() => form.submit()}>
+                                <LogOut class="mr-2 h-4 w-4" />
+                                <input type="submit" value="Log out" />
+                            </DropdownMenu.Item>
+                        </form>
+                    </DropdownMenu.Item>
+                </DropdownMenu.Content>
+            </DropdownMenu.Root>
         {:else}
             {#if !loggedIn}
                 <Button href="/lghs/view-companies" variant="link" class="text-white text-xl">View Companies</Button>
@@ -89,7 +105,23 @@
             <Button href="/edit-data" variant="link" class="text-white text-xl">Edit Data</Button>
             <Button href="/lottery" variant="link" class="text-white text-xl">Lottery</Button>
             <Button href="/dashboard" variant="link" class="text-white text-xl">Dashboard</Button>
-            <Button href="/logout" variant="link" class="text-white text-xl"><LogOut class="mr-2 h-4 w-4" />Log Out</Button>
+            <DropdownMenu.Root>
+                <DropdownMenu.Trigger>
+                    <span class="px-2 rounded border border-gray-300 bg-white hover:bg-gray-100 flex items-center justify-center cursor-pointer" style="height: 2.5rem; width: 2.5rem;">
+                        <User />
+                    </span>
+                </DropdownMenu.Trigger>
+                <DropdownMenu.Content>
+                    <DropdownMenu.Item>
+                        <form method="POST" use:enhance action="/dashboard/?/logOut" bind:this={form}>
+                            <DropdownMenu.Item onclick={() => form.submit()}>
+                                <LogOut class="mr-2 h-4 w-4" />
+                                <input type="submit" value="Log out" />
+                            </DropdownMenu.Item>
+                        </form>
+                    </DropdownMenu.Item>
+                </DropdownMenu.Content>
+            </DropdownMenu.Root>
         {:else}
             {#if loggedIn && !isHost}
                 <!-- <Button href="/dashboard/student/pick" variant="link" class="text-white text-xl">Pick Favorites</Button> -->

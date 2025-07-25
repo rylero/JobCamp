@@ -10,7 +10,7 @@
     let { data } = $props();
 </script>
 
-<Navbar loggedIn={true} isHost={true} />
+<Navbar loggedIn={true} isHost={true} isAdmin={false} />
 
 <div class="h-24"></div>
 

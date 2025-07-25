@@ -18,7 +18,7 @@
   <div class="flex justify-center items-center my-2 mx-4 flex-col md:flex-row">
       <div class="w-96 text-center px-1 text-xl">{ content.p1 }</div>
       <figure class="w-96 px-1">
-          <img src={content.img1}>
+          <img src={content.img1} alt={content.caption1}>
           <figcaption class="text-sm font-thin italic text-center">{ content.caption1 }</figcaption>
       </figure>
   </div>
@@ -27,7 +27,7 @@
 
   <div class="flex justify-center items-center my-2 mx-4 flex-col md:flex-row">
       <figure class="w-96 px-1">
-          <img src={content.img2} >
+          <img src={content.img2} alt={content.caption2}>
           <figcaption class="text-sm font-thin italic text-center">{ content.caption2 }</figcaption>
       </figure>
       <p class="w-96 text-center text-xl px-1">{ content.p2 }</p>
@@ -38,7 +38,7 @@
   <div class="flex justify-center items-center my-2 mx-4 flex-col md:flex-row">
       <p class="w-96 text-center text-xl px-1">{ content.p3 }</p>
       <figure class="w-96 px-1">
-          <img src={content.img3} >
+          <img src={content.img3} alt={content.caption3}>
           <figcaption class="text-sm font-thin italic text-center">{ content.caption3 }</figcaption>
       </figure>
   </div>

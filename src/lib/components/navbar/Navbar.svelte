@@ -12,6 +12,7 @@
     const { loggedIn, isHost, isAdmin } = $props();
 
     let collapsed = $state(false);
+    let form: HTMLFormElement = $state();
 
     onMount(() => {
         var x = window.matchMedia("(max-width: 768px)")
@@ -22,9 +23,6 @@
         })
     });
    
-
-
-    var form: HTMLFormElement;
 </script>
 
 <nav class="w-screen fixed top-0 left-0 bg-gray-800 flex flex-col z-50 justify-center">

@@ -19,10 +19,22 @@ export const load: PageServerLoad = async ({ locals }) => {
     if (!userInfo?.adminOfSchools?.length) {
         redirect(302, "/dashboard");
     }
-    
+
+    // Load data for editing
+    //const schools = userInfo.adminOfSchools;
+    //const users = await prisma.user.findMany({
+    //    where: { 
+    //        OR: [
+    //            { student: { schoolId: { in: schools.map(s => s.id) } } },
+    //            { host: { company: { schoolId: { in: schools.map(s => s.id) } } } }
+    //        ]
+    //    },
+    //    include: { student: true, host: true }
+    //});
+
     return {
         isAdmin: true,
         loggedIn: true,
-        isHost: !!locals.user.host
+        isHost: !!locals.user.host,
     };
 };

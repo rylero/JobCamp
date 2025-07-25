@@ -19,7 +19,13 @@ export const load: PageServerLoad = async ({ locals }) => {
     if (!userInfo?.adminOfSchools?.length) {
         redirect(302, "/dashboard");
     }
-    
+
+    // Load messaging-specific data
+    //const messages = await prisma.message.findMany({
+    //    where: { schoolId: { in: userInfo.adminOfSchools.map(s => s.id) } },
+    //    orderBy: { createdAt: 'desc' }
+    //});
+
     return {
         isAdmin: true,
         loggedIn: true,

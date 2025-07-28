@@ -20,17 +20,6 @@ export const load: PageServerLoad = async ({ locals }) => {
         redirect(302, "/dashboard");
     }
 
-    // Load lottery-specific data
-    //const lotteryResults = await prisma.student.findMany({
-    //    where: { 
-    //        schoolId: { in: userInfo.adminOfSchools.map(s => s.id) },
-    //        lotteryPositionId: { not: null }
-    //    },
-    //    include: { 
-    //        lotteryResult: { include: { host: { include: { company: true } } } }
-    //    }
-    //});
-
     return {
         isAdmin: true,
         loggedIn: true,

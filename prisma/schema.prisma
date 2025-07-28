@@ -187,3 +187,26 @@ model PermissionSlipSubmission {
   liability            String
   liabilityDate        String
 }
+
+model LotteryJob {
+    id          String   @id @default(cuid())
+    status      String   // RUNNING, COMPLETED, FAILED
+    progress    Float    @default(0)
+    currentSeed Int      @default(0)
+    adminId     String
+    startedAt   DateTime @default(now())
+    completedAt DateTime?
+    error       String?
+    results     LotteryResults[]
+}
+
+model LotteryResults {
+    id           String   @id @default(cuid())
+    lotteryJobId String
+    lotteryJob   LotteryJob @relation(fields: [lotteryJobId], references: [id], onDelete: Cascade)
+    studentId    String
+    positionId   String
+    createdAt    DateTime @default(now())
+    
+    @@unique([studentId, lotteryJobId]) // One result per student per job
+}

@@ -66,12 +66,36 @@ export const load: PageServerLoad = async ({ locals }) => {
     };
 };
 
-async function calculateLotteryStats(results: any[]) {
-    const totalStudents = results.length;
-    let firstChoice = 0;
-    let secondChoice = 0;
-    let thirdChoice = 0;
-    let notPlaced = 0;
+async function calculateLotteryStats(results: { studentId: string; positionId: string }[]) {
+    // Get all students who made choices
+    const allStudentsWithChoices = await prisma.student.findMany({
+        where: {
+            positionsSignedUpFor: { some: {} }
+        },
+        select: { id: true }
+    });
+    
+    const totalStudents = allStudentsWithChoices.length;
+    const placedStudents = results.length;
+    const notPlacedCount = totalStudents - placedStudents;
+    
+    console.log(`Debug: Total students with choices: ${totalStudents}`);
+    console.log(`Debug: Placed students: ${placedStudents}`);
+    console.log(`Debug: Not placed count: ${notPlacedCount}`);
+    
+    const choiceCounts = {
+        firstChoice: 0,
+        secondChoice: 0,
+        thirdChoice: 0,
+        fourthChoice: 0,
+        fifthChoice: 0,
+        sixthChoice: 0,
+        seventhChoice: 0,
+        eighthChoice: 0,
+        ninthChoice: 0,
+        tenthChoice: 0,
+        notPlaced: notPlacedCount
+    };
 
     for (const result of results) {
         // Get student's choices in order
@@ -85,23 +109,41 @@ async function calculateLotteryStats(results: any[]) {
             choice.positionId === result.positionId
         );
 
-        if (choiceIndex === 0) firstChoice++;
-        else if (choiceIndex === 1) secondChoice++;
-        else if (choiceIndex === 2) thirdChoice++;
-        else notPlaced++; // Position not in student's choices
+        console.log(`Debug: Student ${result.studentId} placed in position ${result.positionId}, choice index: ${choiceIndex}`);
+
+        if (choiceIndex === 0) choiceCounts.firstChoice++;
+        else if (choiceIndex === 1) choiceCounts.secondChoice++;
+        else if (choiceIndex === 2) choiceCounts.thirdChoice++;
+        else if (choiceIndex === 3) choiceCounts.fourthChoice++;
+        else if (choiceIndex === 4) choiceCounts.fifthChoice++;
+        else if (choiceIndex === 5) choiceCounts.sixthChoice++;
+        else if (choiceIndex === 6) choiceCounts.seventhChoice++;
+        else if (choiceIndex === 7) choiceCounts.eighthChoice++;
+        else if (choiceIndex === 8) choiceCounts.ninthChoice++;
+        else if (choiceIndex === 9) choiceCounts.tenthChoice++;
+        else {
+            choiceCounts.notPlaced++; // Position not in student's choices
+            console.log(`Debug: Student ${result.studentId} placed in position not in their choices`);
+        }
     }
 
+    console.log(`Debug: Final choice counts:`, choiceCounts);
+    
     return {
         totalStudents,
-        firstChoice,
-        secondChoice,
-        thirdChoice,
-        notPlaced
+        ...choiceCounts
     };
 }
 
 export const actions: Actions = {
     runLottery: async ({ locals }) => {
+        if (!locals.user) {
+            return { 
+                success: false, 
+                message: "User not authenticated" 
+            };
+        }
+        
         // Start background job
         const jobId = await startLotteryJob(locals.user.id);
         

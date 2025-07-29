@@ -133,22 +133,83 @@
                     <div class="text-2xl font-bold text-blue-600">{data.stats.totalStudents}</div>
                     <div class="text-sm text-gray-600">Total Students</div>
                 </div>
+                
+                {#if data.stats.firstChoice > 0}
                 <div class="text-center">
                     <div class="text-2xl font-bold text-green-600">{data.stats.firstChoice}</div>
                     <div class="text-sm text-gray-600">1st Choice</div>
                 </div>
+                {/if}
+                
+                {#if data.stats.secondChoice > 0}
                 <div class="text-center">
                     <div class="text-2xl font-bold text-yellow-600">{data.stats.secondChoice}</div>
                     <div class="text-sm text-gray-600">2nd Choice</div>
                 </div>
+                {/if}
+                
+                {#if data.stats.thirdChoice > 0}
                 <div class="text-center">
                     <div class="text-2xl font-bold text-orange-600">{data.stats.thirdChoice}</div>
                     <div class="text-sm text-gray-600">3rd Choice</div>
                 </div>
+                {/if}
+                
+                {#if data.stats.fourthChoice > 0}
+                <div class="text-center">
+                    <div class="text-2xl font-bold text-purple-600">{data.stats.fourthChoice}</div>
+                    <div class="text-sm text-gray-600">4th Choice</div>
+                </div>
+                {/if}
+                
+                {#if data.stats.fifthChoice > 0}
+                <div class="text-center">
+                    <div class="text-2xl font-bold text-indigo-600">{data.stats.fifthChoice}</div>
+                    <div class="text-sm text-gray-600">5th Choice</div>
+                </div>
+                {/if}
+                
+                {#if data.stats.sixthChoice > 0}
+                <div class="text-center">
+                    <div class="text-2xl font-bold text-pink-600">{data.stats.sixthChoice}</div>
+                    <div class="text-sm text-gray-600">6th Choice</div>
+                </div>
+                {/if}
+                
+                {#if data.stats.seventhChoice > 0}
+                <div class="text-center">
+                    <div class="text-2xl font-bold text-teal-600">{data.stats.seventhChoice}</div>
+                    <div class="text-sm text-gray-600">7th Choice</div>
+                </div>
+                {/if}
+                
+                {#if data.stats.eighthChoice > 0}
+                <div class="text-center">
+                    <div class="text-2xl font-bold text-cyan-600">{data.stats.eighthChoice}</div>
+                    <div class="text-sm text-gray-600">8th Choice</div>
+                </div>
+                {/if}
+                
+                {#if data.stats.ninthChoice > 0}
+                <div class="text-center">
+                    <div class="text-2xl font-bold text-lime-600">{data.stats.ninthChoice}</div>
+                    <div class="text-sm text-gray-600">9th Choice</div>
+                </div>
+                {/if}
+                
+                {#if data.stats.tenthChoice > 0}
+                <div class="text-center">
+                    <div class="text-2xl font-bold text-amber-600">{data.stats.tenthChoice}</div>
+                    <div class="text-sm text-gray-600">10th Choice</div>
+                </div>
+                {/if}
+                
+                {#if data.stats.notPlaced > 0}
                 <div class="text-center">
                     <div class="text-2xl font-bold text-red-600">{data.stats.notPlaced}</div>
                     <div class="text-sm text-gray-600">Not Placed</div>
                 </div>
+                {/if}
             </div>
         </div>
     {/if}

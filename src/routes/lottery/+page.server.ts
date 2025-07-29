@@ -79,9 +79,7 @@ async function calculateLotteryStats(results: { studentId: string; positionId: s
     const placedStudents = results.length;
     const notPlacedCount = totalStudents - placedStudents;
     
-    console.log(`Debug: Total students with choices: ${totalStudents}`);
-    console.log(`Debug: Placed students: ${placedStudents}`);
-    console.log(`Debug: Not placed count: ${notPlacedCount}`);
+
     
     const choiceCounts = {
         firstChoice: 0,
@@ -109,8 +107,6 @@ async function calculateLotteryStats(results: { studentId: string; positionId: s
             choice.positionId === result.positionId
         );
 
-        console.log(`Debug: Student ${result.studentId} placed in position ${result.positionId}, choice index: ${choiceIndex}`);
-
         if (choiceIndex === 0) choiceCounts.firstChoice++;
         else if (choiceIndex === 1) choiceCounts.secondChoice++;
         else if (choiceIndex === 2) choiceCounts.thirdChoice++;
@@ -121,14 +117,9 @@ async function calculateLotteryStats(results: { studentId: string; positionId: s
         else if (choiceIndex === 7) choiceCounts.eighthChoice++;
         else if (choiceIndex === 8) choiceCounts.ninthChoice++;
         else if (choiceIndex === 9) choiceCounts.tenthChoice++;
-        else {
-            choiceCounts.notPlaced++; // Position not in student's choices
-            console.log(`Debug: Student ${result.studentId} placed in position not in their choices`);
-        }
+        else choiceCounts.notPlaced++; // Position not in student's choices
     }
 
-    console.log(`Debug: Final choice counts:`, choiceCounts);
-    
     return {
         totalStudents,
         ...choiceCounts

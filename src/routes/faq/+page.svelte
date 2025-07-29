@@ -15,7 +15,7 @@
 
 <div class="flex flex-col justify-center mt-28 mb-10 w-full">
   <h1 class="flex justify-center text-4xl mb-3">FAQs</h1>
-  <Accordion.Root class="w-full px-10">
+  <Accordion.Root type="multiple" class="w-full px-10">
       {#each questions as question, index}
         <Accordion.Item value={question}>
           <Accordion.Trigger class="text-xl text-left">

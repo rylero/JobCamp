@@ -12,7 +12,6 @@
     const { loggedIn, isHost, isAdmin } = $props();
 
     let collapsed = $state(false);
-    let form: HTMLFormElement = $state();
 
     onMount(() => {
         var x = window.matchMedia("(max-width: 768px)")

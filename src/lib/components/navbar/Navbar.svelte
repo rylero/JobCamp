@@ -33,6 +33,7 @@
             <Button href="/messaging" variant="link" class="text-white text-xl">Messaging</Button>
             <Button href="/edit-data" variant="link" class="text-white text-xl">Edit/Search Data</Button>
             <Button href="/lottery" variant="link" class="text-white text-xl">Lottery</Button>
+            <Button href="/visualizations" variant="link" class="text-white text-xl">Visualizations</Button>
             <Button href="/dashboard" variant="link" class="text-white text-xl">Dashboard</Button>
             <DropdownMenu.Root>
                 <DropdownMenu.Trigger>
@@ -103,6 +104,7 @@
             <Button href="/messaging" variant="link" class="text-white text-xl">Messaging</Button>
             <Button href="/edit-data" variant="link" class="text-white text-xl">Edit Data</Button>
             <Button href="/lottery" variant="link" class="text-white text-xl">Lottery</Button>
+            <Button href="/visualizations" variant="link" class="text-white text-xl">Visualizations</Button>
             <Button href="/dashboard" variant="link" class="text-white text-xl">Dashboard</Button>
             <DropdownMenu.Root>
                 <DropdownMenu.Trigger>

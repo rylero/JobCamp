@@ -77,13 +77,19 @@ export const load: PageServerLoad = async ({ locals }) => {
 
     // Company Statistics
     const [
-        companiesCreated,
-        companiesWithoutPositions,
-        companiesNotLoggedIn,
-        totalPositions,
-        totalSlots
+        totalCompanies,
+        companiesLoggedInThisYear,
+        positionsThisYear,
+        slotsThisYear
     ] = await Promise.all([
-        // Companies created/logged in this year
+        // Total companies present in the DB
+        prisma.company.count({
+            where: { 
+                schoolId: { in: schoolIds }
+            }
+        }),
+        
+        // Companies logged in during the current calendar year (Jan-Dec of this year)
         prisma.company.count({
             where: { 
                 schoolId: { in: schoolIds },
@@ -98,43 +104,32 @@ export const load: PageServerLoad = async ({ locals }) => {
                 }
             }
         }),
-        // Companies without positions defined
-        prisma.company.count({
+        
+        // Positions this year (only for companies logged in this year)
+        prisma.position.count({
             where: {
-                schoolId: { in: schoolIds },
-                hosts: {
-                    none: {
-                        positions: { some: {} }
-                    }
-                }
-            }
-        }),
-
-        // Companies that have not logged in this year
-        prisma.company.count({
-            where: {
-                schoolId: { in: schoolIds },
-                hosts: {
-                    none: {
-                        user: {
-                            lastLogin: {
-                                gte: new Date(currentYear, 0, 1)
-                            }
+                event: { schoolId: { in: schoolIds } },
+                host: {
+                    user: {
+                        lastLogin: {
+                            gte: new Date(currentYear, 0, 1)
                         }
                     }
                 }
             }
         }),
-        // Total positions registered
-        prisma.position.count({
-            where: {
-                event: { schoolId: { in: schoolIds } }
-            }
-        }),
-        // Total slots available
+        
+        // Slots this year (only for companies logged in this year)
         prisma.position.aggregate({
             where: {
-                event: { schoolId: { in: schoolIds } }
+                event: { schoolId: { in: schoolIds } },
+                host: {
+                    user: {
+                        lastLogin: {
+                            gte: new Date(currentYear, 0, 1)
+                        }
+                    }
+                }
             },
             _sum: { slots: true }
         }).then(res => res._sum.slots || 0)
@@ -155,11 +150,10 @@ export const load: PageServerLoad = async ({ locals }) => {
             senior: gradeStats.senior   
         },
         companyStats: {
-            companiesCreated,
-            companiesWithoutPositions,
-            companiesNotLoggedIn,
-            totalPositions,
-            totalSlots
+            totalCompanies,
+            companiesLoggedInThisYear,
+            positionsThisYear,
+            slotsThisYear
         }
     };  
 };

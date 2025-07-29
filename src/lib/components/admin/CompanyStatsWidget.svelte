@@ -1,10 +1,9 @@
 <script lang="ts">
     export let stats: {
-        companiesCreated: number;
-        companiesWithoutPositions: number;
-        companiesNotLoggedIn: number;
-        totalPositions: number;
-        totalSlots: number;
+        totalCompanies: number;
+        companiesLoggedInThisYear: number;
+        positionsThisYear: number;
+        slotsThisYear: number;
     };
 </script>
 
@@ -13,24 +12,20 @@
     
     <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
         <div class="text-center">
-            <div class="text-2xl font-bold text-blue-600">{stats.companiesCreated}</div>
-            <div class="text-sm text-gray-600">Companies Created</div>
+            <div class="text-2xl font-bold text-blue-600">{stats.totalCompanies}</div>
+            <div class="text-sm text-gray-600">Total Companies</div>
         </div>
         <div class="text-center">
-            <div class="text-2xl font-bold text-orange-600">{stats.companiesWithoutPositions}</div>
-            <div class="text-sm text-gray-600">No Positions</div>
+            <div class="text-2xl font-bold text-green-600">{stats.companiesLoggedInThisYear}</div>
+            <div class="text-sm text-gray-600">Logged In This Year</div>
         </div>
         <div class="text-center">
-            <div class="text-2xl font-bold text-red-600">{stats.companiesNotLoggedIn}</div>
-            <div class="text-sm text-gray-600">Not Logged In</div>
+            <div class="text-2xl font-bold text-orange-600">{stats.positionsThisYear}</div>
+            <div class="text-sm text-gray-600">Positions This Year</div>
         </div>
         <div class="text-center">
-            <div class="text-2xl font-bold text-green-600">{stats.totalPositions}</div>
-            <div class="text-sm text-gray-600">Total Positions</div>
-        </div>
-        <div class="text-center">
-            <div class="text-2xl font-bold text-purple-600">{stats.totalSlots}</div>
-            <div class="text-sm text-gray-600">Total Slots</div>
+            <div class="text-2xl font-bold text-purple-600">{stats.slotsThisYear}</div>
+            <div class="text-sm text-gray-600">Slots This Year</div>
         </div>
     </div>
 </div>

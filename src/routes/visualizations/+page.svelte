@@ -2,7 +2,7 @@
     import Navbar from "$lib/components/navbar/Navbar.svelte";
     import { Button } from "$lib/components/ui/button";
     import { onMount } from 'svelte';
-    import { Chart, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, BarController, DoughnutController, ArcElement } from 'chart.js';
+    import { Chart, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, BarController, DoughnutController, ArcElement, LineController, LineElement, PointElement } from 'chart.js';
 
     let { data } = $props();
     // Chart variables
@@ -19,7 +19,20 @@
     ];
 
     // Register Chart.js components
-    Chart.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, BarController, DoughnutController, ArcElement);
+    Chart.register(
+        CategoryScale,
+        LinearScale,
+        BarElement,
+        Title,
+        Tooltip,
+        Legend,
+        BarController,
+        DoughnutController,
+        ArcElement,
+        LineController,
+        LineElement,
+        PointElement
+    );
 
     function createChart() {
         if (!chartCanvas || !data.lotteryStats) return;
@@ -268,6 +281,14 @@
     let slotChart = $state<Chart | null>(null);
     let choiceVsSlotsChart = $state<Chart | null>(null);
 
+    // Event Timeline Charts
+    let registrationChartCanvas = $state<HTMLCanvasElement | undefined>(undefined);
+    let choiceTimelineChartCanvas = $state<HTMLCanvasElement | undefined>(undefined);
+    let companyTimelineChartCanvas = $state<HTMLCanvasElement | undefined>(undefined);
+    let registrationChart = $state<Chart | null>(null);
+    let choiceTimelineChart = $state<Chart | null>(null);
+    let companyTimelineChart = $state<Chart | null>(null);
+
     function createGradeChart() {
         if (!gradeChartCanvas || !data.studentStats) return;
 
@@ -497,6 +518,170 @@
         });
     }
 
+    function createRegistrationChart() {
+        if (!registrationChartCanvas || !data.timelineStats) return;
+
+        if (registrationChart) {
+            registrationChart.destroy();
+            registrationChart = null;
+        }
+
+        const ctx = registrationChartCanvas.getContext('2d');
+        if (!ctx) return;
+
+        registrationChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: data.timelineStats.registrationStats.map(r => r.date),
+                datasets: [{
+                    label: 'Student Registrations',
+                    data: data.timelineStats.registrationStats.map(r => r.count),
+                    borderColor: '#3b82f6',
+                    backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                    borderWidth: 3,
+                    fill: true,
+                    tension: 0.4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Student Registration Timeline',
+                        font: { size: 18, weight: 'bold' }
+                    },
+                    legend: {
+                        display: true
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: { display: true, text: 'Number of Registrations' }
+                    },
+                    x: {
+                        title: { display: true, text: 'Date' }
+                    }
+                }
+            }
+        });
+    }
+
+    function createChoiceTimelineChart() {
+        if (!choiceTimelineChartCanvas || !data.timelineStats) return;
+
+        if (choiceTimelineChart) {
+            choiceTimelineChart.destroy();
+            choiceTimelineChart = null;
+        }
+
+        const ctx = choiceTimelineChartCanvas.getContext('2d');
+        if (!ctx) return;
+
+        choiceTimelineChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: data.timelineStats.choiceStats.map(c => c.date),
+                datasets: [{
+                    label: 'Choice Submissions',
+                    data: data.timelineStats.choiceStats.map(c => c.count),
+                    borderColor: '#10b981',
+                    backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                    borderWidth: 3,
+                    fill: true,
+                    tension: 0.4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Choice Submission Timeline',
+                        font: { size: 18, weight: 'bold' }
+                    },
+                    legend: {
+                        display: true
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: { display: true, text: 'Number of Submissions' }
+                    },
+                    x: {
+                        title: { display: true, text: 'Date' }
+                    }
+                }
+            }
+        });
+    }
+
+    function createCompanyTimelineChart() {
+        if (!companyTimelineChartCanvas || !data.timelineStats) return;
+
+        if (companyTimelineChart) {
+            companyTimelineChart.destroy();
+            companyTimelineChart = null;
+        }
+
+        const ctx = companyTimelineChartCanvas.getContext('2d');
+        if (!ctx) return;
+
+        companyTimelineChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: data.timelineStats.companyStats.map(c => c.date),
+                datasets: [
+                    {
+                        label: 'Company Registrations',
+                        data: data.timelineStats.companyStats.map(c => c.count),
+                        borderColor: '#8b5cf6',
+                        backgroundColor: 'rgba(139, 92, 246, 0.1)',
+                        borderWidth: 3,
+                        fill: true,
+                        tension: 0.4
+                    },
+                    {
+                        label: 'Position Creations',
+                        data: data.timelineStats.positionStats.map(p => p.count),
+                        borderColor: '#f97316',
+                        backgroundColor: 'rgba(249, 115, 22, 0.1)',
+                        borderWidth: 3,
+                        fill: true,
+                        tension: 0.4
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Company Engagement Timeline',
+                        font: { size: 18, weight: 'bold' }
+                    },
+                    legend: {
+                        display: true
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: { display: true, text: 'Count' }
+                    },
+                    x: {
+                        title: { display: true, text: 'Date' }
+                    }
+                }
+            }
+        });
+    }
+
     // Create student charts when data is available
     $effect(() => {
         if (selectedVisualization === 'student' && data.studentStats) {
@@ -505,6 +690,17 @@
                 createChoiceChart();
                 createSlotChart();
                 createChoiceVsSlotsChart();
+            }, 0);
+        }
+    });
+
+    // Create timeline charts when data is available
+    $effect(() => {
+        if (selectedVisualization === 'timeline' && data.timelineStats) {
+            setTimeout(() => {
+                createRegistrationChart();
+                createChoiceTimelineChart();
+                createCompanyTimelineChart();
             }, 0);
         }
     });
@@ -887,6 +1083,109 @@
             <h2 class="text-xl font-semibold mb-4">No Student Data Available</h2>
             <p class="text-gray-600 mb-4">
                 No student registration or choice data is currently available. Ensure students have registered and selected companies.
+            </p>
+        </div>
+    {:else if selectedVisualization === 'timeline' && data.timelineStats}
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <!-- Registration Timeline -->
+            <div class="bg-white rounded-lg shadow p-6">
+                <h2 class="text-xl font-semibold mb-4">Student Registration Timeline</h2>
+                <div class="h-96">
+                    <canvas bind:this={registrationChartCanvas} width="800" height="400"></canvas>
+                </div>
+            </div>
+
+            <!-- Choice Submission Timeline -->
+            <div class="bg-white rounded-lg shadow p-6">
+                <h2 class="text-xl font-semibold mb-4">Choice Submission Timeline</h2>
+                <div class="h-96">
+                    <canvas bind:this={choiceTimelineChartCanvas} width="800" height="400"></canvas>
+                </div>
+            </div>
+
+            <!-- Company Engagement Timeline -->
+            <div class="bg-white rounded-lg shadow p-6 lg:col-span-2">
+                <h2 class="text-xl font-semibold mb-4">Company Engagement Timeline</h2>
+                <div class="h-96">
+                    <canvas bind:this={companyTimelineChartCanvas} width="800" height="400"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Event Milestones -->
+        <div class="mt-8 bg-white rounded-lg shadow p-6">
+            <h2 class="text-xl font-semibold mb-4">Event Milestones</h2>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                <div class="text-center">
+                    <div class="text-lg font-semibold text-blue-600">{data.timelineStats.milestones.totalStudents}</div>
+                    <div class="text-sm text-gray-600">Total Students</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-lg font-semibold text-green-600">{data.timelineStats.milestones.studentsWithChoices}</div>
+                    <div class="text-sm text-gray-600">Students with Choices</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-lg font-semibold text-purple-600">{data.timelineStats.milestones.totalCompanies}</div>
+                    <div class="text-sm text-gray-600">Total Companies</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-lg font-semibold text-orange-600">{data.timelineStats.milestones.totalPositions}</div>
+                    <div class="text-sm text-gray-600">Total Positions</div>
+                </div>
+            </div>
+
+            <!-- Timeline Details -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <h3 class="text-lg font-semibold mb-3">Registration Period</h3>
+                    <div class="space-y-2">
+                        <div class="flex justify-between">
+                            <span class="text-gray-600">First Registration:</span>
+                            <span class="font-medium">{data.timelineStats.milestones.firstRegistration ? new Date(data.timelineStats.milestones.firstRegistration).toLocaleDateString() : 'N/A'}</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-600">Last Registration:</span>
+                            <span class="font-medium">{data.timelineStats.milestones.lastRegistration ? new Date(data.timelineStats.milestones.lastRegistration).toLocaleDateString() : 'N/A'}</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-600">Duration:</span>
+                            <span class="font-medium">{data.timelineStats.velocity.totalDays} days</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-600">Avg per Day:</span>
+                            <span class="font-medium">{data.timelineStats.velocity.avgRegistrationsPerDay.toFixed(1)}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <h3 class="text-lg font-semibold mb-3">Choice Period</h3>
+                    <div class="space-y-2">
+                        <div class="flex justify-between">
+                            <span class="text-gray-600">First Choice:</span>
+                            <span class="font-medium">{data.timelineStats.milestones.firstChoice ? new Date(data.timelineStats.milestones.firstChoice).toLocaleDateString() : 'N/A'}</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-600">Last Choice:</span>
+                            <span class="font-medium">{data.timelineStats.milestones.lastChoice ? new Date(data.timelineStats.milestones.lastChoice).toLocaleDateString() : 'N/A'}</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-600">Duration:</span>
+                            <span class="font-medium">{data.timelineStats.velocity.choiceDays} days</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-600">Avg per Day:</span>
+                            <span class="font-medium">{data.timelineStats.velocity.avgChoicesPerDay.toFixed(1)}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {:else if selectedVisualization === 'timeline' && !data.timelineStats}
+        <div class="bg-white rounded-lg shadow p-6">
+            <h2 class="text-xl font-semibold mb-4">No Timeline Data Available</h2>
+            <p class="text-gray-600 mb-4">
+                No event timeline data is currently available. Ensure students and companies have registered and made choices.
             </p>
         </div>
     {:else}

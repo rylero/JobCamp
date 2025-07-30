@@ -211,7 +211,6 @@
 
     function createCompanyChart() {
         if (!companyChartCanvas || !data.companyStats) {
-            console.log('Cannot create company chart:', { companyChartCanvas: !!companyChartCanvas, companyStats: !!data.companyStats });
             return;
         }
 
@@ -222,12 +221,10 @@
 
         const ctx = companyChartCanvas.getContext('2d');
         if (!ctx) {
-            console.error('Could not get 2D context from company chart canvas');
             return;
         }
 
         const topCompanies = data.companyStats.companyStats.slice(0, 10);
-        console.log('Creating company chart with data:', topCompanies);
         
         companyChart = new Chart(ctx, {
             type: 'doughnut',
@@ -257,7 +254,6 @@
             }
         });
         
-        console.log('Company chart created successfully');
     }
 
     // Create company charts when data is available
@@ -266,6 +262,257 @@
             setTimeout(() => {
                 createCareerChart();
                 createCompanyChart();
+            }, 0);
+        }
+    });
+
+    // Student Demographics Charts
+    let gradeChartCanvas: HTMLCanvasElement;
+    let choiceChartCanvas: HTMLCanvasElement;
+    let slotChartCanvas: HTMLCanvasElement;
+    let choiceVsSlotsChartCanvas: HTMLCanvasElement;
+    let gradeChart: Chart | null = null;
+    let choiceChart: Chart | null = null;
+    let slotChart: Chart | null = null;
+    let choiceVsSlotsChart: Chart | null = null;
+
+    function createGradeChart() {
+        if (!gradeChartCanvas || !data.studentStats) return;
+
+        if (gradeChart) {
+            gradeChart.destroy();
+            gradeChart = null;
+        }
+
+        const ctx = gradeChartCanvas.getContext('2d');
+        if (!ctx) return;
+
+        gradeChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: data.studentStats.gradeStats.map(g => `Grade ${g.grade}`),
+                datasets: [
+                    {
+                        label: 'Total Students',
+                        data: data.studentStats.gradeStats.map(g => g.totalStudents),
+                        backgroundColor: '#3b82f6',
+                        borderColor: '#2563eb',
+                        borderWidth: 1
+                    },
+                    {
+                        label: 'Students with Choices',
+                        data: data.studentStats.gradeStats.map(g => g.studentsWithChoices),
+                        backgroundColor: '#10b981',
+                        borderColor: '#059669',
+                        borderWidth: 1
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Student Distribution by Grade',
+                        font: { size: 18, weight: 'bold' }
+                    },
+                    legend: {
+                        display: true
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: { display: true, text: 'Number of Students' }
+                    }
+                }
+            }
+        });
+    }
+
+    function createChoiceChart() {
+        if (!choiceChartCanvas || !data.studentStats) return;
+
+        if (choiceChart) {
+            choiceChart.destroy();
+            choiceChart = null;
+        }
+
+        const ctx = choiceChartCanvas.getContext('2d');
+        if (!ctx) return;
+
+        choiceChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: data.studentStats.choiceStats.map(c => `${c.choices} choices`),
+                datasets: [{
+                    label: 'Number of Students',
+                    data: data.studentStats.choiceStats.map(c => c.count),
+                    backgroundColor: '#8b5cf6',
+                    borderColor: '#7c3aed',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Distribution of Student Choices',
+                        font: { size: 18, weight: 'bold' }
+                    },
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: { display: true, text: 'Number of Students' }
+                    }
+                }
+            }
+        });
+    }
+
+    function createSlotChart() {
+        if (!slotChartCanvas || !data.studentStats) return;
+
+        if (slotChart) {
+            slotChart.destroy();
+            slotChart = null;
+        }
+
+        const ctx = slotChartCanvas.getContext('2d');
+        if (!ctx) return;
+
+        // Use the new slot availability stats
+        const slotData = data.studentStats.slotAvailabilityStats;
+        
+        if (slotData.length === 0) {
+            return;
+        }
+
+        slotChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: slotData.map(s => s.category),
+                datasets: [{
+                    label: 'Count',
+                    data: slotData.map(s => s.value),
+                    backgroundColor: slotData.map(s => s.color),
+                    borderColor: slotData.map(s => s.color),
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Slot Availability Overview',
+                        font: { size: 18, weight: 'bold' }
+                    },
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: { display: true, text: 'Count' }
+                    }
+                }
+            }
+        });
+    }
+
+    function createChoiceVsSlotsChart() {
+        if (!choiceVsSlotsChartCanvas || !data.studentStats) return;
+
+        if (choiceVsSlotsChart) {
+            choiceVsSlotsChart.destroy();
+            choiceVsSlotsChart = null;
+        }
+
+        const ctx = choiceVsSlotsChartCanvas.getContext('2d');
+        if (!ctx) return;
+
+        // Filter out students with 0 choices since they have no slot data
+        const filteredData = data.studentStats.slotStats.filter(s => s.choices > 0);
+        
+        if (filteredData.length === 0) {
+            return;
+        }
+
+        choiceVsSlotsChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: filteredData.map(s => `${s.choices} choices`),
+                datasets: [
+                    {
+                        label: 'Number of Students',
+                        data: filteredData.map(s => s.studentCount),
+                        backgroundColor: '#3b82f6',
+                        borderColor: '#2563eb',
+                        borderWidth: 1,
+                        yAxisID: 'y'
+                    },
+                    {
+                        label: 'Average Slots Available',
+                        data: filteredData.map(s => s.averageSlots),
+                        backgroundColor: '#10b981',
+                        borderColor: '#059669',
+                        borderWidth: 1,
+                        yAxisID: 'y1'
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Student Choice Patterns vs Available Slots',
+                        font: { size: 18, weight: 'bold' }
+                    },
+                    legend: {
+                        display: true
+                    }
+                },
+                scales: {
+                    y: {
+                        type: 'linear',
+                        display: true,
+                        position: 'left',
+                        title: { display: true, text: 'Number of Students' }
+                    },
+                    y1: {
+                        type: 'linear',
+                        display: true,
+                        position: 'right',
+                        title: { display: true, text: 'Average Slots Available' },
+                        grid: {
+                            drawOnChartArea: false,
+                        },
+                    }
+                }
+            }
+        });
+    }
+
+    // Create student charts when data is available
+    $effect(() => {
+        if (selectedVisualization === 'student' && data.studentStats) {
+            setTimeout(() => {
+                createGradeChart();
+                createChoiceChart();
+                createSlotChart();
+                createChoiceVsSlotsChart();
             }, 0);
         }
     });
@@ -528,6 +775,126 @@
             <h2 class="text-xl font-semibold mb-4">No Company Data Available</h2>
             <p class="text-gray-600 mb-4">
                 No company participation data is currently available. Ensure students have registered and selected companies.
+            </p>
+        </div>
+    {:else if selectedVisualization === 'student' && data.studentStats}
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- Grade Distribution -->
+            <div class="bg-white rounded-lg shadow p-6">
+                <h2 class="text-xl font-semibold mb-4">Student Distribution by Grade</h2>
+                <div class="h-96">
+                    <canvas bind:this={gradeChartCanvas} width="800" height="400"></canvas>
+                </div>
+            </div>
+
+            <!-- Choice Distribution -->
+            <div class="bg-white rounded-lg shadow p-6">
+                <h2 class="text-xl font-semibold mb-4">Distribution of Student Choices</h2>
+                <div class="h-96">
+                    <canvas bind:this={choiceChartCanvas} width="800" height="400"></canvas>
+                </div>
+            </div>
+
+                         <!-- Slot Availability Overview -->
+             <div class="bg-white rounded-lg shadow p-6">
+                 <h2 class="text-xl font-semibold mb-4">Slot Availability Overview</h2>
+                 <div class="h-96">
+                     <canvas bind:this={slotChartCanvas} width="800" height="400"></canvas>
+                 </div>
+             </div>
+        </div>
+
+        <!-- Student Summary -->
+        <div class="mt-8 bg-white rounded-lg shadow p-6">
+            <h2 class="text-xl font-semibold mb-4">Student Summary</h2>
+            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+                <div class="text-center">
+                    <div class="text-lg font-semibold">{data.studentStats.totalStudents}</div>
+                    <div class="text-sm text-gray-600">Total Students</div>
+                </div>
+                                                  <div class="text-center">
+                     <div class="text-lg font-semibold text-green-600">{data.studentStats.totalStudentsWithChoices}</div>
+                     <div class="text-sm text-gray-600">Students with Choices</div>
+                 </div>
+                 <div class="text-center">
+                     <div class="text-lg font-semibold text-blue-600">{data.studentStats.totalChoices}</div>
+                     <div class="text-sm text-gray-600">Total Student Choices</div>
+                 </div>
+                 <div class="text-center">
+                     <div class="text-lg font-semibold text-purple-600">{data.studentStats.averageChoicesPerStudent.toFixed(1)}</div>
+                     <div class="text-sm text-gray-600">Avg Choices per Student</div>
+                 </div>
+                 <div class="text-center">
+                     <div class="text-lg font-semibold text-orange-600">{data.studentStats.totalAvailableSlots}</div>
+                     <div class="text-sm text-gray-600">Total Available Slots</div>
+                 </div>
+                 <div class="text-center">
+                     <div class="text-lg font-semibold text-red-600">{data.studentStats.studentsWithNoChoices.length}</div>
+                     <div class="text-sm text-gray-600">Students with No Choices</div>
+                 </div>
+            </div>
+        </div>
+
+        <!-- Student Details Table -->
+        <div class="mt-8 bg-white rounded-lg shadow p-6">
+            <h2 class="text-xl font-semibold mb-4">Student Details</h2>
+            <div class="overflow-x-auto">
+                <table class="min-w-full bg-white border border-gray-200">
+                    <thead>
+                        <tr>
+                            <th class="py-2 px-4 border-b text-left text-sm font-semibold text-gray-600">Grade</th>
+                            <th class="py-2 px-4 border-b text-left text-sm font-semibold text-gray-600">Total Students</th>
+                            <th class="py-2 px-4 border-b text-left text-sm font-semibold text-gray-600">Students with Choices</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {#each data.studentStats.gradeStats as grade}
+                            <tr>
+                                <td class="py-2 px-4 border-b text-sm text-gray-800">{grade.grade}</td>
+                                <td class="py-2 px-4 border-b text-sm text-green-600">{grade.totalStudents}</td>
+                                <td class="py-2 px-4 border-b text-sm text-blue-600">{grade.studentsWithChoices}</td>
+                            </tr>
+                        {/each}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Choice Details Table -->
+        <div class="mt-8 bg-white rounded-lg shadow p-6">
+            <h2 class="text-xl font-semibold mb-4">Choice Details</h2>
+            <div class="overflow-x-auto">
+                <table class="min-w-full bg-white border border-gray-200">
+                    <thead>
+                        <tr>
+                            <th class="py-2 px-4 border-b text-left text-sm font-semibold text-gray-600">Number of Choices</th>
+                            <th class="py-2 px-4 border-b text-left text-sm font-semibold text-gray-600">Count</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {#each data.studentStats.choiceStats as choice}
+                            <tr>
+                                <td class="py-2 px-4 border-b text-sm text-gray-800">{choice.choices} choices</td>
+                                <td class="py-2 px-4 border-b text-sm text-blue-600">{choice.count}</td>
+                            </tr>
+                        {/each}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+         <!-- Slot Details Table -->
+         <div class="mt-8 bg-white rounded-lg shadow p-6">
+             <h2 class="text-xl font-semibold mb-4">Choice Patterns vs Slot Availability</h2>
+             <div class="h-96">
+                 <canvas bind:this={choiceVsSlotsChartCanvas} width="800" height="400"></canvas>
+             </div>
+         </div>
+    {:else if selectedVisualization === 'student' && !data.studentStats}
+        <div class="bg-white rounded-lg shadow p-6">
+            <h2 class="text-xl font-semibold mb-4">No Student Data Available</h2>
+            <p class="text-gray-600 mb-4">
+                No student registration or choice data is currently available. Ensure students have registered and selected companies.
             </p>
         </div>
     {:else}

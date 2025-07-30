@@ -23,6 +23,7 @@ export const load = async ({ locals }: { locals: any }) => {
         // Get latest completed lottery results
         let lotteryStats = null;
         let companyStats = null;
+        let studentStats = null;
         try {
             const latestJob = await prisma.lotteryJob.findFirst({
                 where: { status: 'COMPLETED' },
@@ -38,6 +39,9 @@ export const load = async ({ locals }: { locals: any }) => {
                 
                 // Calculate company analytics
                 companyStats = await calculateCompanyStats(userInfo);
+                
+                // Calculate student demographics
+                studentStats = await calculateStudentStats(userInfo);
             }
         } catch (lotteryError) {
             console.error('Error fetching lottery stats:', lotteryError);
@@ -49,7 +53,8 @@ export const load = async ({ locals }: { locals: any }) => {
             loggedIn: true,
             isHost: !!locals.user.host,
             lotteryStats,
-            companyStats
+            companyStats,
+            studentStats
         };
     } catch (error) {
         console.error('Error in visualizations load function:', error);
@@ -236,6 +241,181 @@ async function calculateCompanyStats(userInfo: any) {
         };
     } catch (error) {
         console.error('Error calculating company stats:', error);
+        throw error;
+    }
+}
+
+async function calculateStudentStats(userInfo: any) {
+    try {
+        // Get all positions to calculate total available slots
+        const allPositions = await prisma.position.findMany({
+            where: {
+                event: { schoolId: { in: userInfo.adminOfSchools.map((s: any) => s.id) } }
+            },
+            include: {
+                host: {
+                    include: {
+                        company: true
+                    }
+                }
+            }
+        });
+
+        const totalAvailableSlots = allPositions.reduce((sum, p) => sum + p.slots, 0);
+
+        // Get all students with their choices and grade information
+        const studentsWithChoices = await prisma.student.findMany({
+            where: {
+                schoolId: { in: userInfo.adminOfSchools.map((s: any) => s.id) }
+            },
+            include: {
+                positionsSignedUpFor: {
+                    include: {
+                        position: {
+                            include: {
+                                host: {
+                                    include: {
+                                        company: true
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    orderBy: { rank: 'asc' }
+                }
+            }
+        });
+
+        // Grade distribution
+        const gradeDistribution = {};
+        const choiceDistribution = {};
+        const slotAvailability = {};
+        const studentsWithNoChoices = [];
+        const studentsWithManyChoices = [];
+
+        for (const student of studentsWithChoices) {
+            const grade = student.grade;
+            const choiceCount = student.positionsSignedUpFor.length;
+            
+            // Grade distribution
+            if (!gradeDistribution[grade]) {
+                gradeDistribution[grade] = {
+                    totalStudents: 0,
+                    studentsWithChoices: 0,
+                    totalChoices: 0,
+                    averageChoices: 0
+                };
+            }
+            gradeDistribution[grade].totalStudents++;
+            gradeDistribution[grade].totalChoices += choiceCount;
+            if (choiceCount > 0) {
+                gradeDistribution[grade].studentsWithChoices++;
+            }
+
+            // Choice distribution
+            if (!choiceDistribution[choiceCount]) {
+                choiceDistribution[choiceCount] = 0;
+            }
+            choiceDistribution[choiceCount]++;
+
+            // Students with no choices
+            if (choiceCount === 0) {
+                studentsWithNoChoices.push({
+                    name: `${student.firstName} ${student.lastName}`,
+                    grade: student.grade
+                });
+            }
+
+            // Students with many choices (5+)
+            if (choiceCount >= 5) {
+                studentsWithManyChoices.push({
+                    name: `${student.firstName} ${student.lastName}`,
+                    grade: student.grade,
+                    choiceCount
+                });
+            }
+
+            // Calculate total available slots for student's choices
+            let totalSlotsAvailable = 0;
+            for (const choice of student.positionsSignedUpFor) {
+                totalSlotsAvailable += choice.position.slots;
+            }
+
+            if (!slotAvailability[choiceCount]) {
+                slotAvailability[choiceCount] = {
+                    totalSlots: 0,
+                    studentCount: 0
+                };
+            }
+            slotAvailability[choiceCount].totalSlots += totalSlotsAvailable;
+            slotAvailability[choiceCount].studentCount++;
+        }
+
+        // Calculate averages
+        Object.keys(gradeDistribution).forEach(grade => {
+            const stats = gradeDistribution[grade];
+            stats.averageChoices = stats.studentsWithChoices > 0 ? 
+                (stats.totalChoices / stats.studentsWithChoices) : 0;
+        });
+
+        // Convert to arrays for easier charting
+        const gradeStats = Object.entries(gradeDistribution).map(([grade, stats]) => ({
+            grade: parseInt(grade),
+            ...stats
+        })).sort((a, b) => a.grade - b.grade);
+
+        const choiceStats = Object.entries(choiceDistribution).map(([choices, count]) => ({
+            choices: parseInt(choices),
+            count
+        })).sort((a, b) => a.choices - b.choices);
+
+        const slotStats = Object.entries(slotAvailability).map(([choices, stats]) => ({
+            choices: parseInt(choices),
+            averageSlots: stats.studentCount > 0 ? (stats.totalSlots / stats.studentCount) : 0,
+            totalSlots: stats.totalSlots,
+            studentCount: stats.studentCount
+        })).sort((a, b) => a.choices - b.choices);
+
+        // Create a more meaningful slot availability chart
+        const slotAvailabilityStats = [
+            {
+                category: 'Total Available Slots',
+                value: totalAvailableSlots,
+                color: '#10b981'
+            },
+            {
+                category: 'Total Student Choices',
+                value: studentsWithChoices.reduce((sum, s) => sum + s.positionsSignedUpFor.length, 0),
+                color: '#3b82f6'
+            },
+            {
+                category: 'Students with Choices',
+                value: studentsWithChoices.filter(s => s.positionsSignedUpFor.length > 0).length,
+                color: '#8b5cf6'
+            },
+            {
+                category: 'Students with No Choices',
+                value: studentsWithChoices.filter(s => s.positionsSignedUpFor.length === 0).length,
+                color: '#ef4444'
+            }
+        ];
+
+        return {
+            gradeStats,
+            choiceStats,
+            slotStats,
+            slotAvailabilityStats,
+            studentsWithNoChoices,
+            studentsWithManyChoices,
+            totalStudents: studentsWithChoices.length,
+            totalStudentsWithChoices: studentsWithChoices.filter(s => s.positionsSignedUpFor.length > 0).length,
+            totalChoices: studentsWithChoices.reduce((sum, s) => sum + s.positionsSignedUpFor.length, 0),
+            totalAvailableSlots,
+            averageChoicesPerStudent: studentsWithChoices.length > 0 ? 
+                (studentsWithChoices.reduce((sum, s) => sum + s.positionsSignedUpFor.length, 0) / studentsWithChoices.length) : 0
+        };
+    } catch (error) {
+        console.error('Error calculating student stats:', error);
         throw error;
     }
 } 

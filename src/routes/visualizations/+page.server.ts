@@ -22,6 +22,7 @@ export const load = async ({ locals }: { locals: any }) => {
 
         // Get latest completed lottery results
         let lotteryStats = null;
+        let companyStats = null;
         try {
             const latestJob = await prisma.lotteryJob.findFirst({
                 where: { status: 'COMPLETED' },
@@ -34,6 +35,9 @@ export const load = async ({ locals }: { locals: any }) => {
             if (latestJob) {
                 // Calculate choice statistics
                 lotteryStats = await calculateLotteryStats(latestJob.results);
+                
+                // Calculate company analytics
+                companyStats = await calculateCompanyStats(userInfo);
             }
         } catch (lotteryError) {
             console.error('Error fetching lottery stats:', lotteryError);
@@ -44,7 +48,8 @@ export const load = async ({ locals }: { locals: any }) => {
             isAdmin: true,
             loggedIn: true,
             isHost: !!locals.user.host,
-            lotteryStats
+            lotteryStats,
+            companyStats
         };
     } catch (error) {
         console.error('Error in visualizations load function:', error);
@@ -112,6 +117,125 @@ async function calculateLotteryStats(results: { studentId: string; positionId: s
         };
     } catch (error) {
         console.error('Error calculating lottery stats:', error);
+        throw error;
+    }
+}
+
+async function calculateCompanyStats(userInfo: any) {
+    try {
+        // Get all positions with their companies and student choices
+        const positionsWithChoices = await prisma.position.findMany({
+            where: {
+                event: { schoolId: { in: userInfo.adminOfSchools.map((s: any) => s.id) } }
+            },
+            include: {
+                host: {
+                    include: {
+                        company: true
+                    }
+                },
+                students: {
+                    include: {
+                        student: true
+                    }
+                }
+            }
+        });
+
+        // Group positions by career field
+        const positionsByCareer: Record<string, any> = {};
+        const companyPopularity: Record<string, any> = {};
+        const oversubscribedCompanies: any[] = [];
+        const undersubscribedCompanies: any[] = [];
+
+        for (const position of positionsWithChoices) {
+            const careerField = position.career || 'Other';
+            const companyName = position.host.company?.companyName || 'Unknown Company';
+            
+            // Track positions by career
+            if (!positionsByCareer[careerField]) {
+                positionsByCareer[careerField] = {
+                    totalPositions: 0,
+                    totalSlots: 0,
+                    totalChoices: 0,
+                    companies: new Set()
+                };
+            }
+            positionsByCareer[careerField].totalPositions++;
+            positionsByCareer[careerField].totalSlots += position.slots;
+            positionsByCareer[careerField].totalChoices += position.students.length;
+            positionsByCareer[careerField].companies.add(companyName);
+
+            // Track company popularity
+            if (!companyPopularity[companyName]) {
+                companyPopularity[companyName] = {
+                    totalPositions: 0,
+                    totalSlots: 0,
+                    totalChoices: 0,
+                    careerFields: new Set()
+                };
+            }
+            companyPopularity[companyName].totalPositions++;
+            companyPopularity[companyName].totalSlots += position.slots;
+            companyPopularity[companyName].totalChoices += position.students.length;
+            companyPopularity[companyName].careerFields.add(careerField);
+
+            // Check for oversubscription
+            const oversubscriptionRate = position.students.length / position.slots;
+            if (oversubscriptionRate > 1) {
+                oversubscribedCompanies.push({
+                    company: companyName,
+                    position: position.title,
+                    slots: position.slots,
+                    choices: position.students.length,
+                    rate: oversubscriptionRate
+                });
+            } else if (position.students.length === 0) {
+                undersubscribedCompanies.push({
+                    company: companyName,
+                    position: position.title,
+                    slots: position.slots,
+                    choices: 0
+                });
+            }
+        }
+
+        // Convert Sets to arrays for JSON serialization
+        const careerStats = Object.entries(positionsByCareer).map(([career, stats]) => ({
+            career,
+            totalPositions: stats.totalPositions,
+            totalSlots: stats.totalSlots,
+            totalChoices: stats.totalChoices,
+            averageChoicesPerPosition: stats.totalChoices / stats.totalPositions,
+            companies: Array.from(stats.companies)
+        }));
+
+        const companyStats = Object.entries(companyPopularity).map(([company, stats]) => ({
+            company,
+            totalPositions: stats.totalPositions,
+            totalSlots: stats.totalSlots,
+            totalChoices: stats.totalChoices,
+            averageChoicesPerPosition: stats.totalChoices / stats.totalPositions,
+            careerFields: Array.from(stats.careerFields)
+        }));
+
+        // Sort by popularity
+        careerStats.sort((a, b) => b.totalChoices - a.totalChoices);
+        companyStats.sort((a, b) => b.totalChoices - a.totalChoices);
+        oversubscribedCompanies.sort((a, b) => b.rate - a.rate);
+
+        return {
+            careerStats,
+            companyStats,
+            oversubscribedCompanies,
+            undersubscribedCompanies,
+            totalCompanies: Object.keys(companyPopularity).length,
+            totalPositions: positionsWithChoices.length,
+            totalSlots: positionsWithChoices.reduce((sum, p) => sum + p.slots, 0),
+            totalChoices: positionsWithChoices.reduce((sum, p) => sum + p.students.length, 0)
+        };
+    } catch (error) {
+        console.error('Error calculating company stats:', error);
         throw error;
     }
 } 

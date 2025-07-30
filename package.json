@@ -44,7 +44,6 @@
 	},
 	"type": "module",
 	"dependencies": {
-		"@friendofsvelte/tipex": "0.0.1-prev.0.2",
 		"@google-cloud/storage": "^7.15.0",
 		"@lucia-auth/adapter-prisma": "^4.0.1",
 		"@node-rs/argon2": "^1.8.3",
@@ -54,6 +53,7 @@
 		"@tiptap/extension-list-item": "^2.11.5",
 		"@tiptap/pm": "^2.11.5",
 		"@tiptap/starter-kit": "^2.11.5",
+		"chart.js": "^4.5.0",
 		"firebase-scrypt": "^2.2.0",
 		"mailtrap": "^3.4.0",
 		"oslo": "^1.2.1",

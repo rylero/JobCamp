@@ -49,66 +49,61 @@
             type: 'bar',
             data: {
                 labels: ['1st Choice', '2nd Choice', '3rd Choice', '4th Choice', '5th Choice', '6th Choice', '7th Choice', '8th Choice', '9th Choice', '10th Choice', 'Not Placed'],
-                datasets: [
-                    {
-                        label: 'Students',
-                        data: [
-                            data.lotteryStats.firstChoice,
-                            data.lotteryStats.secondChoice,
-                            data.lotteryStats.thirdChoice,
-                            data.lotteryStats.fourthChoice,
-                            data.lotteryStats.fifthChoice,
-                            data.lotteryStats.sixthChoice,
-                            data.lotteryStats.seventhChoice,
-                            data.lotteryStats.eighthChoice,
-                            data.lotteryStats.ninthChoice,
-                            data.lotteryStats.tenthChoice,
-                            data.lotteryStats.notPlaced
-                        ],
-                        backgroundColor: [
-                            '#10b981', // Green for 1st choice
-                            '#f59e0b', // Yellow for 2nd choice
-                            '#f97316', // Orange for 3rd choice
-                            '#8b5cf6', // Purple for 4th choice
-                            '#3b82f6', // Blue for 5th choice
-                            '#ec4899', // Pink for 6th choice
-                            '#06b6d4', // Cyan for 7th choice
-                            '#84cc16', // Lime for 8th choice
-                            '#fbbf24', // Amber for 9th choice
-                            '#f97316', // Orange for 10th choice
-                            '#ef4444'  // Red for not placed
-                        ],
-                        borderColor: [
-                            '#059669',
-                            '#d97706',
-                            '#ea580c',
-                            '#7c3aed',
-                            '#2563eb',
-                            '#db2777',
-                            '#0891b2',
-                            '#65a30d',
-                            '#d97706',
-                            '#ea580c',
-                            '#dc2626'
-                        ],
-                        borderWidth: 1
-                    }
-                ]
+                datasets: [{
+                    label: 'Students',
+                    data: [
+                        data.lotteryStats.firstChoice,
+                        data.lotteryStats.secondChoice,
+                        data.lotteryStats.thirdChoice,
+                        data.lotteryStats.fourthChoice,
+                        data.lotteryStats.fifthChoice,
+                        data.lotteryStats.sixthChoice,
+                        data.lotteryStats.seventhChoice,
+                        data.lotteryStats.eighthChoice,
+                        data.lotteryStats.ninthChoice,
+                        data.lotteryStats.tenthChoice,
+                        data.lotteryStats.notPlaced
+                    ],
+                    backgroundColor: [
+                        '#10b981', // Green for 1st choice
+                        '#f59e0b', // Yellow for 2nd choice
+                        '#f97316', // Orange for 3rd choice
+                        '#8b5cf6', // Purple for 4th choice
+                        '#3b82f6', // Blue for 5th choice
+                        '#ec4899', // Pink for 6th choice
+                        '#06b6d4', // Cyan for 7th choice
+                        '#84cc16', // Lime for 8th choice
+                        '#fbbf24', // Amber for 9th choice
+                        '#f97316', // Orange for 10th choice
+                        '#ef4444'  // Red for not placed
+                    ],
+                    borderColor: [
+                        '#059669',
+                        '#d97706',
+                        '#ea580c',
+                        '#7c3aed',
+                        '#2563eb',
+                        '#db2777',
+                        '#0891b2',
+                        '#65a30d',
+                        '#d97706',
+                        '#ea580c',
+                        '#dc2626'
+                    ],
+                    borderWidth: 1
+                }]
             },
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
                 plugins: {
-                    legend: {
-                        display: false
-                    },
                     title: {
                         display: true,
                         text: 'Lottery Results - Choice Distribution',
-                        font: {
-                            size: 18,
-                            weight: 'bold'
-                        }
+                        font: { size: 18, weight: 'bold' }
+                    },
+                    legend: {
+                        display: false
                     },
                     tooltip: {
                         callbacks: {
@@ -123,27 +118,24 @@
                 scales: {
                     y: {
                         beginAtZero: true,
-                        title: {
-                            display: true,
-                            text: 'Number of Students'
-                        }
+                        title: { display: true, text: 'Number of Students' }
                     },
                     x: {
-                        title: {
-                            display: true,
-                            text: 'Choice Level'
-                        }
+                        title: { display: true, text: 'Choice Level' }
                     }
                 }
             }
         });
     }
 
-    // Create chart when component mounts and data is available
-    onMount(() => {
-        setTimeout(() => {
-            createChart();
-        }, 0);
+    // Create lottery chart when data is available
+    $effect(() => {
+        if (selectedVisualization === 'lottery' && data.lotteryStats) {
+            // Use a longer timeout to ensure canvas is properly bound
+            setTimeout(() => {
+                createChart();
+            }, 100);
+        }
     });
 
     // Cleanup on unmount

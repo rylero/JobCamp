@@ -5,8 +5,9 @@
     import { Chart, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, BarController, DoughnutController, ArcElement } from 'chart.js';
 
     let { data } = $props();
-    let chartCanvas: HTMLCanvasElement;
-    let chart: Chart | null = null;
+    // Chart variables
+    let chartCanvas = $state<HTMLCanvasElement | undefined>(undefined);
+    let chart = $state<Chart | null>(null);
     let selectedVisualization = $state('lottery');
 
     // Available visualizations
@@ -21,20 +22,15 @@
     Chart.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, BarController, DoughnutController, ArcElement);
 
     function createChart() {
-        if (!chartCanvas || !data.lotteryStats) {
-            return;
-        }
+        if (!chartCanvas || !data.lotteryStats) return;
 
-        // Destroy existing chart if it exists
         if (chart) {
             chart.destroy();
             chart = null;
         }
 
         const ctx = chartCanvas.getContext('2d');
-        if (!ctx) {
-            return;
-        }
+        if (!ctx) return;
 
         chart = new Chart(ctx, {
             type: 'bar',
@@ -147,10 +143,10 @@
     });
 
     // Company Analytics Charts
-    let careerChartCanvas: HTMLCanvasElement;
-    let companyChartCanvas: HTMLCanvasElement;
-    let careerChart: Chart | null = null;
-    let companyChart: Chart | null = null;
+    let careerChartCanvas = $state<HTMLCanvasElement | undefined>(undefined);
+    let companyChartCanvas = $state<HTMLCanvasElement | undefined>(undefined);
+    let careerChart = $state<Chart | null>(null);
+    let companyChart = $state<Chart | null>(null);
 
     function createCareerChart() {
         if (!careerChartCanvas || !data.companyStats) return;
@@ -210,9 +206,7 @@
     }
 
     function createCompanyChart() {
-        if (!companyChartCanvas || !data.companyStats) {
-            return;
-        }
+        if (!companyChartCanvas || !data.companyStats) return;
 
         if (companyChart) {
             companyChart.destroy();
@@ -220,9 +214,7 @@
         }
 
         const ctx = companyChartCanvas.getContext('2d');
-        if (!ctx) {
-            return;
-        }
+        if (!ctx) return;
 
         const topCompanies = data.companyStats.companyStats.slice(0, 10);
         
@@ -267,14 +259,14 @@
     });
 
     // Student Demographics Charts
-    let gradeChartCanvas: HTMLCanvasElement;
-    let choiceChartCanvas: HTMLCanvasElement;
-    let slotChartCanvas: HTMLCanvasElement;
-    let choiceVsSlotsChartCanvas: HTMLCanvasElement;
-    let gradeChart: Chart | null = null;
-    let choiceChart: Chart | null = null;
-    let slotChart: Chart | null = null;
-    let choiceVsSlotsChart: Chart | null = null;
+    let gradeChartCanvas = $state<HTMLCanvasElement | undefined>(undefined);
+    let choiceChartCanvas = $state<HTMLCanvasElement | undefined>(undefined);
+    let slotChartCanvas = $state<HTMLCanvasElement | undefined>(undefined);
+    let choiceVsSlotsChartCanvas = $state<HTMLCanvasElement | undefined>(undefined);
+    let gradeChart = $state<Chart | null>(null);
+    let choiceChart = $state<Chart | null>(null);
+    let slotChart = $state<Chart | null>(null);
+    let choiceVsSlotsChart = $state<Chart | null>(null);
 
     function createGradeChart() {
         if (!gradeChartCanvas || !data.studentStats) return;

@@ -20,6 +20,7 @@ export async function startLotteryJob(adminId: string) {
 }
 
 async function runLotteryInBackground(jobId: string) {
+    console.log('Starting lottery background job:', jobId);
     try {
         // Initial progress update
         await prisma.lotteryJob.update({
@@ -30,8 +31,61 @@ async function runLotteryInBackground(jobId: string) {
             }
         });
         
+        // Get the job to find the admin
+        const job = await prisma.lotteryJob.findUnique({
+            where: { id: jobId }
+        });
+
+        if (!job) {
+            throw new Error('Job not found');
+        }
+
+        // Get admin's school
+        const admin = await prisma.user.findUnique({
+            where: { id: job.adminId },
+            include: { adminOfSchools: true }
+        });
+
+        if (!admin?.adminOfSchools?.length) {
+            throw new Error('Admin not found or no schools assigned');
+        }
+
+        const schoolId = admin.adminOfSchools[0].id;
+
+        // Get lottery configuration
+        let lotteryConfig = await prisma.lotteryConfiguration.findUnique({
+            where: { schoolId },
+            include: {
+                manualAssignments: true,
+                prefillSettings: {
+                    include: {
+                        company: true
+                    }
+                }
+            }
+        });
+
+        // If no config exists, create one with default settings
+        if (!lotteryConfig) {
+            lotteryConfig = await prisma.lotteryConfiguration.create({
+                data: {
+                    schoolId,
+                    gradeOrder: 'NONE' // Default to random order
+                },
+                include: {
+                    manualAssignments: true,
+                    prefillSettings: {
+                        include: {
+                            company: true
+                        }
+                    }
+                }
+            });
+        }
+
         // Get all students and their preferences
         const students = await prisma.student.findMany({
+            where: { schoolId },
             include: {
                 positionsSignedUpFor: {
                     include: {
@@ -44,14 +98,46 @@ async function runLotteryInBackground(jobId: string) {
 
         // Get all positions
         const positions = await prisma.position.findMany({
+            where: {
+                event: { schoolId }
+            },
             include: {
                 event: {
                     include: {
                         school: true
                     }
+                },
+                host: {
+                    include: {
+                        company: true
+                    }
                 }
             }
         });
+
+        // Apply manual assignments first
+        const manualAssignments = new Map();
+        if (lotteryConfig?.manualAssignments) {
+            for (const assignment of lotteryConfig.manualAssignments) {
+                manualAssignments.set(assignment.studentId, assignment.positionId);
+            }
+        }
+
+        // Apply prefill settings
+        const prefillAssignments = new Map();
+        if (lotteryConfig?.prefillSettings) {
+            for (const setting of lotteryConfig.prefillSettings) {
+                const companyPositions = positions.filter(p => 
+                    p.host?.company?.id === setting.companyId
+                );
+                
+                for (const position of companyPositions) {
+                    const slotsToFill = Math.floor(position.slots * setting.prefillPercentage / 100);
+                    // This is a simplified prefill - in practice you'd want more sophisticated logic
+                    prefillAssignments.set(position.id, slotsToFill);
+                }
+            }
+        }
 
         let bestResult = null;
         let bestCost = Infinity;
@@ -59,7 +145,14 @@ async function runLotteryInBackground(jobId: string) {
         // Your lottery algorithm here
         for (let seed = 1; seed <= 5000; seed++) {
             // Run lottery with this seed
-            const result = await runLotteryWithSeed(seed, students, positions);
+            const result = await runLotteryWithSeed(
+                seed, 
+                students, 
+                positions, 
+                manualAssignments,
+                prefillAssignments,
+                lotteryConfig?.gradeOrder || 'ASCENDING'
+            );
             
             // Track the best result
             if (result.cost < bestCost) {
@@ -115,17 +208,28 @@ async function runLotteryInBackground(jobId: string) {
         });
         
     } catch (error) {
+        console.error('Lottery failed with error:', error);
+        const errorMessage = error instanceof Error ? error.message : String(error);
+        console.error('Error message:', errorMessage);
+        
         await prisma.lotteryJob.update({
             where: { id: jobId },
             data: { 
                 status: 'FAILED',
-                error: error instanceof Error ? error.message : String(error)
+                error: errorMessage.substring(0, 190)
             }
         });
     }
 }
 
-async function runLotteryWithSeed(seed: number, students: any[], positions: any[]) {
+async function runLotteryWithSeed(
+    seed: number, 
+    students: any[], 
+    positions: any[], 
+    manualAssignments: Map<string, string>,
+    prefillAssignments: Map<string, number>,
+    gradeOrder: string
+) {
     // Your migrated lottery algorithm
     function deepCopy(obj: any) {
         return JSON.parse(JSON.stringify(obj));
@@ -146,6 +250,15 @@ async function runLotteryWithSeed(seed: number, students: any[], positions: any[
     let cost = 0;
     let worstrank = 0;
     const studentsCopy = deepCopy(students);
+    
+    // Sort students by grade according to configuration
+    if (gradeOrder === 'ASCENDING') {
+        studentsCopy.sort((a: any, b: any) => a.grade - b.grade);
+    } else if (gradeOrder === 'DESCENDING') {
+        studentsCopy.sort((a: any, b: any) => b.grade - a.grade);
+    }
+    // For 'NONE', we don't sort by grade, just use the shuffled order
+    
     shuffle(studentsCopy);
     
     const positionSlots: { [key: string]: number } = {};
@@ -153,10 +266,25 @@ async function runLotteryWithSeed(seed: number, students: any[], positions: any[
         positionSlots[pos.id] = pos.slots;
     });
     
+    // Apply prefill assignments
+    for (const [positionId, slotsToFill] of prefillAssignments.entries()) {
+        if (positionSlots[positionId]) {
+            positionSlots[positionId] = Math.max(0, positionSlots[positionId] - slotsToFill);
+        }
+    }
+    
     const assignments: { [key: string]: { positionId: string | null, rank: number | null } } = {};
     studentsCopy.forEach((s: any) => {
         assignments[s.id] = { positionId: null, rank: null };
     });
+
+    // Apply manual assignments first
+    for (const [studentId, positionId] of manualAssignments.entries()) {
+        if (positionSlots[positionId] > 0) {
+            assignments[studentId] = { positionId, rank: -1 }; // -1 indicates manual assignment
+            positionSlots[positionId] -= 1;
+        }
+    }
 
     // Convert student preferences to the format your algorithm expects
     for (let currentRank = 0; currentRank < 10; currentRank++) {

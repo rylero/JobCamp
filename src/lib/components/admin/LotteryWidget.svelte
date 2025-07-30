@@ -8,6 +8,7 @@
         results: any[];
         stats: any;
     };
+    export let gradeOrder: string = 'NONE';
 
     let jobId: string | null = null;
     let isRunning = data.isRunning;
@@ -89,6 +90,7 @@
         <h3 class="font-semibold mb-2">Run Lottery</h3>
         {#if !isRunning && !isProcessing}
             <form method="POST" action="?/runLottery">
+                <input type="hidden" name="gradeOrder" value={gradeOrder}>
                 <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
                     Run Lottery
                 </button>

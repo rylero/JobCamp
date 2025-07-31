@@ -151,9 +151,12 @@
           },
           tooltip: {
             callbacks: {
-              label: function (tooltipItem: any) {
-                const data = tooltipItem.dataset.data as number[];
-                const value = tooltipItem.parsed.y as number;
+              label: function (tooltipItem: {
+                dataset: { data: number[] };
+                parsed: { y: number };
+              }) {
+                const data = tooltipItem.dataset.data;
+                const value = tooltipItem.parsed.y;
                 const total = data.reduce((a: number, b: number) => a + b, 0);
                 const percentage = ((value / total) * 100).toFixed(1);
                 return `${value} students (${percentage}%)`;

@@ -64,7 +64,7 @@ jobs:
       - name: Smoke test complete
         run: echo "✅ All tests and smoke test passed!"
 
-  deploy:
+  generate-staging-docker-container:
     runs-on: "ubuntu-latest"
     needs: test # Only run if tests pass
 

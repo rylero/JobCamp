@@ -1,13 +1,15 @@
 import { prisma } from '$lib/server/prisma';
 import { redirect } from '@sveltejs/kit';
-import type { Actions, PageServerLoad } from './$types';
+import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ params, locals }) => {
     const loggedIn = locals.user != null;
     
     let isHost = false;
+    let isAdmin = false;
     if (locals.user) {
         isHost = locals.user.host != null;
+        isAdmin = locals.user.adminOfSchools != null && locals.user.adminOfSchools.length > 0;
     }
 
     const schoolWebAddr = params.school;
@@ -37,5 +39,5 @@ export const load: PageServerLoad = async ({ params, locals }) => {
         }
     });
 
-    return { positionData, isHost, loggedIn };
+    return { positionData, isHost, loggedIn, isAdmin };
 }

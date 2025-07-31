@@ -9,6 +9,28 @@ interface Locals {
     };
 }
 
+interface CompanySubscriptionRate {
+    totalPositions: number;
+    totalSlots: number;
+    totalChoices: number;
+    averageSubscriptionRate: number;
+    positions: Array<{
+        title: string;
+        slots: number;
+        choices: number;
+        rate: number;
+    }>;
+}
+
+interface CompanySubscriptionRates {
+    [companyName: string]: CompanySubscriptionRate;
+}
+
+interface UserInfo {
+    id: string;
+    adminOfSchools: Array<{ id: string }>;
+}
+
 export const load = async ({ locals }: { locals: Locals }) => {
     try {
         if (!locals.user) {
@@ -119,7 +141,7 @@ async function calculateLotteryStats(results: { studentId: string; positionId: s
         });
 
         // Calculate company subscription rates
-        const companySubscriptionRates: Record<string, any> = {};
+        const companySubscriptionRates: CompanySubscriptionRates = {};
         const totalPositions = positionsWithCompanies.length;
         const totalSlots = positionsWithCompanies.reduce((sum, p) => sum + p.slots, 0);
         const totalChoices = positionsWithCompanies.reduce((sum, p) => sum + p.students.length, 0);
@@ -204,7 +226,7 @@ async function calculateLotteryStats(results: { studentId: string; positionId: s
     }
 }
 
-async function calculateCompanyStats(userInfo: any) {
+async function calculateCompanyStats(userInfo: UserInfo) {
     try {
         // Get all positions with their companies and student choices
         const positionsWithChoices = await prisma.position.findMany({
@@ -323,7 +345,7 @@ async function calculateCompanyStats(userInfo: any) {
     }
 }
 
-async function calculateStudentStats(userInfo: any) {
+async function calculateStudentStats(userInfo: UserInfo) {
     try {
         // Get all positions to calculate total available slots
         const allPositions = await prisma.position.findMany({
@@ -498,7 +520,7 @@ async function calculateStudentStats(userInfo: any) {
     }
 }
 
-async function calculateTimelineStats(userInfo: any) {
+async function calculateTimelineStats(userInfo: UserInfo) {
     try {
         // Get all students with their choice data
         const students = await prisma.student.findMany({

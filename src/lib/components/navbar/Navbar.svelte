@@ -12,7 +12,7 @@
   const { loggedIn, isHost, isAdmin } = $props();
 
   let collapsed = $state(false);
-  let form: HTMLFormElement;
+  let form = $state<HTMLFormElement | undefined>(undefined);
 
   onMount(() => {
     var x = window.matchMedia("(max-width: 768px)");
@@ -70,7 +70,7 @@
                   action="/dashboard/?/logOut"
                   bind:this={form}
                 >
-                  <DropdownMenu.Item onclick={() => form.submit()}>
+                  <DropdownMenu.Item onclick={() => form?.submit()}>
                     <LogOut class="mr-2 h-4 w-4" />
                     <input type="submit" value="Log out" />
                   </DropdownMenu.Item>
@@ -131,7 +131,7 @@
                     action="/dashboard/?/logOut"
                     bind:this={form}
                   >
-                    <DropdownMenu.Item onclick={() => form.submit()}>
+                    <DropdownMenu.Item onclick={() => form?.submit()}>
                       <LogOut class="mr-2 h-4 w-4" />
                       <input type="submit" value="Log out" />
                     </DropdownMenu.Item>
@@ -193,7 +193,7 @@
                 action="/dashboard/?/logOut"
                 bind:this={form}
               >
-                <DropdownMenu.Item onclick={() => form.submit()}>
+                <DropdownMenu.Item onclick={() => form?.submit()}>
                   <LogOut class="mr-2 h-4 w-4" />
                   <input type="submit" value="Log out" />
                 </DropdownMenu.Item>

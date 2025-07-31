@@ -116,10 +116,10 @@ export const actions: Actions = {
             redirect(302, "/login");
         }
 
-        let posIds: any = await prisma.positionsOnStudents.findMany({ where: { studentId: studentId }});
+        let posIds: Array<{ positionId: string }> = await prisma.positionsOnStudents.findMany({ where: { studentId: studentId }});
 
         let deleted = false;
-        posIds = posIds.filter((val: any) => {
+        posIds = posIds.filter((val: { positionId: string }) => {
             if (val.positionId == posId) {
                 deleted = true;
             }
@@ -130,7 +130,7 @@ export const actions: Actions = {
             posIds.push({ positionId: posId });
         }
 
-        const positions = posIds.map((val: any, i: number) => {
+        const positions = posIds.map((val: { positionId: string }, i: number) => {
             return {
                 rank: i,
                 studentId: student.id,

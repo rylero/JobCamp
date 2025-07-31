@@ -1,5 +1,4 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { prisma } from './prisma';
 
 // Mock the lottery functions
 vi.mock('./lottery', () => ({
@@ -14,19 +13,7 @@ describe('Lottery Algorithm', () => {
 
 	describe('runLotteryWithSeed', () => {
 		it('should apply manual assignments first', async () => {
-			const mockStudents = [
-				{ id: 's1', grade: 10, positionsSignedUpFor: [] },
-				{ id: 's2', grade: 11, positionsSignedUpFor: [] }
-			];
-
-			const mockPositions = [
-				{ id: 'p1', slots: 2, host: { company: { id: 'c1' } } },
-				{ id: 'p2', slots: 1, host: { company: { id: 'c2' } } }
-			];
-
 			const manualAssignments = new Map([['s1', 'p1']]);
-			const prefillAssignments = new Map();
-			const gradeOrder = 'NONE';
 
 			// This would test the actual algorithm logic
 			// For now, we'll test the structure
@@ -35,13 +22,6 @@ describe('Lottery Algorithm', () => {
 		});
 
 		it('should apply prefill settings correctly', async () => {
-			const mockPositions = [
-				{ id: 'p1', slots: 10, host: { company: { id: 'c1' } } },
-				{ id: 'p2', slots: 5, host: { company: { id: 'c1' } } }
-			];
-
-			const prefillAssignments = new Map([['p1', 3]]); // 30% of 10 slots
-
 			// Test prefill calculation
 			const expectedSlotsToFill = Math.floor(10 * 30 / 100);
 			expect(expectedSlotsToFill).toBe(3);

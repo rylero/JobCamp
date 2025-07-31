@@ -122,7 +122,7 @@ export const actions: Actions = {
             posIds.push({ positionId: posId });
         }
 
-        let positions = posIds.map((val: any, i: number) => {
+        const positions = posIds.map((val: any, i: number) => {
             return {
                 rank: i,
                 studentId: student.id,

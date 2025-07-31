@@ -23,7 +23,7 @@ export const load: PageServerLoad = async (event) => {
     }
     const positionInfo = await prisma.position.findFirst({ where: { id: positionId }, include: { attachments : true } });
 
-    var attachments: any = [];
+    const attachments: any = [];
     positionInfo?.attachments.forEach(async attachment => {
         attachments.push(await getFile(attachment.fileName));
     });

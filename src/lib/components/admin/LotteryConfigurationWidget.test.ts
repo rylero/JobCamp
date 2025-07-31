@@ -10,6 +10,23 @@ vi.mock('./LotteryConfigurationWidget.svelte', () => ({
 	default: vi.fn()
 }));
 
+interface Student {
+	id: string;
+	firstName: string;
+	lastName: string;
+	grade: number;
+}
+
+interface Position {
+	id: string;
+	title: string;
+	host: {
+		company: {
+			companyName: string;
+		};
+	};
+}
+
 describe('LotteryConfigurationWidget', () => {
 	const mockLotteryConfig = {
 		id: 'config1',
@@ -19,12 +36,12 @@ describe('LotteryConfigurationWidget', () => {
 		prefillSettings: []
 	};
 
-	const mockStudents = [
+	const mockStudents: Student[] = [
 		{ id: 's1', firstName: 'John', lastName: 'Doe', grade: 10 },
 		{ id: 's2', firstName: 'Jane', lastName: 'Smith', grade: 11 }
 	];
 
-	const mockPositions = [
+	const mockPositions: Position[] = [
 		{ 
 			id: 'p1', 
 			title: 'Software Engineer',
@@ -44,7 +61,7 @@ describe('LotteryConfigurationWidget', () => {
 
 	it('should format student names correctly', () => {
 		// Test the name formatting logic directly
-		function getStudentName(student: any) {
+		function getStudentName(student: Student) {
 			return `${student.lastName}, ${student.firstName} (Grade ${student.grade})`;
 		}
 
@@ -54,7 +71,7 @@ describe('LotteryConfigurationWidget', () => {
 
 	it('should format position names correctly', () => {
 		// Test the position name formatting logic directly
-		function getPositionName(position: any) {
+		function getPositionName(position: Position) {
 			return `${position.host.company?.companyName || 'Unknown Company'} - ${position.title}`;
 		}
 

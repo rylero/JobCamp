@@ -81,11 +81,11 @@ export const actions: Actions = {
     update: async({ request, locals, cookies }) => {
         const data = await request.formData();
 
-        let posIdsString = data.get("posIds")?.toString();
+        const posIdsString = data.get("posIds")?.toString();
         if (!posIdsString) {
             redirect(302, "/about");
         }
-        let posIds = JSON.parse(posIdsString).positions;
+        const posIds = JSON.parse(posIdsString).positions;
         if (!posIds) {
             redirect(302, "/about");
         }
@@ -101,7 +101,7 @@ export const actions: Actions = {
             redirect(302, "/login");
         }
 
-        let positions = posIds.map((val: string, i: number) => {
+        const positions = posIds.map((val: string, i: number) => {
             return {
                 rank: i,
                 studentId: student.id,

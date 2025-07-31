@@ -32,7 +32,7 @@ export function userAccountSetupFlow(locals: App.Locals, pageType: PageType) {
     }
 
     if (locals.user.student) {
-        var permissionSlipNeeded = locals.user.student && locals.user.student.permissionSlipCompleted == false;
+        const permissionSlipNeeded = locals.user.student && locals.user.student.permissionSlipCompleted == false;
         if (permissionSlipNeeded && pageType != PageType.PermissionSlip) {
             redirect(302, "/permission-slip");
         } else if (!permissionSlipNeeded && pageType == PageType.PermissionSlip) {

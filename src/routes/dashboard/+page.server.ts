@@ -44,7 +44,7 @@ export const load: PageServerLoad = async (event) => {
     }
 
 
-    var positions = await prisma.position.findMany({where: {hostId: hostInfo.id}, include: { attachments: true }});
+    const positions = await prisma.position.findMany({where: {hostId: hostInfo.id}, include: { attachments: true }});
 
     return { positions, userData: event.locals.user, isCompany: true };
 };

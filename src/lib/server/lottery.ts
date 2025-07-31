@@ -222,20 +222,34 @@ async function runLotteryInBackground(jobId: string) {
     }
 }
 
+interface Student {
+    id: string;
+    grade: number;
+    positionsSignedUpFor: Array<{
+        positionId: string;
+        rank: number;
+    }>;
+}
+
+interface Position {
+    id: string;
+    slots: number;
+}
+
 async function runLotteryWithSeed(
     seed: number, 
-    students: any[], 
-    positions: any[], 
+    students: Student[], 
+    positions: Position[], 
     manualAssignments: Map<string, string>,
     prefillAssignments: Map<string, number>,
     gradeOrder: string
 ) {
     // Your migrated lottery algorithm
-    function deepCopy(obj: any) {
+    function deepCopy<T>(obj: T): T {
         return JSON.parse(JSON.stringify(obj));
     }
     
-    function shuffle(array: any[]) {
+    function shuffle<T>(array: T[]): T[] {
         // Fisher-Yates shuffle with seed
         let m = array.length, t, i;
         while (m) {
@@ -253,9 +267,9 @@ async function runLotteryWithSeed(
     
     // Sort students by grade according to configuration
     if (gradeOrder === 'ASCENDING') {
-        studentsCopy.sort((a: any, b: any) => a.grade - b.grade);
+        studentsCopy.sort((a: Student, b: Student) => a.grade - b.grade);
     } else if (gradeOrder === 'DESCENDING') {
-        studentsCopy.sort((a: any, b: any) => b.grade - a.grade);
+        studentsCopy.sort((a: Student, b: Student) => b.grade - a.grade);
     }
     // For 'NONE', we don't sort by grade, just use the shuffled order
     
@@ -274,7 +288,7 @@ async function runLotteryWithSeed(
     }
     
     const assignments: { [key: string]: { positionId: string | null, rank: number | null } } = {};
-    studentsCopy.forEach((s: any) => {
+    studentsCopy.forEach((s: Student) => {
         assignments[s.id] = { positionId: null, rank: null };
     });
 
@@ -293,8 +307,8 @@ async function runLotteryWithSeed(
             
             // Convert positionsSignedUpFor to preferences format
             const sortedPrefs = student.positionsSignedUpFor
-                .map((pref: any) => ({ positionId: pref.positionId, rank: pref.rank }))
-                .sort((a: any, b: any) => a.rank - b.rank);
+                .map((pref) => ({ positionId: pref.positionId, rank: pref.rank }))
+                .sort((a, b) => a.rank - b.rank);
             
             for (const pref of sortedPrefs) {
                 if (pref.rank !== currentRank) continue;

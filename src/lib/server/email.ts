@@ -13,6 +13,15 @@ export const SENDER = { name: "JobCamp", email: "admin@jobcamp.org" };
 
 export type EmailParams = { [index: string]: string }
 
+interface Position {
+    contact_email: string;
+    [key: string]: string;
+}
+
+interface HostInfo {
+    [key: string]: string;
+}
+
 export function renderEmailTemplate(emailHtml: string, params: EmailParams) {
     Object.getOwnPropertyNames(params).forEach(name => {
         emailHtml = emailHtml.replaceAll("${"+name+"}", params[name]);
@@ -56,7 +65,7 @@ export async function sendPermissionSlipEmail(parentEmail: string, code: string,
     });
 }
 
-export async function sendPositionUpdateEmail(hostEmail: string, position: any) {
+export async function sendPositionUpdateEmail(hostEmail: string, position: Position) {
     if (hostEmail != position.contact_email) {
         await emailClient.send({
             from: SENDER,
@@ -74,7 +83,7 @@ export async function sendPositionUpdateEmail(hostEmail: string, position: any) 
     });
 }
 
-export async function sendHostEmail(hostEmail: string, info: any) {
+export async function sendHostEmail(hostEmail: string, info: HostInfo) {
     // console.log(hostEmail, renderEmailTemplate(hostEmailTemp, info), "\n\n\n\n\n");
     await emailClient.send({
         from: SENDER,

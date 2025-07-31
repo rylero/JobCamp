@@ -1,4 +1,3 @@
-import { page } from "$app/stores";
 import { redirect } from "@sveltejs/kit";
 
 export enum PageType {

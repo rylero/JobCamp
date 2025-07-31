@@ -52,7 +52,7 @@ export const load: PageServerLoad = async (event) => {
 
 
 export const actions: Actions = {
-    sendPermissionSlip: async({ request, locals, cookies }) => {
+    sendPermissionSlip: async({ request, locals }) => {
             const data = await request.formData();
             console.log(data);
             
@@ -72,13 +72,13 @@ export const actions: Actions = {
                 redirect(302, "/login");
             }
             
-            generatePermissionSlipCode(id, parentEmail.toString()).then(
+            generatePermissionSlipCode(id).then(
                 (code) => sendPermissionSlipEmail(parentEmail.toString(), code, firstName)
             );
     
             return { sent: true, err: false };
     },
-    update: async({ request, locals, cookies }) => {
+    update: async({ request, locals }) => {
         const data = await request.formData();
 
         const posIdsString = data.get("posIds")?.toString();

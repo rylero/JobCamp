@@ -4,7 +4,7 @@ import type { Actions, PageServerLoad } from './$types';
 import { generatePermissionSlipCode } from '$lib/server/auth';
 import { sendPermissionSlipEmail } from '$lib/server/email';
 
-export const load: PageServerLoad = async ({ params, locals }) => {
+export const load: PageServerLoad = async ({ locals }) => {
     if (!locals.user) {
         redirect(302, "/login");
     }
@@ -46,7 +46,11 @@ export const load: PageServerLoad = async ({ params, locals }) => {
         studentId: studentId
     }})
 
-    positionData.map((val: any) => {
+    positionData.map((val: {
+        id: string;
+        selected?: boolean;
+        [key: string]: unknown;
+    }) => {
         val.selected = false;
         positionsOnStudents.forEach(a => {
             if (a.positionId == val.id) {
@@ -56,14 +60,18 @@ export const load: PageServerLoad = async ({ params, locals }) => {
         return val;
     })
 
-    const posData: any = positionData;
+    const posData: Array<{
+        id: string;
+        selected?: boolean;
+        [key: string]: unknown;
+    }> = positionData;
 
     return { positionData: posData, countSelected: positionsOnStudents.length, permissionSlipCompleted: student.permissionSlipCompleted, parentEmail: student.parentEmail };
 }
 
 
 export const actions: Actions = {
-    sendPermissionSlip: async({ request, locals, cookies }) => {
+    sendPermissionSlip: async({ request, locals }) => {
         const data = await request.formData();
         console.log(data);
         
@@ -83,13 +91,13 @@ export const actions: Actions = {
             redirect(302, "/login");
         }
         
-        generatePermissionSlipCode(id, parentEmail.toString()).then(
+        generatePermissionSlipCode(id).then(
             (code) => sendPermissionSlipEmail(parentEmail.toString(), code, firstName)
         );
 
         return { sent: true, err: false };
     },
-    togglePosition: async ({ request, locals, cookies }) => {
+    togglePosition: async ({ request, locals }) => {
         const data = await request.formData();
 
         const posId = data.get("id")?.toString();

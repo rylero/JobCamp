@@ -7,7 +7,6 @@ import { superValidate } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
 import { createNewPositionSchema } from "./schema";
 import { sendPositionUpdateEmail } from "$lib/server/email";
-import { addNewFile } from "../storage";
 
 const grabUserData = async (locals : App.Locals) => {
     if (!locals.user) {
@@ -31,22 +30,22 @@ const grabUserData = async (locals : App.Locals) => {
     return { userInfo, hostInfo }
 }
 
-export const load: PageServerLoad = async (event) => {
-    if (!event.locals.user) {
+export const load: PageServerLoad = async ({ locals }) => {
+    if (!locals.user) {
         redirect(302, "/login");
     }
-    if (!event.locals.user.emailVerified) {
+    if (!locals.user.emailVerified) {
         redirect(302, "/verify-email");
     }
 
-    const { userInfo, hostInfo } = await grabUserData(event.locals);
+    const { userInfo, hostInfo } = await grabUserData(locals);
     const form = await superValidate(zod(createNewPositionSchema(hostInfo.name, userInfo.email)));
 
     return { form };
 };
 
 export const actions: Actions = {
-    createPosition: async ({ request, locals, cookies }) => {
+    createPosition: async ({ request, locals }) => {
         const { userInfo, hostInfo } = await grabUserData(locals);
         const form = await superValidate(request, zod(createNewPositionSchema(hostInfo.name, userInfo.email)));
 
@@ -90,7 +89,7 @@ export const actions: Actions = {
         //     attachments.push({ fileName: form.data.attachment2.name })
         // }
 
-        const position = await prisma.host.update({
+        await prisma.host.update({
             where: { userId: locals.user.id },
             data: {
                 positions: {

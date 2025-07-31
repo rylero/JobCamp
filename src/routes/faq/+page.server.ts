@@ -1,8 +1,6 @@
 import type { PageServerLoad } from './$types';
-import { prisma } from '$lib/server/prisma';
-import { redirect } from '@sveltejs/kit';
 
-export const load : PageServerLoad = async ({ cookies, params, locals }) => {
+export const load : PageServerLoad = async ({ locals }) => {
     const loggedIn = locals.user != null;
     
     let isHost = false;

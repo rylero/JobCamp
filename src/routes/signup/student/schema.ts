@@ -2,7 +2,7 @@ import { z } from "zod"
 
 import { isMobilePhone } from "$lib/server/auth";
 
-export const createStudentSchema = (schoolId: string | undefined) => {
+export const createStudentSchema = () => {
     return z.object({
         grade: z.number().int().min(9).max(12),
         firstName: z.string().min(1),

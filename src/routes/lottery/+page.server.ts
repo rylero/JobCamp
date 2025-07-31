@@ -267,7 +267,7 @@ export const actions: Actions = {
                 jobId,
                 message: "Lottery started. You'll be notified when complete." 
             };
-        } catch (error) {
+        } catch {
             return { 
                 success: false, 
                 message: "Failed to start lottery" 
@@ -331,7 +331,7 @@ export const actions: Actions = {
             });
 
             return { success: true, message: "Manual assignment added" };
-        } catch (error) {
+        } catch {
             return { success: false, message: "Failed to add manual assignment" };
         }
     },
@@ -379,7 +379,7 @@ export const actions: Actions = {
             });
 
             return { success: true, message: "Manual assignment removed" };
-        } catch (error) {
+        } catch {
             return { success: false, message: "Failed to remove manual assignment" };
         }
     },
@@ -440,7 +440,7 @@ export const actions: Actions = {
             });
 
             return { success: true, message: "Prefill setting updated" };
-        } catch (error) {
+        } catch {
             return { success: false, message: "Failed to update prefill setting" };
         }
     },
@@ -488,7 +488,7 @@ export const actions: Actions = {
             });
 
             return { success: true, message: "Prefill setting removed" };
-        } catch (error) {
+        } catch {
             return { success: false, message: "Failed to remove prefill setting" };
         }
     },

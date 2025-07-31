@@ -19,7 +19,7 @@ export async function GET({ params }) {
             currentSeed: job.currentSeed,
             error: job.error
         });
-    } catch (error) {
+    } catch {
         return json({ error: 'Failed to fetch job status' }, { status: 500 });
     }
 } 

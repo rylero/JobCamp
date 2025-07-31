@@ -7,34 +7,36 @@ import { superValidate } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
 import { editPositionSchema } from "./schema";
 import { sendPositionUpdateEmail } from "$lib/server/email";
-import { addNewFile, getFile, getFileUrl } from "../storage";
 
-export const load: PageServerLoad = async (event) => {
-    if (!event.locals.user) {
+export const load: PageServerLoad = async ({ locals, url }) => {
+    if (!locals.user) {
         redirect(302, "/login");
     }
-    if (!event.locals.user.emailVerified) {
+    if (!locals.user.emailVerified) {
         redirect(302, "/verify-email");
     }
 
-    const positionId = event.url.searchParams.get("posId")?.toString();
+    const positionId = url.searchParams.get("posId")?.toString();
     if (!positionId) {
         redirect(302, "/lghs")
     }
     const positionInfo = await prisma.position.findFirst({ where: { id: positionId }, include: { attachments : true } });
+    if (!positionInfo) {
+        redirect(302, "/lghs")
+    }
 
-    const attachments: any = [];
-    positionInfo?.attachments.forEach(async attachment => {
-        attachments.push(await getFile(attachment.fileName));
+    const attachments: Array<{ fileName: string }> = [];
+    positionInfo.attachments.forEach(async attachment => {
+        attachments.push(attachment);
     });
     
-    const form = await superValidate(zod(editPositionSchema(positionInfo, attachments[0], attachments[1])));
+    const form = await superValidate(zod(editPositionSchema(positionInfo)));
     
     return { form };
 };
 
 export const actions: Actions = {
-    createPosition: async ({ url, request, locals, cookies }) => {
+    createPosition: async ({ url, request, locals }) => {
         const positionId = url.searchParams.get("posId")?.toString();
         if (!positionId) {
             redirect(302, "/about")
@@ -44,7 +46,7 @@ export const actions: Actions = {
             redirect(302, "/faq")
         }
         
-        const form = await superValidate(request, zod(editPositionSchema(positionInfo, undefined, undefined)));
+        const form = await superValidate(request, zod(editPositionSchema(positionInfo)));
         if (!form.valid) {
             return fail(400, { form });
         }
@@ -78,7 +80,7 @@ export const actions: Actions = {
         //     addNewFile(element.fileName, await element.bytes());
         // }
 
-        const position = await prisma.position.update({
+        await prisma.position.update({
             where: { id: positionId },
             data: {
                 title: form.data.title,
@@ -96,7 +98,6 @@ export const actions: Actions = {
                 // attachments: { set: attachments }
             }
         });
-        console.log(position);
 
         sendPositionUpdateEmail(locals.user.email, {
             title: form.data.title,

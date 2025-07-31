@@ -12,7 +12,7 @@ export async function getFile(fileName: string) {
   return await storage.bucket(bucketName).file(fileName);
 }
 
-export async function addNewFile(fileName: string, fileToSave: any) {
+export async function addNewFile(fileName: string, fileToSave: Buffer) {
   await storage.bucket(bucketName).file(fileName).save(fileToSave);
 }
 

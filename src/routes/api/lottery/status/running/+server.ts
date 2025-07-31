@@ -17,7 +17,7 @@ export async function GET() {
             progress: runningJob.progress,
             currentSeed: runningJob.currentSeed
         });
-    } catch (error) {
+    } catch {
         return json({ error: 'Failed to find running job' }, { status: 500 });
     }
 } 

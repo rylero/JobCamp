@@ -4,7 +4,18 @@ import { lucia } from "$lib/server/auth";
 import type { PageServerLoad } from "./$types";
 import { prisma } from "$lib/server/prisma";
 
-const grabUserData: any = async (locals : App.Locals) => {
+interface UserData {
+    userInfo: {
+        id: string;
+        adminOfSchools: Array<{ id: string }>;
+    };
+    hostInfo: {
+        id: string;
+        userId: string;
+    } | null;
+}
+
+const grabUserData = async (locals: App.Locals): Promise<UserData> => {
     if (!locals.user) {
         redirect(302, "/login");
     }
@@ -25,15 +36,15 @@ const grabUserData: any = async (locals : App.Locals) => {
     return { userInfo, hostInfo }
 }
 
-export const load: PageServerLoad = async (event) => {
-    if (!event.locals.user) {
+export const load: PageServerLoad = async ({ locals }) => {
+    if (!locals.user) {
         redirect(302, "/login");
     }
-    if (!event.locals.user.emailVerified) {
+    if (!locals.user.emailVerified) {
         redirect(302, "/verify-email");
     }
 
-    const { userInfo, hostInfo } = await grabUserData(event.locals);
+    const { userInfo, hostInfo } = await grabUserData(locals);
 
     if (userInfo.adminOfSchools && userInfo.adminOfSchools.length > 0) {
         redirect(302, "/dashboard/admin");
@@ -46,7 +57,7 @@ export const load: PageServerLoad = async (event) => {
 
     const positions = await prisma.position.findMany({where: {hostId: hostInfo.id}, include: { attachments: true }});
 
-    return { positions, userData: event.locals.user, isCompany: true };
+    return { positions, userData: locals.user, isCompany: true };
 };
 
 export const actions: Actions = {
@@ -59,7 +70,7 @@ export const actions: Actions = {
         }
         redirect(302, "/login")
     },
-    deletePosition: async ({ locals, cookies, url }) => {
+    deletePosition: async ({ url }) => {
         const positionId = url.searchParams.get("posId")?.toString();
         console.log(`DELETE POSITION: ${positionId}`)
         if (!positionId) {

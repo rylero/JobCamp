@@ -11,21 +11,22 @@ import { sendEmailVerificationEmail, sendPermissionSlipEmail } from '$lib/server
 
 
 export const load: PageServerLoad = async (event) => {
-    userAccountSetupFlow(event.locals, PageType.AccountCreation);
+    if (event.locals.user) {
+        redirect(302, "/dashboard");
+    }
 
-    const schoolId = event.cookies.get("school");
     const schools = await prisma.school.findMany();
     const schoolMapping = Object.fromEntries(schools.map((val) => [val.id, val.name]));
 
-    const form = await superValidate(zod(createStudentSchema(schoolId)));
+    const form = await superValidate(zod(createStudentSchema()));
+
     return { form, schoolMapping };
 };
 
 export const actions: Actions = {
     default: async (event) => {
         const { request } = event;
-        const schoolIdCookie = event.cookies.get("school");
-        const form = await superValidate(request, zod(createStudentSchema(schoolIdCookie)));
+        const form = await superValidate(request, zod(createStudentSchema()));
 
         if (!form.valid) {
             return fail(400, { form });

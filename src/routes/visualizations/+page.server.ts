@@ -1,7 +1,15 @@
 import { redirect } from '@sveltejs/kit';
 import { prisma } from '$lib/server/prisma';
 
-export const load = async ({ locals }: { locals: any }) => {
+interface Locals {
+    user?: {
+        id: string;
+        emailVerified: boolean;
+        host?: unknown;
+    };
+}
+
+export const load = async ({ locals }: { locals: Locals }) => {
     try {
         if (!locals.user) {
             redirect(302, "/login");

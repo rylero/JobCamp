@@ -1,4 +1,3 @@
-import { PageType, userAccountSetupFlow } from '$lib/server/authFlow';
 import { fail, redirect, type Actions } from '@sveltejs/kit';
 import type { PageServerLoad } from "./$types";
 import { createStudentSchema } from "./schema";
@@ -79,7 +78,7 @@ export const actions: Actions = {
         const code = await generateEmailVerificationCode(userId, user.email)
         await sendEmailVerificationEmail(userId, user.email, code);
 
-        generatePermissionSlipCode(userId, form.data.parentEmail).then(
+        generatePermissionSlipCode(userId).then(
             (code) => sendPermissionSlipEmail(form.data.parentEmail, code, form.data.firstName)
         );
 

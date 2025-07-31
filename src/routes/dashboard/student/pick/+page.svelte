@@ -279,7 +279,7 @@
     {/if}
     <div class="mx-4 mt-2">
       <Accordion.Root type="multiple">
-        {#each filteredPositions as position, index}
+        {#each filteredPositions as position}
           <Accordion.Item value={position.id} class="my-2">
             <Accordion.Trigger
               class="text-xl bg-slate-100 hover:bg-slate-200 rounded-t-sm px-5"

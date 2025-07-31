@@ -31,6 +31,53 @@ interface UserInfo {
     adminOfSchools: Array<{ id: string }>;
 }
 
+interface CareerStats {
+    totalPositions: number;
+    totalSlots: number;
+    totalChoices: number;
+    companies: Set<string>;
+}
+
+interface CompanyPopularity {
+    totalPositions: number;
+    totalSlots: number;
+    totalChoices: number;
+    careerFields: Set<string>;
+}
+
+interface OversubscribedCompany {
+    company: string;
+    position: string;
+    slots: number;
+    choices: number;
+    rate: number;
+}
+
+interface UndersubscribedCompany {
+    company: string;
+    position: string;
+    slots: number;
+    choices: number;
+}
+
+interface CareerStatsResult {
+    career: string;
+    totalPositions: number;
+    totalSlots: number;
+    totalChoices: number;
+    averageChoicesPerPosition: number;
+    companies: string[];
+}
+
+interface CompanyStatsResult {
+    company: string;
+    totalPositions: number;
+    totalSlots: number;
+    totalChoices: number;
+    averageChoicesPerPosition: number;
+    careerFields: string[];
+}
+
 export const load = async ({ locals }: { locals: Locals }) => {
     try {
         if (!locals.user) {
@@ -179,7 +226,7 @@ async function calculateLotteryStats(results: { studentId: string; positionId: s
 
         // Convert to array and sort by average subscription rate
         const companySubscriptionStats = Object.entries(companySubscriptionRates)
-            .map(([company, stats]) => ({
+            .map(([company, stats]: [string, CompanySubscriptionRate]) => ({
                 company,
                 ...stats
             }))
@@ -231,7 +278,7 @@ async function calculateCompanyStats(userInfo: UserInfo) {
         // Get all positions with their companies and student choices
         const positionsWithChoices = await prisma.position.findMany({
             where: {
-                event: { schoolId: { in: userInfo.adminOfSchools.map((s: any) => s.id) } }
+                event: { schoolId: { in: userInfo.adminOfSchools.map((s: { id: string }) => s.id) } }
             },
             include: {
                 host: {
@@ -248,10 +295,10 @@ async function calculateCompanyStats(userInfo: UserInfo) {
         });
 
         // Group positions by career field
-        const positionsByCareer: Record<string, any> = {};
-        const companyPopularity: Record<string, any> = {};
-        const oversubscribedCompanies: any[] = [];
-        const undersubscribedCompanies: any[] = [];
+        const positionsByCareer: Record<string, CareerStats> = {};
+        const companyPopularity: Record<string, CompanyPopularity> = {};
+        const oversubscribedCompanies: OversubscribedCompany[] = [];
+        const undersubscribedCompanies: UndersubscribedCompany[] = [];
 
         for (const position of positionsWithChoices) {
             const careerField = position.career || 'Other';
@@ -306,7 +353,7 @@ async function calculateCompanyStats(userInfo: UserInfo) {
         }
 
         // Convert Sets to arrays for JSON serialization
-        const careerStats = Object.entries(positionsByCareer).map(([career, stats]) => ({
+        const careerStats: CareerStatsResult[] = Object.entries(positionsByCareer).map(([career, stats]: [string, CareerStats]) => ({
             career,
             totalPositions: stats.totalPositions,
             totalSlots: stats.totalSlots,
@@ -315,7 +362,7 @@ async function calculateCompanyStats(userInfo: UserInfo) {
             companies: Array.from(stats.companies)
         }));
 
-        const companyStats = Object.entries(companyPopularity).map(([company, stats]) => ({
+        const companyStats: CompanyStatsResult[] = Object.entries(companyPopularity).map(([company, stats]: [string, CompanyPopularity]) => ({
             company,
             totalPositions: stats.totalPositions,
             totalSlots: stats.totalSlots,
@@ -350,7 +397,7 @@ async function calculateStudentStats(userInfo: UserInfo) {
         // Get all positions to calculate total available slots
         const allPositions = await prisma.position.findMany({
             where: {
-                event: { schoolId: { in: userInfo.adminOfSchools.map((s: any) => s.id) } }
+                event: { schoolId: { in: userInfo.adminOfSchools.map((s: { id: string }) => s.id) } }
             },
             include: {
                 host: {
@@ -366,7 +413,7 @@ async function calculateStudentStats(userInfo: UserInfo) {
         // Get all students with their choices and grade information
         const studentsWithChoices = await prisma.student.findMany({
             where: {
-                schoolId: { in: userInfo.adminOfSchools.map((s: any) => s.id) }
+                schoolId: { in: userInfo.adminOfSchools.map((s: { id: string }) => s.id) }
             },
             include: {
                 positionsSignedUpFor: {
@@ -387,11 +434,26 @@ async function calculateStudentStats(userInfo: UserInfo) {
         });
 
         // Grade distribution
-        const gradeDistribution = {};
-        const choiceDistribution = {};
-        const slotAvailability = {};
-        const studentsWithNoChoices = [];
-        const studentsWithManyChoices = [];
+        const gradeDistribution: Record<number, {
+            totalStudents: number;
+            studentsWithChoices: number;
+            totalChoices: number;
+            averageChoices: number;
+        }> = {};
+        const choiceDistribution: Record<number, number> = {};
+        const slotAvailability: Record<number, {
+            totalSlots: number;
+            studentCount: number;
+        }> = {};
+        const studentsWithNoChoices: Array<{
+            name: string;
+            grade: number;
+        }> = [];
+        const studentsWithManyChoices: Array<{
+            name: string;
+            grade: number;
+            choiceCount: number;
+        }> = [];
 
         for (const student of studentsWithChoices) {
             const grade = student.grade;
@@ -453,23 +515,31 @@ async function calculateStudentStats(userInfo: UserInfo) {
 
         // Calculate averages
         Object.keys(gradeDistribution).forEach(grade => {
-            const stats = gradeDistribution[grade];
+            const stats = gradeDistribution[parseInt(grade)];
             stats.averageChoices = stats.studentsWithChoices > 0 ? 
                 (stats.totalChoices / stats.studentsWithChoices) : 0;
         });
 
         // Convert to arrays for easier charting
-        const gradeStats = Object.entries(gradeDistribution).map(([grade, stats]) => ({
+        const gradeStats = Object.entries(gradeDistribution).map(([grade, stats]: [string, {
+            totalStudents: number;
+            studentsWithChoices: number;
+            totalChoices: number;
+            averageChoices: number;
+        }]) => ({
             grade: parseInt(grade),
             ...stats
         })).sort((a, b) => a.grade - b.grade);
 
-        const choiceStats = Object.entries(choiceDistribution).map(([choices, count]) => ({
+        const choiceStats = Object.entries(choiceDistribution).map(([choices, count]: [string, number]) => ({
             choices: parseInt(choices),
             count
         })).sort((a, b) => a.choices - b.choices);
 
-        const slotStats = Object.entries(slotAvailability).map(([choices, stats]) => ({
+        const slotStats = Object.entries(slotAvailability).map(([choices, stats]: [string, {
+            totalSlots: number;
+            studentCount: number;
+        }]) => ({
             choices: parseInt(choices),
             averageSlots: stats.studentCount > 0 ? (stats.totalSlots / stats.studentCount) : 0,
             totalSlots: stats.totalSlots,
@@ -525,7 +595,7 @@ async function calculateTimelineStats(userInfo: UserInfo) {
         // Get all students with their choice data
         const students = await prisma.student.findMany({
             where: {
-                schoolId: { in: userInfo.adminOfSchools.map((s: any) => s.id) }
+                schoolId: { in: userInfo.adminOfSchools.map((s: { id: string }) => s.id) }
             },
             include: {
                 user: true,
@@ -541,7 +611,7 @@ async function calculateTimelineStats(userInfo: UserInfo) {
         // Get all companies with their activity data
         const companies = await prisma.company.findMany({
             where: {
-                schoolId: { in: userInfo.adminOfSchools.map((s: any) => s.id) }
+                schoolId: { in: userInfo.adminOfSchools.map((s: { id: string }) => s.id) }
             },
             include: {
                 hosts: {
@@ -556,7 +626,7 @@ async function calculateTimelineStats(userInfo: UserInfo) {
         // Get all positions
         const positions = await prisma.position.findMany({
             where: {
-                event: { schoolId: { in: userInfo.adminOfSchools.map((s: any) => s.id) } }
+                event: { schoolId: { in: userInfo.adminOfSchools.map((s: { id: string }) => s.id) } }
             },
             include: {
                 host: {

@@ -15,7 +15,7 @@
   let passwordEntryType = $derived(showPassword ? "text" : "password");
 </script>
 
-<Navbar isHost={false} loggedIn={false} />
+<Navbar isHost={false} loggedIn={false} isAdmin={false} />
 
 <div class="w-full mt-28 flex flex-col sm:gap-8 justify-center items-center">
   <form

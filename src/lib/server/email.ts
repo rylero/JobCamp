@@ -7,7 +7,7 @@ import positionUpdateEmail from "$lib/emails/positionUpdate.html?raw";
 import hostEmailTemp from "$lib/emails/hostEmailTemp.html?raw";
 import lotteryResults from "$lib/emails/lotteryResults.html?raw";
 
-export const emailClient = new MailtrapClient({ token: env.MAILTRAP_TOKEN });
+export const emailClient = new MailtrapClient({ token: env.MAILTRAP_TOKEN || '' });
 
 export const SENDER = { name: "JobCamp", email: "admin@jobcamp.org" };
 

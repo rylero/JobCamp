@@ -13,7 +13,7 @@ export const load: PageServerLoad = async (event) => {
     userAccountSetupFlow(event.locals, PageType.AccountCreation);
 
     const form = await superValidate(zod(createCompanySchema()));
-    return { form };
+    return { form, isAdmin: false };
 };
 
 export const actions: Actions = {

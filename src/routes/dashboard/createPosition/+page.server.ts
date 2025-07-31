@@ -119,7 +119,7 @@ export const actions: Actions = {
         sendPositionUpdateEmail(userInfo.email, {
             title: form.data.title,
             career: form.data.career,
-            slots: form.data.slots,
+            slots: form.data.slots.toString(),
             summary: form.data.summary,
             contact_name: form.data.fullName,
             contact_email: form.data.email,

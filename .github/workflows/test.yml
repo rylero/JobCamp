@@ -47,3 +47,6 @@ jobs:
       - name: Run type checking
         run: pnpm check || true
         timeout-minutes: 5
+
+      - name: Tests complete
+        run: echo "✅ All tests passed!"

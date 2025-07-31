@@ -1,4 +1,4 @@
-name: Tests
+name: Unit Tests and Linting
 
 on:
   push:

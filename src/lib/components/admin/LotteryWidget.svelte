@@ -1,12 +1,34 @@
 <script lang="ts">
   import { onMount } from "svelte";
 
+  interface LotteryResult {
+    studentId: string;
+    positionId: string;
+  }
+
+  interface LotteryStats {
+    totalStudents: number;
+    firstChoice: number;
+    secondChoice: number;
+    thirdChoice: number;
+    fourthChoice: number;
+    fifthChoice: number;
+    sixthChoice: number;
+    seventhChoice: number;
+    eighthChoice: number;
+    ninthChoice: number;
+    tenthChoice: number;
+    notPlaced: number;
+    completedAt?: string;
+    adminEmail?: string;
+  }
+
   export let data: {
     isRunning: boolean;
     progress: number;
     currentSeed: number;
-    results: any[];
-    stats: any;
+    results: LotteryResult[];
+    stats: LotteryStats;
   };
   export let gradeOrder: string = "NONE";
 

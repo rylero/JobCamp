@@ -95,6 +95,66 @@ async function calculateLotteryStats(results: { studentId: string; positionId: s
             notPlaced: notPlacedCount
         };
 
+        // Get all positions with their companies for subscription rate calculation
+        const positionsWithCompanies = await prisma.position.findMany({
+            where: {
+                students: { some: {} } // Only positions that have student choices
+            },
+            include: {
+                host: {
+                    include: {
+                        company: true
+                    }
+                },
+                students: true
+            }
+        });
+
+        // Calculate company subscription rates
+        const companySubscriptionRates: Record<string, any> = {};
+        const totalPositions = positionsWithCompanies.length;
+        const totalSlots = positionsWithCompanies.reduce((sum, p) => sum + p.slots, 0);
+        const totalChoices = positionsWithCompanies.reduce((sum, p) => sum + p.students.length, 0);
+
+        for (const position of positionsWithCompanies) {
+            const companyName = position.host.company?.companyName || 'Unknown Company';
+            const subscriptionRate = position.students.length / position.slots;
+            
+            if (!companySubscriptionRates[companyName]) {
+                companySubscriptionRates[companyName] = {
+                    totalPositions: 0,
+                    totalSlots: 0,
+                    totalChoices: 0,
+                    averageSubscriptionRate: 0,
+                    positions: []
+                };
+            }
+            
+            companySubscriptionRates[companyName].totalPositions++;
+            companySubscriptionRates[companyName].totalSlots += position.slots;
+            companySubscriptionRates[companyName].totalChoices += position.students.length;
+            companySubscriptionRates[companyName].positions.push({
+                title: position.title,
+                slots: position.slots,
+                choices: position.students.length,
+                rate: subscriptionRate
+            });
+        }
+
+        // Calculate average subscription rates per company
+        for (const companyName in companySubscriptionRates) {
+            const company = companySubscriptionRates[companyName];
+            company.averageSubscriptionRate = company.totalChoices / company.totalSlots;
+        }
+
+        // Convert to array and sort by average subscription rate
+        const companySubscriptionStats = Object.entries(companySubscriptionRates)
+            .map(([company, stats]) => ({
+                company,
+                ...stats
+            }))
+            .sort((a, b) => b.averageSubscriptionRate - a.averageSubscriptionRate);
+
         for (const result of results) {
             // Get student's choices in order
             const studentChoices = await prisma.positionsOnStudents.findMany({
@@ -123,7 +183,12 @@ async function calculateLotteryStats(results: { studentId: string; positionId: s
 
         return {
             totalStudents,
-            ...choiceCounts
+            ...choiceCounts,
+            companySubscriptionStats,
+            totalPositions,
+            totalSlots,
+            totalChoices,
+            overallSubscriptionRate: totalChoices / totalSlots
         };
     } catch (error) {
         console.error('Error calculating lottery stats:', error);

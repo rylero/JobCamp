@@ -379,15 +379,60 @@ async function calculateCompanyStats(userInfo: UserInfo) {
         companyStats.sort((a, b) => b.totalChoices - a.totalChoices);
         oversubscribedCompanies.sort((a, b) => b.rate - a.rate);
 
+        // Create companySubscriptionStats with the same structure as lottery stats
+        const companySubscriptionRates: CompanySubscriptionRates = {};
+        
+        for (const position of positionsWithChoices) {
+            const companyName = position.host.company?.companyName || 'Unknown Company';
+            const top3Choices = position.students.filter(student => student.rank <= 3).length;
+            const subscriptionRate = top3Choices / position.slots;
+            
+            if (!companySubscriptionRates[companyName]) {
+                companySubscriptionRates[companyName] = {
+                    totalPositions: 0,
+                    totalSlots: 0,
+                    totalChoices: 0,
+                    averageSubscriptionRate: 0,
+                    positions: []
+                };
+            }
+            
+            companySubscriptionRates[companyName].totalPositions++;
+            companySubscriptionRates[companyName].totalSlots += position.slots;
+            companySubscriptionRates[companyName].totalChoices += top3Choices;
+            companySubscriptionRates[companyName].positions.push({
+                title: position.title,
+                slots: position.slots,
+                choices: top3Choices,
+                rate: subscriptionRate
+            });
+        }
+
+        // Calculate average subscription rates per company
+        for (const companyName in companySubscriptionRates) {
+            const company = companySubscriptionRates[companyName];
+            company.averageSubscriptionRate = company.totalChoices / company.totalSlots;
+        }
+
+        // Convert to array and sort by average subscription rate
+        const companySubscriptionStats = Object.entries(companySubscriptionRates)
+            .map(([company, stats]: [string, CompanySubscriptionRate]) => ({
+                company,
+                ...stats
+            }))
+            .sort((a, b) => b.averageSubscriptionRate - a.averageSubscriptionRate);
+
         return {
             careerStats,
             companyStats,
             oversubscribedCompanies,
             undersubscribedCompanies,
+            companySubscriptionStats,
             totalCompanies: Object.keys(companyPopularity).length,
             totalPositions: positionsWithChoices.length,
             totalSlots: positionsWithChoices.reduce((sum, p) => sum + p.slots, 0),
-            totalChoices: positionsWithChoices.reduce((sum, p) => sum + p.students.filter(s => s.rank <= 3).length, 0)
+            totalChoices: positionsWithChoices.reduce((sum, p) => sum + p.students.filter(s => s.rank <= 3).length, 0),
+            overallSubscriptionRate: positionsWithChoices.reduce((sum, p) => sum + p.students.filter(s => s.rank <= 3).length, 0) / positionsWithChoices.reduce((sum, p) => sum + p.slots, 0)
         };
     } catch (error) {
         console.error('Error calculating company stats:', error);

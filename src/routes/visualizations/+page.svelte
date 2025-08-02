@@ -941,44 +941,77 @@
       </div>
     </div>
 
+  {:else if selectedVisualization === "lottery" && !data.lotteryStats}
+    <div class="bg-white rounded-lg shadow p-6">
+      <h2 class="text-xl font-semibold mb-4">No Lottery Data Available</h2>
+      <p class="text-gray-600 mb-4">
+        No lottery results are currently available. Run the lottery first to see
+        the analysis.
+      </p>
+      <Button href="/lottery" variant="default">Go to Lottery</Button>
+    </div>
+  {:else if selectedVisualization === "company" && data.companyStats}
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <!-- Career Field Distribution -->
+      <div class="bg-white rounded-lg shadow p-6">
+        <h2 class="text-xl font-semibold mb-4">Career Field Distribution</h2>
+        <p class="text-gray-600 mb-4">
+          Shows student choices for each career field (1st, 2nd, and 3rd choices only)
+        </p>
+        <div class="h-96">
+          <canvas bind:this={careerChartCanvas} width="800" height="400"
+          ></canvas>
+        </div>
+      </div>
+
+      <!-- Company Popularity -->
+      <div class="bg-white rounded-lg shadow p-6">
+        <h2 class="text-xl font-semibold mb-4">Company Popularity</h2>
+        <div class="h-96">
+          <canvas bind:this={companyChartCanvas} width="800" height="400"
+          ></canvas>
+        </div>
+      </div>
+    </div>
+
     <!-- Company Subscription Rate Statistics -->
     <div class="mt-8 bg-white rounded-lg shadow p-6">
       <h2 class="text-xl font-semibold mb-4">Company Subscription Rates</h2>
       <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4 mb-6">
         <div class="text-center">
           <div class="text-lg font-semibold">
-            {data.lotteryStats.totalPositions}
+            {data.companyStats.totalPositions}
           </div>
           <div class="text-sm text-gray-600">Total Positions</div>
         </div>
         <div class="text-center">
           <div class="text-lg font-semibold text-green-600">
-            {data.lotteryStats.totalChoices}
+            {data.companyStats.totalChoices}
           </div>
           <div class="text-sm text-gray-600">Total Choices</div>
         </div>
         <div class="text-center">
           <div class="text-lg font-semibold text-blue-600">
-            {data.lotteryStats.totalSlots}
+            {data.companyStats.totalSlots}
           </div>
           <div class="text-sm text-gray-600">Total Slots</div>
         </div>
         <div class="text-center">
           <div class="text-lg font-semibold text-purple-600">
-            {(data.lotteryStats.overallSubscriptionRate * 100).toFixed(1)}%
+            {(data.companyStats.overallSubscriptionRate * 100).toFixed(1)}%
           </div>
           <div class="text-sm text-gray-600">Overall Subscription Rate</div>
         </div>
         <div class="text-center">
           <div class="text-lg font-semibold text-orange-600">
-            {data.lotteryStats.companySubscriptionStats.length}
+            {data.companyStats.companySubscriptionStats.length}
           </div>
           <div class="text-sm text-gray-600">Companies with Choices</div>
         </div>
         <div class="text-center">
           <div class="text-lg font-semibold text-red-600">
             {(
-              data.lotteryStats.totalChoices / data.lotteryStats.totalPositions
+              data.companyStats.totalChoices / data.companyStats.totalPositions
             ).toFixed(1)}
           </div>
           <div class="text-sm text-gray-600">Avg Choices per Position</div>
@@ -1017,7 +1050,7 @@
             </tr>
           </thead>
           <tbody>
-            {#each data.lotteryStats.companySubscriptionStats as company}
+            {#each data.companyStats.companySubscriptionStats as company}
               <tr>
                 <td class="py-2 px-4 border-b text-sm text-gray-800"
                   >{company.company}</td
@@ -1064,38 +1097,6 @@
             {/each}
           </tbody>
         </table>
-      </div>
-    </div>
-  {:else if selectedVisualization === "lottery" && !data.lotteryStats}
-    <div class="bg-white rounded-lg shadow p-6">
-      <h2 class="text-xl font-semibold mb-4">No Lottery Data Available</h2>
-      <p class="text-gray-600 mb-4">
-        No lottery results are currently available. Run the lottery first to see
-        the analysis.
-      </p>
-      <Button href="/lottery" variant="default">Go to Lottery</Button>
-    </div>
-  {:else if selectedVisualization === "company" && data.companyStats}
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-      <!-- Career Field Distribution -->
-      <div class="bg-white rounded-lg shadow p-6">
-        <h2 class="text-xl font-semibold mb-4">Career Field Distribution</h2>
-        <p class="text-gray-600 mb-4">
-          Shows student choices for each career field (1st, 2nd, and 3rd choices only)
-        </p>
-        <div class="h-96">
-          <canvas bind:this={careerChartCanvas} width="800" height="400"
-          ></canvas>
-        </div>
-      </div>
-
-      <!-- Company Popularity -->
-      <div class="bg-white rounded-lg shadow p-6">
-        <h2 class="text-xl font-semibold mb-4">Company Popularity</h2>
-        <div class="h-96">
-          <canvas bind:this={companyChartCanvas} width="800" height="400"
-          ></canvas>
-        </div>
       </div>
     </div>
 
@@ -1147,53 +1148,6 @@
       </div>
     </div>
 
-    <!-- Company Details Table -->
-    <div class="mt-8 bg-white rounded-lg shadow p-6">
-      <h2 class="text-xl font-semibold mb-4">Company Details</h2>
-      <div class="overflow-x-auto">
-        <table class="min-w-full bg-white border border-gray-200">
-          <thead>
-            <tr>
-              <th
-                class="py-2 px-4 border-b text-left text-sm font-semibold text-gray-600"
-                >Company</th
-              >
-              <th
-                class="py-2 px-4 border-b text-left text-sm font-semibold text-gray-600"
-                >Top 3 Choices</th
-              >
-              <th
-                class="py-2 px-4 border-b text-left text-sm font-semibold text-gray-600"
-                >Total Slots</th
-              >
-              <th
-                class="py-2 px-4 border-b text-left text-sm font-semibold text-gray-600"
-                >Slots Filled</th
-              >
-            </tr>
-          </thead>
-          <tbody>
-            {#each data.companyStats.companyStats as company}
-              <tr>
-                <td class="py-2 px-4 border-b text-sm text-gray-800"
-                  >{company.company}</td
-                >
-                <td class="py-2 px-4 border-b text-sm text-green-600"
-                  >{company.totalChoices}</td
-                >
-                <td class="py-2 px-4 border-b text-sm text-blue-600"
-                  >{company.totalSlots}</td
-                >
-                <td class="py-2 px-4 border-b text-sm text-red-600"
-                  >{company.totalSlots - company.totalChoices}</td
-                >
-              </tr>
-            {/each}
-          </tbody>
-        </table>
-      </div>
-    </div>
-
     <!-- Career Field Details Table -->
     <div class="mt-8 bg-white rounded-lg shadow p-6">
       <h2 class="text-xl font-semibold mb-4">Career Field Details</h2>
@@ -1240,63 +1194,6 @@
         </table>
       </div>
     </div>
-
-    <!-- Oversubscribed Companies -->
-    {#if data.companyStats.oversubscribedCompanies.length > 0}
-      <div class="mt-8 bg-white rounded-lg shadow p-6">
-        <h2 class="text-xl font-semibold mb-4">Oversubscribed Positions</h2>
-        <div class="overflow-x-auto">
-          <table class="min-w-full bg-white border border-gray-200">
-            <thead>
-              <tr>
-                <th
-                  class="py-2 px-4 border-b text-left text-sm font-semibold text-gray-600"
-                  >Company</th
-                >
-                <th
-                  class="py-2 px-4 border-b text-left text-sm font-semibold text-gray-600"
-                  >Position</th
-                >
-                <th
-                  class="py-2 px-4 border-b text-left text-sm font-semibold text-gray-600"
-                  >Available Slots</th
-                >
-                <th
-                  class="py-2 px-4 border-b text-left text-sm font-semibold text-gray-600"
-                  >Student Choices</th
-                >
-                <th
-                  class="py-2 px-4 border-b text-left text-sm font-semibold text-gray-600"
-                  >Oversubscription Rate</th
-                >
-              </tr>
-            </thead>
-            <tbody>
-              {#each data.companyStats.oversubscribedCompanies as position}
-                <tr>
-                  <td class="py-2 px-4 border-b text-sm text-gray-800"
-                    >{position.company}</td
-                  >
-                  <td class="py-2 px-4 border-b text-sm text-gray-800"
-                    >{position.position}</td
-                  >
-                  <td class="py-2 px-4 border-b text-sm text-blue-600"
-                    >{position.slots}</td
-                  >
-                  <td class="py-2 px-4 border-b text-sm text-green-600"
-                    >{position.choices}</td
-                  >
-                  <td
-                    class="py-2 px-4 border-b text-sm text-red-600 font-semibold"
-                    >{position.rate.toFixed(1)}x</td
-                  >
-                </tr>
-              {/each}
-            </tbody>
-          </table>
-        </div>
-      </div>
-    {/if}
   {:else if selectedVisualization === "company" && !data.companyStats}
     <div class="bg-white rounded-lg shadow p-6">
       <h2 class="text-xl font-semibold mb-4">No Company Data Available</h2>

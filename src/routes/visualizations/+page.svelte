@@ -280,16 +280,16 @@
           {
             data: topCompanies.map((c) => c.totalChoices),
             backgroundColor: [
-              "#ef4444",
-              "#f97316",
-              "#f59e0b",
-              "#eab308",
-              "#84cc16",
-              "#22c55e",
-              "#14b8a6",
-              "#06b6d4",
-              "#3b82f6",
-              "#8b5cf6",
+              "#1e40af", // Dark blue
+              "#3b82f6", // Blue
+              "#60a5fa", // Light blue
+              "#93c5fd", // Lighter blue
+              "#dbeafe", // Very light blue
+              "#1e3a8a", // Navy blue
+              "#1d4ed8", // Royal blue
+              "#2563eb", // Medium blue
+              "#7c3aed", // Purple (for variety)
+              "#8b5cf6", // Light purple
             ],
           },
         ],

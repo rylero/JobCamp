@@ -221,7 +221,7 @@
         labels: topCareers.map((c) => c.career),
         datasets: [
           {
-            label: "Total Choices",
+            label: "Top 3 Choices",
             data: topCareers.map((c) => c.totalChoices),
             backgroundColor: "#3b82f6",
             borderColor: "#2563eb",
@@ -242,7 +242,7 @@
         plugins: {
           title: {
             display: true,
-            text: "Positions by Career Field",
+            text: "Positions by Career Field (Top 3 Choices)",
             font: { size: 18, weight: "bold" },
           },
           legend: {
@@ -1080,6 +1080,9 @@
       <!-- Career Field Distribution -->
       <div class="bg-white rounded-lg shadow p-6">
         <h2 class="text-xl font-semibold mb-4">Career Field Distribution</h2>
+        <p class="text-gray-600 mb-4">
+          Shows student choices for each career field (1st, 2nd, and 3rd choices only)
+        </p>
         <div class="h-96">
           <canvas bind:this={careerChartCanvas} width="800" height="400"
           ></canvas>
@@ -1110,7 +1113,7 @@
           <div class="text-lg font-semibold text-green-600">
             {data.companyStats.totalChoices}
           </div>
-          <div class="text-sm text-gray-600">Total Student Choices</div>
+          <div class="text-sm text-gray-600">Top 3 Student Choices</div>
         </div>
         <div class="text-center">
           <div class="text-lg font-semibold text-blue-600">
@@ -1139,7 +1142,7 @@
               data.companyStats.totalChoices / data.companyStats.totalPositions
             ).toFixed(1)}
           </div>
-          <div class="text-sm text-gray-600">Avg Choices per Position</div>
+          <div class="text-sm text-gray-600">Avg Top 3 Choices per Position</div>
         </div>
       </div>
     </div>
@@ -1157,7 +1160,7 @@
               >
               <th
                 class="py-2 px-4 border-b text-left text-sm font-semibold text-gray-600"
-                >Total Choices</th
+                >Top 3 Choices</th
               >
               <th
                 class="py-2 px-4 border-b text-left text-sm font-semibold text-gray-600"

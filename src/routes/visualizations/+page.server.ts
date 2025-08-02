@@ -304,6 +304,9 @@ async function calculateCompanyStats(userInfo: UserInfo) {
             const careerField = position.career || 'Other';
             const companyName = position.host.company?.companyName || 'Unknown Company';
             
+            // Count only top 3 choices (rank <= 3)
+            const top3Choices = position.students.filter(student => student.rank <= 3).length;
+            
             // Track positions by career
             if (!positionsByCareer[careerField]) {
                 positionsByCareer[careerField] = {
@@ -315,7 +318,7 @@ async function calculateCompanyStats(userInfo: UserInfo) {
             }
             positionsByCareer[careerField].totalPositions++;
             positionsByCareer[careerField].totalSlots += position.slots;
-            positionsByCareer[careerField].totalChoices += position.students.length;
+            positionsByCareer[careerField].totalChoices += top3Choices;
             positionsByCareer[careerField].companies.add(companyName);
 
             // Track company popularity
@@ -329,20 +332,20 @@ async function calculateCompanyStats(userInfo: UserInfo) {
             }
             companyPopularity[companyName].totalPositions++;
             companyPopularity[companyName].totalSlots += position.slots;
-            companyPopularity[companyName].totalChoices += position.students.length;
+            companyPopularity[companyName].totalChoices += top3Choices;
             companyPopularity[companyName].careerFields.add(careerField);
 
-            // Check for oversubscription
-            const oversubscriptionRate = position.students.length / position.slots;
+            // Check for oversubscription (using top 3 choices)
+            const oversubscriptionRate = top3Choices / position.slots;
             if (oversubscriptionRate > 1) {
                 oversubscribedCompanies.push({
                     company: companyName,
                     position: position.title,
                     slots: position.slots,
-                    choices: position.students.length,
+                    choices: top3Choices,
                     rate: oversubscriptionRate
                 });
-            } else if (position.students.length === 0) {
+            } else if (top3Choices === 0) {
                 undersubscribedCompanies.push({
                     company: companyName,
                     position: position.title,
@@ -384,7 +387,7 @@ async function calculateCompanyStats(userInfo: UserInfo) {
             totalCompanies: Object.keys(companyPopularity).length,
             totalPositions: positionsWithChoices.length,
             totalSlots: positionsWithChoices.reduce((sum, p) => sum + p.slots, 0),
-            totalChoices: positionsWithChoices.reduce((sum, p) => sum + p.students.length, 0)
+            totalChoices: positionsWithChoices.reduce((sum, p) => sum + p.students.filter(s => s.rank <= 3).length, 0)
         };
     } catch (error) {
         console.error('Error calculating company stats:', error);

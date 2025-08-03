@@ -2,6 +2,7 @@
     import Navbar from "$lib/components/navbar/Navbar.svelte";
     import StudentStatsWidget from "$lib/components/admin/StudentStatsWidget.svelte";
     import CompanyStatsWidget from "$lib/components/admin/CompanyStatsWidget.svelte";
+    import EventControlsWidget from "$lib/components/admin/EventControlsWidget.svelte";
     
     export let data;
     const { isAdmin, loggedIn, isHost, upcomingEvent, studentStats, companyStats} = data;
@@ -38,6 +39,11 @@
             {:else}
                 <p class="text-gray-600 italic">No upcoming events</p>
             {/if}
+        </div>
+
+        <!-- Event Controls Widget -->
+        <div class="mb-8">
+            <EventControlsWidget />
         </div>
         
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">

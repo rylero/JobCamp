@@ -974,6 +974,54 @@
       </div>
     </div>
 
+    <!-- Company Summary -->
+    <div class="mt-8 bg-white rounded-lg shadow p-6">
+      <h2 class="text-xl font-semibold mb-4">Company Summary</h2>
+      <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+        <div class="text-center">
+          <div class="text-lg font-semibold">
+            {data.companyStats.totalCompanies}
+          </div>
+          <div class="text-sm text-gray-600">Total Companies</div>
+        </div>
+        <div class="text-center">
+          <div class="text-lg font-semibold text-green-600">
+            {data.companyStats.totalChoices}
+          </div>
+          <div class="text-sm text-gray-600">Top 3 Student Choices</div>
+        </div>
+        <div class="text-center">
+          <div class="text-lg font-semibold text-blue-600">
+            {data.companyStats.totalSlots}
+          </div>
+          <div class="text-sm text-gray-600">Total Available Slots</div>
+        </div>
+        <div class="text-center">
+          <div class="text-lg font-semibold text-purple-600">
+            {data.companyStats.totalPositions}
+          </div>
+          <div class="text-sm text-gray-600">Total Positions</div>
+        </div>
+        <div class="text-center">
+          <div class="text-lg font-semibold text-orange-600">
+            {(
+              (data.companyStats.totalChoices / data.companyStats.totalSlots) *
+              100
+            ).toFixed(1)}%
+          </div>
+          <div class="text-sm text-gray-600">Fill Rate</div>
+        </div>
+        <div class="text-center">
+          <div class="text-lg font-semibold text-red-600">
+            {(
+              data.companyStats.totalChoices / data.companyStats.totalPositions
+            ).toFixed(1)}
+          </div>
+          <div class="text-sm text-gray-600">Avg Top 3 Choices per Position</div>
+        </div>
+      </div>
+    </div>
+
     <!-- Company Subscription Rate Statistics -->
     <div class="mt-8 bg-white rounded-lg shadow p-6">
       <h2 class="text-xl font-semibold mb-4">Company Subscription Rates</h2>
@@ -1097,54 +1145,6 @@
             {/each}
           </tbody>
         </table>
-      </div>
-    </div>
-
-    <!-- Company Summary -->
-    <div class="mt-8 bg-white rounded-lg shadow p-6">
-      <h2 class="text-xl font-semibold mb-4">Company Summary</h2>
-      <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
-        <div class="text-center">
-          <div class="text-lg font-semibold">
-            {data.companyStats.totalCompanies}
-          </div>
-          <div class="text-sm text-gray-600">Total Companies</div>
-        </div>
-        <div class="text-center">
-          <div class="text-lg font-semibold text-green-600">
-            {data.companyStats.totalChoices}
-          </div>
-          <div class="text-sm text-gray-600">Top 3 Student Choices</div>
-        </div>
-        <div class="text-center">
-          <div class="text-lg font-semibold text-blue-600">
-            {data.companyStats.totalSlots}
-          </div>
-          <div class="text-sm text-gray-600">Total Available Slots</div>
-        </div>
-        <div class="text-center">
-          <div class="text-lg font-semibold text-purple-600">
-            {data.companyStats.totalPositions}
-          </div>
-          <div class="text-sm text-gray-600">Total Positions</div>
-        </div>
-        <div class="text-center">
-          <div class="text-lg font-semibold text-orange-600">
-            {(
-              (data.companyStats.totalChoices / data.companyStats.totalSlots) *
-              100
-            ).toFixed(1)}%
-          </div>
-          <div class="text-sm text-gray-600">Fill Rate</div>
-        </div>
-        <div class="text-center">
-          <div class="text-lg font-semibold text-red-600">
-            {(
-              data.companyStats.totalChoices / data.companyStats.totalPositions
-            ).toFixed(1)}
-          </div>
-          <div class="text-sm text-gray-600">Avg Top 3 Choices per Position</div>
-        </div>
       </div>
     </div>
 

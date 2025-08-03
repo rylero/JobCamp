@@ -59,6 +59,8 @@ model Position {
   manualAssignments ManualAssignment[]
   attachments       Attachment[]
 
+  createdAt DateTime @default(now())
+
   @@index([eventId], map: "Position_eventId_fkey")
   @@index([hostId], map: "Position_hostId_fkey")
 }
@@ -93,6 +95,8 @@ model Student {
 
   lotteryPositionId String?
   lotteryResult     Position? @relation(fields: [lotteryPositionId], references: [id])
+
+  createdAt DateTime @default(now())
 }
 
 model PositionsOnStudents {
@@ -102,21 +106,25 @@ model PositionsOnStudents {
   studentId  String
   rank       Int
 
+  createdAt DateTime @default(now())
+
   @@id([positionId, studentId])
 }
 
 model Company {
   id String @id @default(cuid())
 
-  companyName        String  @unique
-  companyDescription String  @db.VarChar(1024)
-  companyUrl         String?
+  companyName String
+  companyDescription String @db.VarChar(1024)
+  companyUrl String?
 
   school   School? @relation(fields: [schoolId], references: [id])
   schoolId String?
 
   hosts Host[]
   prefillSettings PrefillSetting[]
+
+  createdAt DateTime @default(now())
 }
 
 model Host {
@@ -124,13 +132,15 @@ model Host {
 
   name String
 
+  company   Company? @relation(fields: [companyId], references: [id])
   companyId String?
-  company   Company? @relation(references: [id], fields: [companyId])
 
-  userId String @unique
-  user   User   @relation(references: [id], fields: [userId], onDelete: Cascade)
+  userId String? @unique
+  user   User?   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   positions Position[]
+
+  createdAt DateTime @default(now())
 }
 
 model User {
@@ -148,6 +158,8 @@ model User {
   lastLogin DateTime
 
   sessions Session[]
+
+  createdAt DateTime @default(now())
 }
 
 model Session {

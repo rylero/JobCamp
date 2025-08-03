@@ -23,6 +23,12 @@ export const load: PageServerLoad = async ({ locals }) => {
     const schoolIds = userInfo.adminOfSchools.map(s => s.id);
     const currentYear = new Date().getFullYear();
 
+    // Get school information
+    const schools = await prisma.school.findMany({
+        where: { id: { in: schoolIds } },
+        select: { id: true, name: true }
+    });
+
     // Student Statistics
     const [
         totalStudents,
@@ -74,6 +80,19 @@ export const load: PageServerLoad = async ({ locals }) => {
         junior: gradeDistribution.find(g => g.grade === 11)?._count.grade || 0,
         senior: gradeDistribution.find(g => g.grade === 12)?._count.grade || 0
     };
+
+    // Get upcoming event
+    const upcomingEvent = await prisma.event.findFirst({
+        where: {
+            schoolId: { in: schoolIds },
+            date: {
+                gte: new Date()
+            }
+        },
+        orderBy: {
+            date: 'asc'
+        }
+    });
 
     // Company Statistics
     const [
@@ -139,6 +158,8 @@ export const load: PageServerLoad = async ({ locals }) => {
         isAdmin: true,
         loggedIn: true,
         isHost: !!locals.user.host,
+        upcomingEvent,
+        schools,
         studentStats: {
             totalStudents,
             permissionSlipsSigned,
